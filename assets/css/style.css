@@ -44,6 +44,7 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -54,7 +55,6 @@ body {
   font-size: 17px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 /* fade the whole page in on load */
@@ -318,6 +318,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
   background: rgba(10,10,18,.85);
   animation: menuIn .35s var(--ease) both;
 }
+.nav__mobile[hidden] { display: none; }
 .nav__mobile a {
   padding: 13px 16px;
   border-radius: 14px;
