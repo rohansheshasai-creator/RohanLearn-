@@ -696,6 +696,12 @@ body.has-pointer .cursor-glow { opacity: 1; }
   border-radius: calc(var(--radius-lg) - 8px);
   background: #000;
 }
+.video-frame__hint {
+  margin: 10px 4px 2px;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--text-faint);
+}
 .video-frame__caption {
   text-align: center;
   margin: 18px 0 0;
