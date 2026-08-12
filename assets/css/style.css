@@ -413,6 +413,23 @@ body.has-pointer .cursor-glow { opacity: 1; }
 }
 .btn--yt:hover { box-shadow: 0 16px 46px -10px var(--yt), inset 0 1px 0 rgba(255,255,255,.4); }
 
+/* the big CTA buttons breathe gently when idle — a slow "alive" animation,
+   distinct from anything triggered by hover or scroll */
+.btn--lg.btn--primary, .btn--lg.btn--yt { animation: breathe 3.6s ease-in-out infinite; }
+.btn--lg.btn--primary:hover, .btn--lg.btn--yt:hover { animation-play-state: paused; }
+
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 10px 34px -8px var(--accent), inset 0 1px 0 rgba(255,255,255,.28); }
+  50%      { box-shadow: 0 14px 44px -6px var(--accent), inset 0 1px 0 rgba(255,255,255,.32); }
+}
+.btn--lg.btn--yt {
+  animation-name: breatheYt;
+}
+@keyframes breatheYt {
+  0%, 100% { box-shadow: 0 10px 34px -10px var(--yt), inset 0 1px 0 rgba(255,255,255,.3); }
+  50%      { box-shadow: 0 14px 44px -8px var(--yt), inset 0 1px 0 rgba(255,255,255,.34); }
+}
+
 .btn--ghost { color: var(--text); }
 .btn--ghost:hover { background: rgba(255,255,255,.1); }
 
@@ -603,6 +620,13 @@ body.has-pointer .cursor-glow { opacity: 1; }
   background: linear-gradient(145deg, rgba(124,92,255,.28), rgba(34,211,238,.14));
   border: 1px solid var(--glass-brd);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.2);
+  transition: transform .45s cubic-bezier(.34, 1.56, .64, 1), border-radius .45s var(--ease);
+}
+/* icon pops and un-rounds into a diamond on hover — a different, playful
+   animation language from the panel-level 3D tilt used elsewhere */
+.card:hover .card__icon {
+  transform: scale(1.12) rotate(-8deg);
+  border-radius: 30% 70% 65% 35% / 40% 45% 55% 60%;
 }
 
 .card__num {
@@ -614,7 +638,10 @@ body.has-pointer .cursor-glow { opacity: 1; }
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+  display: inline-block;
+  transition: transform .45s cubic-bezier(.34, 1.56, .64, 1);
 }
+.card:hover .card__num { transform: translateY(-4px) scale(1.08); }
 
 /* the glare follows the cursor across the card (set by JS) */
 .card__glare {
@@ -655,6 +682,31 @@ body.has-pointer .cursor-glow { opacity: 1; }
 .teaser__title { font-size: clamp(1.8rem, 3.6vw, 2.6rem); }
 .teaser__title em { font-size: 1.1em; }
 
+/* latest-video embed — a frosted frame around the YouTube player */
+.video-frame {
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  overflow: hidden;
+}
+.video-frame iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 8px);
+  background: #000;
+}
+.video-frame__caption {
+  text-align: center;
+  margin: 18px 0 0;
+}
+.video-frame__caption a {
+  font-size: 14.5px;
+  color: var(--text-dim);
+  transition: color .3s;
+}
+.video-frame__caption a:hover { color: var(--accent-2); }
+
 /* contact page — single-column variant of .teaser, centered */
 .contact-card {
   grid-template-columns: 1fr;
@@ -680,6 +732,15 @@ body.has-pointer .cursor-glow { opacity: 1; }
   color: var(--text-faint);
 }
 .contact-email-row svg { flex-shrink: 0; opacity: .7; }
+
+.contact-divider {
+  width: 48px;
+  height: 1px;
+  margin: 30px auto 20px;
+  background: var(--glass-brd-hi);
+}
+.contact-card .eyebrow { display: block; margin-bottom: 14px; }
+.contact-socials { justify-content: center; }
 
 /* avatar — circular frame. .avatar--photo holds a real <img class="avatar-img">;
    without it, the gradient + initial below act as a placeholder. */
@@ -965,6 +1026,34 @@ body.has-pointer .cursor-glow { opacity: 1; }
   80%     { transform: translate(4%, 2%); }
 }
 
+/* ---- Ripple: a click-triggered animation, distinct from anything
+   hover/scroll driven. JS (main.js) injects .btn__ripple on pointerdown. */
+.btn__ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,.5);
+  transform: scale(0);
+  opacity: .6;
+  pointer-events: none;
+  animation: rippleOut .65s var(--ease-soft) forwards;
+}
+@keyframes rippleOut {
+  to { transform: scale(1); opacity: 0; }
+}
+
+/* ---- Letter-stagger reveal for section headings — a text-level burst
+   animation (triggered once) rather than the panel-level 3D tilt used
+   for cards/CTAs elsewhere. JS (main.js) splits .reveal-chars text into
+   per-character spans and toggles .is-in when the heading enters view. */
+.reveal-chars .char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(.5em) rotate(6deg);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+  transition-delay: calc(var(--i, 0) * 22ms);
+}
+.reveal-chars.is-in .char { opacity: 1; transform: none; }
+
 /* ---------- 15. Responsive ---------- */
 @media (max-width: 980px) {
   .about-grid { grid-template-columns: 1fr; gap: 36px; }
@@ -1009,5 +1098,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
   }
   .reveal { opacity: 1; transform: none; }
   .hero__title .word { opacity: 1; transform: none; }
+  .reveal-chars .char { opacity: 1; transform: none; }
+  .btn--lg.btn--primary, .btn--lg.btn--yt { animation: none; }
   .cursor-glow { display: none; }
 }

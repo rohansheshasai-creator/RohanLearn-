@@ -23,6 +23,73 @@
     word.style.animationDelay = (120 + i * 90) + "ms";
   });
 
+  /* ---------- Letter-stagger reveal for section headings ----------
+     A text-level burst animation, distinct from the panel-level 3D
+     tilt used for cards/CTAs. Splits each .reveal-chars heading into
+     per-character spans (preserving nested tags like <em>), then
+     bursts them in, staggered, the first time the heading is scrolled
+     into view. */
+  (function initCharReveal() {
+    var headings = document.querySelectorAll(".reveal-chars");
+    if (!headings.length) return;
+
+    var i;
+    headings.forEach(function (heading) {
+      i = 0;
+      (function wrap(node) {
+        Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+          if (child.nodeType === 3) {                    // text node
+            var frag = document.createDocumentFragment();
+            child.textContent.split("").forEach(function (ch) {
+              if (ch === " ") {
+                frag.appendChild(document.createTextNode(" "));
+              } else {
+                var span = document.createElement("span");
+                span.className = "char";
+                span.style.setProperty("--i", i++);
+                span.textContent = ch;
+                frag.appendChild(span);
+              }
+            });
+            node.replaceChild(frag, child);
+          } else if (child.nodeType === 1) {
+            wrap(child);                                  // recurse into e.g. <em>
+          }
+        });
+      })(heading);
+    });
+
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      headings.forEach(function (h) { h.classList.add("is-in"); });
+      return;
+    }
+
+    var charObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-in");
+        charObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.4 });
+
+    headings.forEach(function (h) { charObserver.observe(h); });
+  })();
+
+  /* ---------- Button ripple — click-triggered, not hover/scroll ---------- */
+  document.querySelectorAll(".btn").forEach(function (btn) {
+    btn.addEventListener("pointerdown", function (e) {
+      var r = btn.getBoundingClientRect();
+      var size = Math.max(r.width, r.height) * 1.6;
+      var ripple = document.createElement("span");
+      ripple.className = "btn__ripple";
+      ripple.style.width = ripple.style.height = size + "px";
+      ripple.style.left = (e.clientX - r.left - size / 2) + "px";
+      ripple.style.top  = (e.clientY - r.top  - size / 2) + "px";
+      btn.appendChild(ripple);
+      ripple.addEventListener("animationend", function () { ripple.remove(); });
+    });
+  });
+
   /* ==========================================================
      Scroll-scrubbed 3D reveal (Apple-product-page style)
      Every .reveal element tracks a continuous progress value
