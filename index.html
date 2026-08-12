@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>RohanLearn — Learn something new, every week</title>
+<meta name="description" content="RohanLearn is a YouTube channel about learning in public — breaking down big ideas into clear, useful lessons you can actually use.">
+
+<link rel="canonical" href="https://rohanlearn.com/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://rohanlearn.com/">
+<meta property="og:title" content="RohanLearn — Learn something new, every week">
+<meta property="og:description" content="A YouTube channel about learning in public — big ideas, broken down clearly.">
+<meta name="theme-color" content="#07070c">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%237c5cff'/><text x='50' y='71' font-size='62' font-family='Georgia,serif' font-weight='700' fill='white' text-anchor='middle'>R</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+
+<!-- ===== Animated background (aurora blobs + grain) ===== -->
+<div class="bg" aria-hidden="true">
+  <div class="bg__blob bg__blob--1"></div>
+  <div class="bg__blob bg__blob--2"></div>
+  <div class="bg__blob bg__blob--3"></div>
+  <div class="bg__grid"></div>
+  <div class="bg__grain"></div>
+</div>
+
+<!-- Glow that follows the mouse (desktop only) -->
+<div class="cursor-glow" aria-hidden="true"></div>
+
+<!-- Scroll progress bar -->
+<div class="progress" aria-hidden="true"><span class="progress__bar"></span></div>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- ===== Navigation ===== -->
+<header class="nav" id="nav">
+  <div class="nav__inner glass">
+    <a class="nav__logo" href="index.html">
+      <span class="nav__logo-mark">R</span>
+      <span class="nav__logo-text">Rohan<em>Learn</em></span>
+    </a>
+
+    <nav class="nav__links" aria-label="Main">
+      <a href="index.html" class="is-active">Home</a>
+      <a href="about.html">About</a>
+    </nav>
+
+    <!-- EDIT: your YouTube channel link -->
+    <a class="btn btn--yt nav__cta magnetic" href="https://www.youtube.com/@rohanlearn" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M23 12s0-3.9-.5-5.8a3 3 0 0 0-2.1-2.1C18.5 3.6 12 3.6 12 3.6s-6.5 0-8.4.5a3 3 0 0 0-2.1 2.1C1 8.1 1 12 1 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 8.4.5 8.4.5s6.5 0 8.4-.5a3 3 0 0 0 2.1-2.1C23 15.9 23 12 23 12ZM9.8 15.5v-7l6.1 3.5-6.1 3.5Z"/></svg>
+      Subscribe
+    </a>
+
+    <button class="nav__burger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu">
+      <span></span><span></span>
+    </button>
+  </div>
+
+  <div class="nav__mobile glass" id="mobile-menu" hidden>
+    <a href="index.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="https://www.youtube.com/@rohanlearn" target="_blank" rel="noopener">YouTube ↗</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="container hero__inner">
+
+      <div class="pill reveal" data-delay="0">
+        <span class="pill__dot"></span>
+        New video every week
+      </div>
+
+      <h1 class="hero__title">
+        <span class="line"><span class="word">Learn</span> <span class="word">something</span></span>
+        <span class="line"><span class="word">new,</span> <span class="word serif-italic accent">every&nbsp;week.</span></span>
+      </h1>
+
+      <!-- EDIT: your channel's one-line pitch -->
+      <p class="hero__sub reveal" data-delay="260">
+        I'm Rohan. On <strong>RohanLearn</strong> I take big, intimidating ideas and break
+        them down into clear, practical lessons — the kind I wish someone had made for me.
+      </p>
+
+      <div class="hero__actions reveal" data-delay="360">
+        <a class="btn btn--yt btn--lg magnetic" href="https://www.youtube.com/@rohanlearn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M23 12s0-3.9-.5-5.8a3 3 0 0 0-2.1-2.1C18.5 3.6 12 3.6 12 3.6s-6.5 0-8.4.5a3 3 0 0 0-2.1 2.1C1 8.1 1 12 1 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 8.4.5 8.4.5s6.5 0 8.4-.5a3 3 0 0 0 2.1-2.1C23 15.9 23 12 23 12ZM9.8 15.5v-7l6.1 3.5-6.1 3.5Z"/></svg>
+          Watch on YouTube
+        </a>
+        <a class="btn btn--ghost btn--lg magnetic" href="about.html">
+          More about me
+          <span class="btn__arrow">→</span>
+        </a>
+      </div>
+
+      <!-- EDIT: replace these numbers with your real stats -->
+      <div class="stats reveal" data-delay="460">
+        <div class="stat">
+          <span class="stat__num" data-count="1200" data-suffix="+">0</span>
+          <span class="stat__label">Subscribers</span>
+        </div>
+        <span class="stat__div" aria-hidden="true"></span>
+        <div class="stat">
+          <span class="stat__num" data-count="40" data-suffix="+">0</span>
+          <span class="stat__label">Videos</span>
+        </div>
+        <span class="stat__div" aria-hidden="true"></span>
+        <div class="stat">
+          <span class="stat__num" data-count="100" data-suffix="K+">0</span>
+          <span class="stat__label">Views</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="scroll-hint reveal" data-delay="700" aria-hidden="true">
+      <span class="scroll-hint__line"></span>
+      Scroll
+    </div>
+  </section>
+
+  <!-- ===== MARQUEE ===== -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <!-- EDIT: the topics your channel covers -->
+      <span>Learning in public</span><span class="marquee__sep">✦</span>
+      <span>Study systems</span><span class="marquee__sep">✦</span>
+      <span>Tech &amp; tools</span><span class="marquee__sep">✦</span>
+      <span>Deep dives</span><span class="marquee__sep">✦</span>
+      <span>Productivity</span><span class="marquee__sep">✦</span>
+      <span>Behind the scenes</span><span class="marquee__sep">✦</span>
+      <span>Learning in public</span><span class="marquee__sep">✦</span>
+      <span>Study systems</span><span class="marquee__sep">✦</span>
+      <span>Tech &amp; tools</span><span class="marquee__sep">✦</span>
+      <span>Deep dives</span><span class="marquee__sep">✦</span>
+      <span>Productivity</span><span class="marquee__sep">✦</span>
+      <span>Behind the scenes</span><span class="marquee__sep">✦</span>
+    </div>
+  </div>
+
+  <!-- ===== THE CHANNEL ===== -->
+  <section class="section" id="channel">
+    <div class="container">
+
+      <header class="section__head">
+        <span class="eyebrow reveal">The channel</span>
+        <h2 class="section__title reveal" data-delay="80">
+          What <em class="serif-italic">RohanLearn</em> is really about
+        </h2>
+        <p class="section__lede reveal" data-delay="160">
+          No fluff, no filler, no fake expertise. Just me figuring things out properly —
+          and showing my work so you can skip the part where I got it wrong.
+        </p>
+      </header>
+
+      <div class="cards">
+
+        <article class="card glass tilt reveal" data-delay="0">
+          <div class="card__glare" aria-hidden="true"></div>
+          <div class="card__icon">📚</div>
+          <h3>Explained from zero</h3>
+          <p>
+            Every video starts at the beginning. No assumed background, no jargon
+            dropped without a definition — you'll never feel lost halfway through.
+          </p>
+        </article>
+
+        <article class="card glass tilt reveal" data-delay="120">
+          <div class="card__glare" aria-hidden="true"></div>
+          <div class="card__icon">🔎</div>
+          <h3>Actually researched</h3>
+          <p>
+            I read the thing, build the thing, or try the thing before I talk about it.
+            If I'm unsure, I say so out loud instead of guessing confidently.
+          </p>
+        </article>
+
+        <article class="card glass tilt reveal" data-delay="240">
+          <div class="card__glare" aria-hidden="true"></div>
+          <div class="card__icon">⚡</div>
+          <h3>Made to be used</h3>
+          <p>
+            Every video ends with something you can do — a system, a template,
+            a next step. Watching should leave you further ahead than you started.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT TEASER ===== -->
+  <section class="section section--tight" id="about-teaser">
+    <div class="container">
+      <div class="teaser glass reveal">
+        <div class="teaser__glow" aria-hidden="true"></div>
+
+        <div class="teaser__media">
+          <!--
+            EDIT: to use a real photo, replace this whole <div class="avatar"> block with:
+            <img src="assets/img/rohan.jpg" alt="Rohan" class="avatar-img">
+            (put your photo at assets/img/rohan.jpg)
+          -->
+          <div class="avatar" aria-hidden="true">
+            <span class="avatar__initial">R</span>
+            <span class="avatar__ring"></span>
+          </div>
+        </div>
+
+        <div class="teaser__body">
+          <span class="eyebrow">A bit about me</span>
+          <h2 class="teaser__title">
+            Hi, I'm <em class="serif-italic accent">Rohan</em>
+          </h2>
+          <!-- EDIT: your short intro -->
+          <p>
+            I'm a lifelong over-explainer who turned that into a channel. I make videos
+            about the things I'm learning right now — which means you're not watching
+            someone perform expertise, you're watching someone build it.
+          </p>
+          <p>
+            Off camera I'm usually reading something I don't fully understand yet,
+            tinkering with a new tool, or rewriting an intro for the ninth time.
+          </p>
+          <a class="btn btn--ghost magnetic" href="about.html">
+            Read the full story
+            <span class="btn__arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="section">
+    <div class="container">
+      <div class="cta glass reveal">
+        <div class="cta__glow" aria-hidden="true"></div>
+        <h2 class="cta__title">Come learn with me</h2>
+        <p class="cta__sub">New video every week. Subscribing is free and it genuinely helps a lot.</p>
+        <a class="btn btn--yt btn--lg magnetic" href="https://www.youtube.com/@rohanlearn" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M23 12s0-3.9-.5-5.8a3 3 0 0 0-2.1-2.1C18.5 3.6 12 3.6 12 3.6s-6.5 0-8.4.5a3 3 0 0 0-2.1 2.1C1 8.1 1 12 1 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 8.4.5 8.4.5s6.5 0 8.4-.5a3 3 0 0 0 2.1-2.1C23 15.9 23 12 23 12ZM9.8 15.5v-7l6.1 3.5-6.1 3.5Z"/></svg>
+          Subscribe on YouTube
+        </a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <div class="container footer__inner">
+    <a class="nav__logo" href="index.html">
+      <span class="nav__logo-mark">R</span>
+      <span class="nav__logo-text">Rohan<em>Learn</em></span>
+    </a>
+    <nav class="footer__links" aria-label="Footer">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="https://www.youtube.com/@rohanlearn" target="_blank" rel="noopener">YouTube</a>
+    </nav>
+    <p class="footer__copy">© <span id="year">2026</span> RohanLearn</p>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
