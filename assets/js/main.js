@@ -40,16 +40,24 @@
         Array.prototype.slice.call(node.childNodes).forEach(function (child) {
           if (child.nodeType === 3) {                    // text node
             var frag = document.createDocumentFragment();
-            child.textContent.split("").forEach(function (ch) {
-              if (ch === " ") {
-                frag.appendChild(document.createTextNode(" "));
-              } else {
-                var span = document.createElement("span");
-                span.className = "char";
-                span.style.setProperty("--i", i++);
-                span.textContent = ch;
-                frag.appendChild(span);
+            // Split into words first, and keep each word's letters inside
+            // one no-wrap container — otherwise every letter is free to
+            // wrap independently and long words break mid-letter at the
+            // edge of the line (e.g. "strat" / "egy.").
+            child.textContent.split(" ").forEach(function (word, wi, words) {
+              if (word !== "") {
+                var wordSpan = document.createElement("span");
+                wordSpan.className = "char-word";
+                word.split("").forEach(function (ch) {
+                  var span = document.createElement("span");
+                  span.className = "char";
+                  span.style.setProperty("--i", i++);
+                  span.textContent = ch;
+                  wordSpan.appendChild(span);
+                });
+                frag.appendChild(wordSpan);
               }
+              if (wi < words.length - 1) frag.appendChild(document.createTextNode(" "));
             });
             node.replaceChild(frag, child);
           } else if (child.nodeType === 1) {
@@ -111,26 +119,47 @@
   if (reduceMotion || !revealTargets.length) {
     revealTargets.forEach(function (t) { t.el.style.setProperty("--p", 1); });
   } else {
+    // The ticker only runs while something is actually moving, and goes
+    // back to sleep once every element has settled — instead of running
+    // requestAnimationFrame forever for the entire life of the page (which
+    // burns battery/CPU even while you're just reading, motionless).
+    var revealRafId = null;
+
+    var ensureRevealLoop = function () {
+      if (revealRafId === null) revealRafId = requestAnimationFrame(tickReveal);
+    };
+
+    function tickReveal() {
+      var stillMoving = false;
+      revealTargets.forEach(function (t) {
+        var diff = t.target - t.current;
+        if (Math.abs(diff) > 0.001) {
+          t.current += diff * 0.16;
+          stillMoving = true;
+        } else if (t.current !== t.target) {
+          t.current = t.target;
+        }
+        t.el.style.setProperty("--p", t.current.toFixed(4));
+      });
+      revealRafId = stillMoving ? requestAnimationFrame(tickReveal) : null;
+    }
+
     var computeRevealTargets = function () {
       var vh = window.innerHeight;
+      var changed = false;
       revealTargets.forEach(function (t) {
         var rect = t.el.getBoundingClientRect();
         var start = vh * 0.92 + t.stagger * 0.4;   // window opens here (element still low on screen)
         var end   = vh * 0.55 + t.stagger * 0.4;   // fully settled by here
         var raw   = (start - rect.top) / (start - end);
-        t.target = Math.min(1, Math.max(0, raw));
+        var next  = Math.min(1, Math.max(0, raw));
+        if (next !== t.target) { t.target = next; changed = true; }
       });
+      if (changed) ensureRevealLoop();
     };
 
-    (function revealLoop() {
-      revealTargets.forEach(function (t) {
-        var diff = t.target - t.current;
-        t.current += diff * 0.16;
-        if (Math.abs(diff) < 0.001) t.current = t.target;
-        t.el.style.setProperty("--p", t.current.toFixed(4));
-      });
-      requestAnimationFrame(revealLoop);
-    })();
+    computeRevealTargets();
+    ensureRevealLoop();
   }
 
   /* ---------- Nav: liquid-glass morph + progress bar + bg parallax ---------- */
@@ -138,9 +167,17 @@
   var progress = document.querySelector(".progress__bar");
   var ticking  = false;
 
-  function onScroll() {
-    var y = window.scrollY;
+  function computeRevealTargetsSafe() {
+    if (typeof computeRevealTargets === "function") computeRevealTargets();
+  }
 
+  function onScroll() {
+    // ---- read phase first (avoids forcing a layout flush mid-frame) ----
+    var y        = window.scrollY;
+    var scrollMax = document.documentElement.scrollHeight - window.innerHeight;
+    if (!reduceMotion) computeRevealTargetsSafe();   // reads getBoundingClientRect
+
+    // ---- write phase ----
     if (nav) {
       nav.classList.toggle("is-stuck", y > 30);
       // continuous "compactness" 0→1 over the first 260px of scroll —
@@ -150,8 +187,7 @@
     }
 
     if (progress) {
-      var max = document.documentElement.scrollHeight - window.innerHeight;
-      progress.style.width = (max > 0 ? (y / max) * 100 : 0) + "%";
+      progress.style.width = (scrollMax > 0 ? (y / scrollMax) * 100 : 0) + "%";
     }
 
     // subtle background parallax
@@ -159,12 +195,7 @@
       "--scroll-parallax", Math.min(60, y * 0.06).toFixed(1) + "px"
     );
 
-    if (!reduceMotion) computeRevealTargetsSafe();
     ticking = false;
-  }
-
-  function computeRevealTargetsSafe() {
-    if (typeof computeRevealTargets === "function") computeRevealTargets();
   }
 
   window.addEventListener("scroll", function () {
@@ -201,7 +232,13 @@
       indicator.style.width = elRect.width + "px";
     }
 
+    // Place it instantly the first time — without this, the indicator's own
+    // hover transition would animate it growing from a zero-width sliver on
+    // every page load, which reads as a glitch rather than an entrance.
+    indicator.style.transition = "none";
     moveTo(activeLink);
+    void indicator.offsetWidth;           // force layout so the "none" takes hold
+    indicator.style.transition = "";      // restore the CSS-defined glide
     requestAnimationFrame(function () { indicator.classList.add("is-ready"); });
 
     links.forEach(function (link) {
@@ -209,6 +246,13 @@
       link.addEventListener("focus", function () { moveTo(link); });
     });
     wrap.addEventListener("pointerleave", function () { moveTo(activeLink); });
+
+    // Keyboard users: once focus leaves the nav entirely, snap back to
+    // showing the real active page instead of leaving the pill stranded
+    // under whichever link was last tabbed to.
+    wrap.addEventListener("focusout", function (e) {
+      if (!wrap.contains(e.relatedTarget)) moveTo(activeLink);
+    });
 
     window.addEventListener("resize", function () { moveTo(activeLink); });
   })();
@@ -281,22 +325,30 @@
   if (finePointer && !reduceMotion) {
     document.body.classList.add("has-pointer");
 
-    /* Glow that trails the cursor (smoothed) */
-    var glow   = document.querySelector(".cursor-glow");
-    var target = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    var pos    = { x: target.x, y: target.y };
+    /* Glow that trails the cursor (smoothed) — only ticks while it's
+       actually catching up to the pointer, not forever in the background. */
+    var glow    = document.querySelector(".cursor-glow");
+    var target  = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    var pos     = { x: target.x, y: target.y };
+    var glowRaf = null;
+
+    function tickGlow() {
+      var dx = target.x - pos.x, dy = target.y - pos.y;
+      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+        pos.x += dx * 0.12;
+        pos.y += dy * 0.12;
+        if (glow) glow.style.transform = "translate3d(" + pos.x + "px," + pos.y + "px,0)";
+        glowRaf = requestAnimationFrame(tickGlow);
+      } else {
+        glowRaf = null;
+      }
+    }
 
     window.addEventListener("pointermove", function (e) {
       target.x = e.clientX;
       target.y = e.clientY;
+      if (glowRaf === null) glowRaf = requestAnimationFrame(tickGlow);
     }, { passive: true });
-
-    (function loop() {
-      pos.x += (target.x - pos.x) * 0.12;
-      pos.y += (target.y - pos.y) * 0.12;
-      if (glow) glow.style.transform = "translate3d(" + pos.x + "px," + pos.y + "px,0)";
-      requestAnimationFrame(loop);
-    })();
 
     /* Magnetic buttons — they lean toward the cursor */
     document.querySelectorAll(".magnetic").forEach(function (el) {

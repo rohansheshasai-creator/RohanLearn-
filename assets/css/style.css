@@ -13,8 +13,8 @@
   --accent-2:      #22d3ee;   /* cyan    */
   --yt:            #ff3b30;   /* youtube red */
 
-  --bg:            #07070c;
-  --bg-soft:       #0c0c14;
+  --bg:            #000000;
+  --bg-soft:       #050505;
   --text:          #ecebf5;
   --text-dim:      #a5a3b8;
   --text-faint:    #6f6d85;
@@ -24,7 +24,7 @@
   --glass-bg-2:    rgba(255, 255, 255, .075);
   --glass-brd:     rgba(255, 255, 255, .10);
   --glass-brd-hi:  rgba(255, 255, 255, .22);
-  --glass-blur:    22px;
+  --glass-blur:    18px;
 
   --radius:        20px;
   --radius-lg:     28px;
@@ -66,16 +66,25 @@ a { color: inherit; text-decoration: none; }
 
 h1, h2, h3 {
   line-height: 1.1;
-  letter-spacing: -.03em;
+  letter-spacing: -.02em;
   margin: 0 0 .5em;
   font-weight: 600;
+}
+
+/* Classic editorial display type for the big headlines; body copy and
+   small UI text (card titles, nav, buttons) stay on Inter for legibility —
+   the same pairing serious finance/editorial sites use. */
+h1, h2, .about-card__name {
+  font-family: "Fraunces", Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -.01em;
 }
 
 p { margin: 0 0 1.1em; color: var(--text-dim); }
 strong { color: var(--text); font-weight: 600; }
 
 .serif-italic {
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "Fraunces", Georgia, serif;
   font-style: italic;
   font-weight: 400;
   letter-spacing: -.01em;
@@ -118,14 +127,14 @@ strong { color: var(--text); font-weight: 600; }
   z-index: -1;
   overflow: hidden;
   background:
-    radial-gradient(120% 90% at 50% -10%, #14142a 0%, transparent 60%),
+    radial-gradient(120% 90% at 50% -10%, #0c0c14 0%, transparent 60%),
     var(--bg);
 }
 
 .bg__blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(110px);
+  filter: blur(90px);
   opacity: .5;
   will-change: transform;
 }
@@ -250,7 +259,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
   transition: background .4s var(--ease-soft), border-color .4s var(--ease-soft), box-shadow .4s var(--ease-soft);
 }
 .nav.is-stuck .nav__inner {
-  background: rgba(10,10,18,.7);
+  background: rgba(0,0,0,.8);
   border-color: var(--glass-brd-hi);
   box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.14);
 }
@@ -267,7 +276,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
   display: grid; place-items: center;
   width: 32px; height: 32px;
   border-radius: 10px;
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "Fraunces", Georgia, serif;
   font-size: 19px;
   background: linear-gradient(140deg, var(--accent), var(--accent-2));
   box-shadow: 0 6px 20px -4px var(--accent);
@@ -341,7 +350,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
   padding: 10px;
   display: flex;
   flex-direction: column;
-  background: rgba(10,10,18,.85);
+  background: rgba(0,0,0,.92);
   animation: menuIn .35s var(--ease) both;
 }
 .nav__mobile[hidden] { display: none; }
@@ -630,7 +639,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
 }
 
 .card__num {
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "Fraunces", Georgia, serif;
   font-size: 2.4rem;
   line-height: 1;
   margin-bottom: 16px;
@@ -764,7 +773,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
 }
 .avatar--lg { width: 168px; height: 168px; margin-bottom: 24px; }
 .avatar__initial {
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "Fraunces", Georgia, serif;
   font-size: 5rem;
   line-height: 1;
   color: rgba(255,255,255,.94);
@@ -855,7 +864,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
 }
 .quote p {
   margin: 0;
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "Fraunces", Georgia, serif;
   font-style: italic;
   font-size: 1.32rem;
   line-height: 1.45;
@@ -1051,6 +1060,11 @@ body.has-pointer .cursor-glow { opacity: 1; }
    animation (triggered once) rather than the panel-level 3D tilt used
    for cards/CTAs elsewhere. JS (main.js) splits .reveal-chars text into
    per-character spans and toggles .is-in when the heading enters view. */
+/* keeps a whole word together on one line — individual .char letters
+   inside are still free to animate, they just can't be split apart by
+   the browser's line-wrapping */
+.reveal-chars .char-word { display: inline-block; white-space: nowrap; }
+
 .reveal-chars .char {
   display: inline-block;
   opacity: 0;
