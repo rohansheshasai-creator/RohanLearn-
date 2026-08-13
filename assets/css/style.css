@@ -611,7 +611,6 @@ body.has-pointer .cursor-glow { opacity: 1; }
 .card {
   border-radius: var(--radius-lg);
   padding: 34px 30px;
-  min-height: 200px;
   transform-style: preserve-3d;
   transition: transform .5s var(--ease), border-color .4s var(--ease-soft), box-shadow .5s var(--ease);
 }
@@ -619,23 +618,8 @@ body.has-pointer .cursor-glow { opacity: 1; }
   border-color: var(--glass-brd-hi);
   box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,.2);
 }
-.card h3 { font-size: 1.28rem; margin-bottom: 12px; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.card h3 { font-size: 1.28rem; margin-bottom: 12px; }
 .card p { margin: 0; font-size: .97rem; }
-
-/* On real hover devices, the card "opens" — the description stays
-   invisible (but present for screen readers) until you hover, echoing
-   the same reveal-on-hover language as the poster row above. Touch
-   devices skip this entirely and always show the full text. */
-@media (hover: hover) and (pointer: fine) {
-  .card h3 { transform: translateY(10px); }
-  .card p {
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity .45s var(--ease-soft), transform .45s var(--ease-soft);
-  }
-  .card:hover h3 { transform: translateY(0); }
-  .card:hover p { opacity: 1; transform: none; }
-}
 
 .card__icon {
   font-size: 26px;
