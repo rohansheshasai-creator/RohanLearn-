@@ -699,27 +699,27 @@ body.has-pointer .cursor-glow { opacity: 1; }
   height: 320px;
 }
 
+/* Widths are computed and set as an inline px value by JS (see main.js
+   initPosterRow) so the hovered card lands at an exact 16:9 — height is
+   fixed at 320px, so width = 320 * 16/9. Transitioning a plain `width`
+   in px interpolates perfectly every frame, unlike animating between
+   flex-basis: 0% and auto (which doesn't tween cleanly). The 33.33%
+   below is just a pre-JS fallback so the row isn't broken without it. */
 .poster {
   position: relative;
   display: block;
-  flex: 1 1 0%;
+  flex: 0 0 auto;
+  width: 33.333%;
   min-width: 0;
   height: 100%;
   overflow: hidden;
   border-radius: var(--radius);
   border: 1px solid var(--glass-brd);
   background: #111;
-  transition: flex-grow .6s cubic-bezier(.22, 1, .36, 1), aspect-ratio .6s cubic-bezier(.22, 1, .36, 1), border-color .4s;
+  transition: width .6s cubic-bezier(.22, 1, .36, 1), border-color .4s;
 }
-/* exact 16:9 on hover, at any viewport width — flex-shrink/grow drop to
-   0 so the aspect-ratio (paired with the row's fixed height) sizes the
-   card precisely, while the other two cards absorb the remaining space. */
 .poster:hover,
-.poster:focus-visible {
-  flex: 0 0 auto;
-  aspect-ratio: 16 / 9;
-  border-color: var(--glass-brd-hi);
-}
+.poster:focus-visible { border-color: var(--glass-brd-hi); }
 
 .poster img {
   position: absolute;
@@ -1030,6 +1030,12 @@ body.has-pointer .cursor-glow { opacity: 1; }
   transform-origin: 50% 100%;
   will-change: transform, opacity;
 }
+
+/* Flat variant: opacity-only fade, no rotateX/scale. Used on elements
+   whose own JS reads getBoundingClientRect() for layout math (like the
+   poster row) — a 3D transform on an ancestor distorts those readings
+   mid-scroll, throwing off the width calculations. Fade is enough here. */
+.reveal.reveal--flat { transform: none; }
 
 /* cards get a little extra life: alternating rotateY so they feel like
    panels swinging into place rather than just rising */

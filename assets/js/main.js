@@ -388,6 +388,49 @@
         card.style.transform = "";
       });
     });
+
+    /* Poster row — widths are set as explicit px values (not flex-grow)
+       so the transition is a plain numeric interpolation: smooth every
+       time, in both directions, with no snap. The hovered card is sized
+       to exactly height * 16/9; the rest split what's left evenly. */
+    (function initPosterRow() {
+      var row = document.querySelector(".posters");
+      if (!row) return;
+      var posters = Array.prototype.slice.call(row.querySelectorAll(".poster"));
+      if (!posters.length) return;
+
+      var GAP = 8; // must match the CSS `gap` on .posters
+
+      function layout(hoveredIndex) {
+        var rowRect = row.getBoundingClientRect();
+        var n = posters.length;
+        var available = rowRect.width - GAP * (n - 1);
+
+        if (hoveredIndex === -1) {
+          var equalWidth = available / n;
+          posters.forEach(function (p) { p.style.width = equalWidth + "px"; });
+          return;
+        }
+
+        var hoveredWidth = Math.min(rowRect.height * (16 / 9), available - (n - 1) * 60);
+        var restWidth = (available - hoveredWidth) / (n - 1);
+        posters.forEach(function (p, i) {
+          p.style.width = (i === hoveredIndex ? hoveredWidth : restWidth) + "px";
+        });
+      }
+
+      layout(-1);
+
+      posters.forEach(function (poster, i) {
+        poster.addEventListener("pointerenter", function () { layout(i); });
+      });
+      row.addEventListener("pointerleave", function () { layout(-1); });
+
+      window.addEventListener("resize", function () {
+        var hoveredNow = posters.findIndex(function (p) { return p.matches(":hover"); });
+        layout(hoveredNow);
+      });
+    })();
   }
 
 })();
