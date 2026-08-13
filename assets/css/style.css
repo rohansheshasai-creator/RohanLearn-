@@ -121,41 +121,42 @@ strong { color: var(--text); font-weight: 600; }
 }
 
 /* ---------- 3. Animated background ---------- */
+/* Charcoal-grey fading to black — a neutral gradient, not a colour wash.
+   Lighter graphite near the top, settling to pure black by mid-page. */
 .bg {
   position: fixed;
   inset: 0;
   z-index: -1;
   overflow: hidden;
   background:
-    radial-gradient(120% 90% at 50% -10%, #0c0c14 0%, transparent 60%),
+    radial-gradient(130% 90% at 50% -15%, #232327 0%, #101012 42%, transparent 72%),
     var(--bg);
 }
 
+/* Soft neutral-grey accents for a little movement/depth — no hue. */
 .bg__blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(90px);
-  opacity: .5;
+  filter: blur(100px);
+  opacity: .14;
+  background: radial-gradient(circle, #55555c 0%, transparent 68%);
   will-change: transform;
 }
 .bg__blob--1 {
   width: 620px; height: 620px;
-  background: radial-gradient(circle, var(--accent) 0%, transparent 68%);
   top: -180px; left: -120px;
   animation: drift1 26s ease-in-out infinite;
 }
 .bg__blob--2 {
   width: 560px; height: 560px;
-  background: radial-gradient(circle, var(--accent-2) 0%, transparent 68%);
   top: 18%; right: -180px;
-  opacity: .32;
+  opacity: .1;
   animation: drift2 32s ease-in-out infinite;
 }
 .bg__blob--3 {
   width: 700px; height: 700px;
-  background: radial-gradient(circle, #ff5fa2 0%, transparent 68%);
   bottom: -280px; left: 32%;
-  opacity: .22;
+  opacity: .08;
   animation: drift3 38s ease-in-out infinite;
 }
 
