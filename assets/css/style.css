@@ -696,7 +696,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
 .posters {
   display: flex;
   gap: 8px;
-  height: 380px;
+  height: 320px;
 }
 
 .poster {
@@ -704,14 +704,22 @@ body.has-pointer .cursor-glow { opacity: 1; }
   display: block;
   flex: 1 1 0%;
   min-width: 0;
+  height: 100%;
   overflow: hidden;
   border-radius: var(--radius);
   border: 1px solid var(--glass-brd);
   background: #111;
-  transition: flex-grow .6s cubic-bezier(.22, 1, .36, 1), border-color .4s;
+  transition: flex-grow .6s cubic-bezier(.22, 1, .36, 1), aspect-ratio .6s cubic-bezier(.22, 1, .36, 1), border-color .4s;
 }
+/* exact 16:9 on hover, at any viewport width — flex-shrink/grow drop to
+   0 so the aspect-ratio (paired with the row's fixed height) sizes the
+   card precisely, while the other two cards absorb the remaining space. */
 .poster:hover,
-.poster:focus-visible { flex-grow: 3.2; border-color: var(--glass-brd-hi); }
+.poster:focus-visible {
+  flex: 0 0 auto;
+  aspect-ratio: 16 / 9;
+  border-color: var(--glass-brd-hi);
+}
 
 .poster img {
   position: absolute;
