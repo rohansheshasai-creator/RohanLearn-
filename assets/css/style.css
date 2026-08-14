@@ -69,6 +69,7 @@ h1, h2, h3 {
   letter-spacing: -.02em;
   margin: 0 0 .5em;
   font-weight: 600;
+  text-wrap: balance; /* even line lengths on wrap — no lonely last word */
 }
 
 /* Classic editorial display type for the big headlines; body copy and
