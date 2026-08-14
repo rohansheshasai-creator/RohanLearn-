@@ -666,17 +666,68 @@ body.has-pointer .cursor-glow { opacity: 1; }
 }
 .card:hover .card__glare { opacity: 1; }
 
-/* ---- Bento grid: "The channel" section — deliberately asymmetric
-   (two feature cards + three small signals + a full-width CTA banner)
-   so this section reads as a different, more editorial moment than the
-   uniform card grids used elsewhere on the site. ---- */
-.bento {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 18px;
+/* ---- Carousel: "The channel" section — a smooth, draggable/scrollable
+   row of 6 uniform slides. Deliberately a different interaction from
+   the static card grids elsewhere and from the poster row's hover-
+   expand (this one glides via scroll-snap, not width changes). ---- */
+.carousel {
+  position: relative;
+  margin-top: 44px;
 }
-.bento .card { grid-column: span 2; }
-.bento .card.bento__lg { grid-column: span 3; }
+.carousel__track {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-left: max(24px, calc((100vw - var(--maxw)) / 2 + 24px));
+  padding: 4px max(24px, calc((100vw - var(--maxw)) / 2 + 24px)) 20px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.carousel__track::-webkit-scrollbar { display: none; }
+
+.carousel__slide {
+  flex: 0 0 340px;
+  scroll-snap-align: start;
+  min-height: 240px;
+}
+
+/* the closing slide — same shape as the others, unmissable colour */
+.carousel__slide--cta {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4px;
+  border-radius: var(--radius-lg);
+  padding: 34px 30px;
+  border: 1px solid rgba(255,77,67,.3);
+  background: linear-gradient(140deg, rgba(255,77,67,.22) 0%, rgba(124,92,255,.18) 100%);
+  background-size: 200% 200%;
+  animation: carouselCtaShift 8s ease-in-out infinite;
+  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.16);
+}
+@keyframes carouselCtaShift {
+  0%, 100% { background-position: 0% 0%; }
+  50%      { background-position: 100% 100%; }
+}
+.carousel__slide-glow {
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--yt) 0%, transparent 70%);
+  opacity: .3;
+  filter: blur(28px);
+  pointer-events: none;
+}
+.carousel__slide--cta .eyebrow { color: #ff8079; position: relative; }
+.carousel__slide--cta h3 { position: relative; font-size: 1.4rem; margin: 4px 0 8px; }
+.carousel__slide--cta p { position: relative; margin: 0 0 20px; }
+.carousel__slide--cta .btn { position: relative; }
 
 .bento__tags {
   list-style: none;
@@ -701,47 +752,49 @@ body.has-pointer .cursor-glow { opacity: 1; }
 .bento__tags li:nth-child(3) { transition-delay: .08s; }
 .card:hover .bento__tags li:hover { transform: translateY(-3px); }
 
-/* the CTA banner — a distinct, warmer surface (not plain glass) with a
-   slow-moving gradient so the section closes on something alive rather
-   than another static card, and the ask ("subscribe") is unmissable. */
-.bento__cta {
-  grid-column: span 6;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 28px;
-  flex-wrap: wrap;
-  padding: 38px 42px;
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(255,77,67,.28);
-  background:
-    linear-gradient(120deg, rgba(255,77,67,.16) 0%, rgba(124,92,255,.14) 45%, rgba(255,77,67,.16) 100%);
-  background-size: 220% 100%;
-  animation: bentoCtaShift 9s ease-in-out infinite;
-  box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.14);
-}
-@keyframes bentoCtaShift {
-  0%, 100% { background-position: 0% 50%; }
-  50%      { background-position: 100% 50%; }
-}
-.bento__cta-glow {
+/* prev/next — floating glass circles, centred on the track, fade out
+   at the ends instead of just disabling (feels alive, not broken) */
+.carousel__arrow {
   position: absolute;
-  top: 50%; left: 18%;
-  width: 360px; height: 360px;
+  top: 50%;
+  translate: 0 -50%;
+  z-index: 2;
+  width: 48px; height: 48px;
+  display: grid;
+  place-items: center;
   border-radius: 50%;
-  background: radial-gradient(circle, var(--yt) 0%, transparent 70%);
-  opacity: .16;
-  transform: translateY(-50%);
-  pointer-events: none;
-  filter: blur(30px);
+  color: var(--text);
+  background: rgba(10,10,14,.7);
+  border: 1px solid var(--glass-brd-hi);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  cursor: pointer;
+  transition: opacity .35s var(--ease-soft), transform .35s var(--ease), background .3s;
 }
-.bento__cta-text { position: relative; max-width: 520px; }
-.bento__cta-text .eyebrow { color: #ff8079; }
-.bento__cta-text h3 { font-size: clamp(1.35rem, 2.6vw, 1.7rem); margin-bottom: 8px; }
-.bento__cta-text p { margin: 0; color: var(--text-dim); }
-.bento__cta .btn { position: relative; flex-shrink: 0; }
+.carousel__arrow:hover { background: rgba(20,20,26,.85); transform: translateY(-50%) scale(1.08); }
+.carousel__arrow--prev { left: 4px; }
+.carousel__arrow--next { right: 4px; }
+.carousel__arrow[disabled] { opacity: 0; pointer-events: none; }
+
+.carousel__dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.carousel__dots button {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  padding: 0;
+  border: none;
+  background: var(--glass-brd-hi);
+  cursor: pointer;
+  transition: background .35s var(--ease-soft), transform .35s cubic-bezier(.34,1.56,.64,1);
+}
+.carousel__dots button.is-active {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  transform: scale(1.35);
+}
 
 /* ---------- 10. About teaser (home page) ---------- */
 .teaser {
@@ -1264,12 +1317,9 @@ body.has-pointer .cursor-glow { opacity: 1; }
   .card { padding: 28px 24px; }
   .footer__inner { justify-content: center; text-align: center; }
 
-  .bento { grid-template-columns: 1fr; }
-  .bento .card,
-  .bento .card.bento__lg,
-  .bento__cta { grid-column: span 1; }
-  .bento__cta { flex-direction: column; align-items: flex-start; padding: 30px 26px; }
-  .bento__cta .btn { width: 100%; justify-content: center; }
+  .carousel__slide { flex-basis: 78%; min-height: 210px; }
+  .carousel__track { padding: 4px 18px 20px; scroll-padding-left: 18px; gap: 14px; }
+  .carousel__arrow { width: 40px; height: 40px; }
 
   /* Touch has no hover — the poster row becomes a swipeable filmstrip
      of fixed-width cards instead of the expand-on-hover interaction. */

@@ -257,6 +257,76 @@
     window.addEventListener("resize", function () { moveTo(activeLink); });
   })();
 
+  /* ---------- Carousel ("The channel" section) ----------
+     Native scroll-snap does the smooth gliding; JS just adds arrows,
+     dots, and keeps them in sync with whatever the user scrolls/drags
+     to. Works the same whether driven by the arrows, a trackpad, or a
+     finger — the track itself is the source of truth. */
+  (function initCarousel() {
+    var carousel = document.querySelector(".carousel");
+    if (!carousel) return;
+    var track = carousel.querySelector(".carousel__track");
+    var slides = Array.prototype.slice.call(track.querySelectorAll(".carousel__slide"));
+    var prevBtn = carousel.querySelector(".carousel__arrow--prev");
+    var nextBtn = carousel.querySelector(".carousel__arrow--next");
+    var dotsWrap = carousel.querySelector(".carousel__dots");
+    if (!slides.length) return;
+
+    var dots = slides.map(function (_, i) {
+      var dot = document.createElement("button");
+      dot.type = "button";
+      dot.setAttribute("role", "tab");
+      dot.setAttribute("aria-label", "Go to slide " + (i + 1));
+      dot.addEventListener("click", function () {
+        slides[i].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+      });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    // offsetWidth (not getBoundingClientRect) — unaffected by the
+    // section's scroll-reveal transform, so it stays accurate mid-scroll.
+    function stepWidth() {
+      var style = getComputedStyle(track);
+      var gap = parseFloat(style.columnGap || style.gap) || 20;
+      return slides[0].offsetWidth + gap;
+    }
+
+    if (prevBtn) prevBtn.addEventListener("click", function () {
+      track.scrollBy({ left: -stepWidth(), behavior: "smooth" });
+    });
+    if (nextBtn) nextBtn.addEventListener("click", function () {
+      track.scrollBy({ left: stepWidth(), behavior: "smooth" });
+    });
+
+    function updateUI() {
+      var maxScroll = track.scrollWidth - track.clientWidth;
+      if (prevBtn) prevBtn.disabled = track.scrollLeft <= 4;
+      if (nextBtn) nextBtn.disabled = maxScroll <= 4 || track.scrollLeft >= maxScroll - 4;
+
+      var trackLeft = track.getBoundingClientRect().left;
+      var closest = 0, closestDist = Infinity;
+      slides.forEach(function (slide, i) {
+        var dist = Math.abs(slide.getBoundingClientRect().left - trackLeft);
+        if (dist < closestDist) { closestDist = dist; closest = i; }
+      });
+      dots.forEach(function (d, i) { d.classList.toggle("is-active", i === closest); });
+    }
+
+    // Cancel-and-reschedule (not a drop-while-busy throttle) so the very
+    // last scroll event — the one that lands on the truly-final resting
+    // position after a smooth scroll/snap settles — always wins instead
+    // of possibly being swallowed while a stale frame is still pending.
+    var scrollRaf = null;
+    track.addEventListener("scroll", function () {
+      if (scrollRaf !== null) cancelAnimationFrame(scrollRaf);
+      scrollRaf = requestAnimationFrame(function () { updateUI(); scrollRaf = null; });
+    }, { passive: true });
+
+    window.addEventListener("resize", updateUI);
+    updateUI();
+  })();
+
   /* ---------- Mobile menu ---------- */
   var burger = document.querySelector(".nav__burger");
   var menu   = document.getElementById("mobile-menu");
