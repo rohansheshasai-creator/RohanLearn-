@@ -673,6 +673,17 @@ body.has-pointer .cursor-glow { opacity: 1; }
 .carousel {
   position: relative;
   margin-top: 44px;
+  padding-block: 36px;
+  /* a distinct "shelf" for this section — full-bleed, subtly warmer and
+     lighter than the page's pure black, with its own soft glow and
+     top/bottom seams so it visually separates from the sections above
+     and below rather than blending into the same flat background. */
+  background:
+    radial-gradient(60% 140% at 15% 50%, rgba(124,92,255,.10) 0%, transparent 70%),
+    radial-gradient(60% 140% at 85% 50%, rgba(34,211,238,.08) 0%, transparent 70%),
+    linear-gradient(180deg, rgba(255,255,255,.035) 0%, rgba(255,255,255,.012) 100%);
+  border-top: 1px solid var(--glass-brd);
+  border-bottom: 1px solid var(--glass-brd);
 }
 .carousel__track {
   display: flex;

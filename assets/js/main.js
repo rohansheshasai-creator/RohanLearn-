@@ -272,31 +272,45 @@
     var dotsWrap = carousel.querySelector(".carousel__dots");
     if (!slides.length) return;
 
+    var currentIndex = 0;
+    var settleTimer = null;
+
+    function goToSlide(i) {
+      currentIndex = (i + slides.length) % slides.length;
+      // Light the dot immediately rather than waiting on scroll events
+      // to eventually agree — those can lag or get throttled, and the
+      // dot should reflect the slide we just committed to right away.
+      dots.forEach(function (d, idx) { d.classList.toggle("is-active", idx === currentIndex); });
+      // While a smooth scroll is settling, updateUI's "closest slide"
+      // read is mid-flight and can briefly disagree with the index we
+      // just committed to — hold that off so it can't overwrite the
+      // dot we just lit before the scroll has actually arrived.
+      if (settleTimer) clearTimeout(settleTimer);
+      settleTimer = setTimeout(function () { settleTimer = null; }, 700);
+      slides[currentIndex].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+    }
+
     var dots = slides.map(function (_, i) {
       var dot = document.createElement("button");
       dot.type = "button";
       dot.setAttribute("role", "tab");
       dot.setAttribute("aria-label", "Go to slide " + (i + 1));
-      dot.addEventListener("click", function () {
-        slides[i].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-      });
+      dot.addEventListener("click", function () { restartAuto(); goToSlide(i); });
       dotsWrap.appendChild(dot);
       return dot;
     });
 
-    // offsetWidth (not getBoundingClientRect) — unaffected by the
-    // section's scroll-reveal transform, so it stays accurate mid-scroll.
-    function stepWidth() {
-      var style = getComputedStyle(track);
-      var gap = parseFloat(style.columnGap || style.gap) || 20;
-      return slides[0].offsetWidth + gap;
-    }
-
+    // Arrows go through the same goToSlide() as dots and auto-advance —
+    // one path for "which slide is active" instead of the arrows quietly
+    // scrolling by a raw pixel amount while dots/auto tracked slide
+    // indices separately (that mismatch was the arrow/dot-sync bug).
     if (prevBtn) prevBtn.addEventListener("click", function () {
-      track.scrollBy({ left: -stepWidth(), behavior: "smooth" });
+      restartAuto();
+      goToSlide(currentIndex - 1);
     });
     if (nextBtn) nextBtn.addEventListener("click", function () {
-      track.scrollBy({ left: stepWidth(), behavior: "smooth" });
+      restartAuto();
+      goToSlide(currentIndex + 1);
     });
 
     function updateUI() {
@@ -304,12 +318,17 @@
       if (prevBtn) prevBtn.disabled = track.scrollLeft <= 4;
       if (nextBtn) nextBtn.disabled = maxScroll <= 4 || track.scrollLeft >= maxScroll - 4;
 
+      // A goToSlide() call is still settling — trust the index it
+      // committed to rather than a mid-animation "closest" read.
+      if (settleTimer) return;
+
       var trackLeft = track.getBoundingClientRect().left;
       var closest = 0, closestDist = Infinity;
       slides.forEach(function (slide, i) {
         var dist = Math.abs(slide.getBoundingClientRect().left - trackLeft);
         if (dist < closestDist) { closestDist = dist; closest = i; }
       });
+      currentIndex = closest;
       dots.forEach(function (d, i) { d.classList.toggle("is-active", i === closest); });
     }
 
@@ -325,6 +344,41 @@
 
     window.addEventListener("resize", updateUI);
     updateUI();
+
+    /* ---- Auto-advance: glides to the next slide on its own, loops
+       back to the start after the last one. Pauses the moment a real
+       person touches it (hover, focus, drag) or it scrolls off-screen,
+       and picks back up afterward — never fights the user. */
+    var AUTO_DELAY = 4200;
+    var autoTimer = null;
+
+    function stopAuto() {
+      if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+    }
+    function startAuto() {
+      if (reduceMotion || autoTimer) return;
+      autoTimer = setInterval(function () { goToSlide(currentIndex + 1); }, AUTO_DELAY);
+    }
+    function restartAuto() { stopAuto(); startAuto(); }
+
+    carousel.addEventListener("pointerenter", stopAuto);
+    carousel.addEventListener("pointerleave", startAuto);
+    carousel.addEventListener("focusin", stopAuto);
+    carousel.addEventListener("focusout", startAuto);
+    track.addEventListener("pointerdown", stopAuto); // dragging/swiping
+
+    if (!reduceMotion) {
+      if ("IntersectionObserver" in window) {
+        var autoIO = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) startAuto(); else stopAuto();
+          });
+        }, { threshold: 0.35 });
+        autoIO.observe(carousel);
+      } else {
+        startAuto();
+      }
+    }
   })();
 
   /* ---------- Mobile menu ---------- */
