@@ -666,14 +666,19 @@ body.has-pointer .cursor-glow { opacity: 1; }
 }
 .card:hover .card__glare { opacity: 1; }
 
-/* ---- Carousel: "The channel" section — a smooth, draggable/scrollable
-   row of 6 uniform slides. Deliberately a different interaction from
-   the static card grids elsewhere and from the poster row's hover-
-   expand (this one glides via scroll-snap, not width changes). ---- */
+/* ---- Carousel: "The channel" section — a continuous marquee, the same
+   technique as the ticker higher up the page (duplicate the set once,
+   animate to -50%, the loop is seamless because the second copy is
+   pixel-identical to the first). Pure CSS animation — no scroll-snap,
+   no JS timer driving it — so there's no "reaches the end, stutters,
+   snaps back" moment; it just keeps gliding, forever, at a constant
+   speed. Pausing on hover is animation-play-state, which is instant
+   in both directions with zero jank. ---- */
 .carousel {
   position: relative;
   margin-top: 44px;
   padding-block: 36px;
+  overflow: hidden;
   /* a distinct "shelf" for this section — full-bleed, subtly warmer and
      lighter than the page's pure black, with its own soft glow and
      top/bottom seams so it visually separates from the sections above
@@ -684,40 +689,45 @@ body.has-pointer .cursor-glow { opacity: 1; }
     linear-gradient(180deg, rgba(255,255,255,.035) 0%, rgba(255,255,255,.012) 100%);
   border-top: 1px solid var(--glass-brd);
   border-bottom: 1px solid var(--glass-brd);
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
 .carousel__track {
   display: flex;
   gap: 20px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  scroll-padding-left: max(24px, calc((100vw - var(--maxw)) / 2 + 24px));
-  padding: 4px max(24px, calc((100vw - var(--maxw)) / 2 + 24px)) 20px;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
+  width: max-content;
+  padding: 4px 20px 20px;
+  animation: carouselScroll 42s linear infinite;
 }
-.carousel__track::-webkit-scrollbar { display: none; }
+/* pausing works whether the pointer is on a gap, a card, or anywhere
+   else within the track — :hover matches for the whole box, children
+   included, so no per-card JS wiring is needed for this. */
+.carousel__track:hover { animation-play-state: paused; }
+
+@keyframes carouselScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
 
 .carousel__slide {
   flex: 0 0 340px;
-  scroll-snap-align: start;
   min-height: 240px;
-  transition: background .45s var(--ease-soft), border-color .45s var(--ease-soft),
-              box-shadow .5s var(--ease), filter .45s var(--ease-soft);
+  transition: background .35s var(--ease-soft), border-color .35s var(--ease-soft),
+              box-shadow .4s var(--ease), filter .35s var(--ease-soft), transform .35s var(--ease);
 }
 /* the hovered card visibly brightens — lighter glass, a lit border, a
    soft accent glow lifting it off the row — on top of the 3D tilt the
    pointer already drives (.tilt), so the whole thing feels alive, not
    just tilted. Neighbours stay untouched, so it's always obvious which
    one you're actually on. */
-.carousel__slide.glass:hover {
+.carousel__slide:hover {
   background: var(--glass-bg-2);
   border-color: var(--glass-brd-hi);
-  box-shadow: 0 28px 64px -16px rgba(124,92,255,.4), inset 0 1px 0 rgba(255,255,255,.28);
+  box-shadow: 0 28px 64px -16px rgba(124,92,255,.45), inset 0 1px 0 rgba(255,255,255,.3);
 }
 .carousel__slide--cta:hover {
-  filter: brightness(1.12) saturate(1.15);
-  border-color: rgba(255,120,110,.55);
+  filter: brightness(1.15) saturate(1.2);
+  border-color: rgba(255,140,130,.65);
 }
 
 /* the closing slide — same shape as the others, unmissable colour */
@@ -778,50 +788,6 @@ body.has-pointer .cursor-glow { opacity: 1; }
 .bento__tags li:nth-child(2) { transition-delay: .04s; }
 .bento__tags li:nth-child(3) { transition-delay: .08s; }
 .card:hover .bento__tags li:hover { transform: translateY(-3px); }
-
-/* prev/next — floating glass circles, centred on the track, fade out
-   at the ends instead of just disabling (feels alive, not broken) */
-.carousel__arrow {
-  position: absolute;
-  top: 50%;
-  translate: 0 -50%;
-  z-index: 2;
-  width: 48px; height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 50%;
-  color: var(--text);
-  background: rgba(10,10,14,.7);
-  border: 1px solid var(--glass-brd-hi);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  cursor: pointer;
-  transition: opacity .35s var(--ease-soft), transform .35s var(--ease), background .3s;
-}
-.carousel__arrow:hover { background: rgba(20,20,26,.85); transform: translateY(-50%) scale(1.08); }
-.carousel__arrow--prev { left: 4px; }
-.carousel__arrow--next { right: 4px; }
-.carousel__arrow[disabled] { opacity: 0; pointer-events: none; }
-
-.carousel__dots {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 6px;
-}
-.carousel__dots button {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  padding: 0;
-  border: none;
-  background: var(--glass-brd-hi);
-  cursor: pointer;
-  transition: background .35s var(--ease-soft), transform .35s cubic-bezier(.34,1.56,.64,1);
-}
-.carousel__dots button.is-active {
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  transform: scale(1.35);
-}
 
 /* ---------- 10. About teaser (home page) ---------- */
 .teaser {
@@ -1344,9 +1310,8 @@ body.has-pointer .cursor-glow { opacity: 1; }
   .card { padding: 28px 24px; }
   .footer__inner { justify-content: center; text-align: center; }
 
-  .carousel__slide { flex-basis: 78%; min-height: 210px; }
-  .carousel__track { padding: 4px 18px 20px; scroll-padding-left: 18px; gap: 14px; }
-  .carousel__arrow { width: 40px; height: 40px; }
+  .carousel__slide { flex-basis: 280px; min-height: 210px; }
+  .carousel__track { padding: 4px 18px 20px; gap: 14px; animation-duration: 30s; }
 
   /* Touch has no hover — the poster row becomes a swipeable filmstrip
      of fixed-width cards instead of the expand-on-hover interaction. */
@@ -1387,4 +1352,19 @@ body.has-pointer .cursor-glow { opacity: 1; }
   .reveal-chars .char { opacity: 1; transform: none; }
   .btn--lg.btn--primary, .btn--lg.btn--yt { animation: none; }
   .cursor-glow { display: none; }
+
+  /* The blanket animation-freeze above would otherwise strand the
+     marquee on its final keyframe (the duplicate set, mid-scroll) with
+     no way to reach the rest — give it back a normal, static,
+     manually-scrollable row of just the 6 real cards instead. */
+  .carousel { overflow: visible; }
+  .carousel__track {
+    animation: none !important;
+    transform: none !important;
+    width: auto;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  .carousel__slide { scroll-snap-align: start; }
+  .carousel__slide[aria-hidden="true"] { display: none; }
 }
