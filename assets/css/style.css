@@ -675,6 +675,8 @@ body.has-pointer .cursor-glow { opacity: 1; }
    speed. Pausing on hover is animation-play-state, which is instant
    in both directions with zero jank. ---- */
 .carousel {
+  --slide-w: 340px;
+  --slide-gap: 20px;
   position: relative;
   margin-top: 44px;
   padding-block: 36px;
@@ -694,7 +696,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
 }
 .carousel__track {
   display: flex;
-  gap: 20px;
+  gap: var(--slide-gap);
   width: max-content;
   padding: 4px 20px 20px;
   animation: carouselScroll 42s linear infinite;
@@ -704,13 +706,22 @@ body.has-pointer .cursor-glow { opacity: 1; }
    included, so no per-card JS wiring is needed for this. */
 .carousel__track:hover { animation-play-state: paused; }
 
+/* Exactly one set's worth of width, INCLUDING its own trailing gap —
+   not -50%. With 12 real+duplicate items sharing one `gap` across all
+   11 boundaries, -50% of the total track width is off by exactly one
+   gap from the true repeat point (the total only has 11 gaps, but two
+   "sets" of 6 conceptually want 12 gap-widths between them — halving
+   the real total therefore undershoots the seam by one gap). That one
+   gap's worth of error is what read as a visible snap at the loop.
+   6 slides + 6 gaps, computed from the same custom properties the
+   slides themselves use, so it can never drift out of sync with them. */
 @keyframes carouselScroll {
   from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  to   { transform: translateX(calc(-6 * (var(--slide-w) + var(--slide-gap)))); }
 }
 
 .carousel__slide {
-  flex: 0 0 340px;
+  flex: 0 0 var(--slide-w);
   min-height: 240px;
   transition: background .35s var(--ease-soft), border-color .35s var(--ease-soft),
               box-shadow .4s var(--ease), filter .35s var(--ease-soft), transform .35s var(--ease);
@@ -1310,8 +1321,12 @@ body.has-pointer .cursor-glow { opacity: 1; }
   .card { padding: 28px 24px; }
   .footer__inner { justify-content: center; text-align: center; }
 
-  .carousel__slide { flex-basis: 280px; min-height: 210px; }
-  .carousel__track { padding: 4px 18px 20px; gap: 14px; animation-duration: 30s; }
+  /* Redefine the custom properties, not flex-basis/gap directly — the
+     keyframes' calc() reads --slide-w/--slide-gap, so this is the only
+     way to resize slides on mobile without reintroducing the seam bug. */
+  .carousel { --slide-w: 280px; --slide-gap: 14px; }
+  .carousel__slide { min-height: 210px; }
+  .carousel__track { padding: 4px 18px 20px; animation-duration: 30s; }
 
   /* Touch has no hover — the poster row becomes a swipeable filmstrip
      of fixed-width cards instead of the expand-on-hover interaction. */
