@@ -451,24 +451,10 @@ body.has-pointer .cursor-glow { opacity: 1; }
   display: grid;
   place-items: center;
   padding: 150px 0 90px;
-  overflow: hidden;
 }
 .hero--sub { min-height: 72svh; padding-bottom: 40px; }
 
-/* the stage/spotlight illustration — sits behind the hero content,
-   fixed to the bottom of the hero so the "crowd" reads as standing
-   just below the headline, fading up into the page's own background. */
-.hero__stage {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100%;
-  opacity: .42;
-  pointer-events: none;
-}
-
-.hero__inner { position: relative; z-index: 1; text-align: center; }
+.hero__inner { text-align: center; }
 
 .pill {
   display: inline-flex;
