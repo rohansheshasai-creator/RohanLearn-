@@ -464,7 +464,7 @@ body.has-pointer .cursor-glow { opacity: 1; }
   z-index: 0;
   width: 100%;
   height: 100%;
-  opacity: .85;
+  opacity: .42;
   pointer-events: none;
 }
 
