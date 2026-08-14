@@ -367,6 +367,15 @@
     carousel.addEventListener("focusout", startAuto);
     track.addEventListener("pointerdown", stopAuto); // dragging/swiping
 
+    // Belt-and-braces: pause the instant the cursor is over any single
+    // card, specifically — not just "somewhere in the carousel". Same
+    // stopAuto/startAuto either way, this just makes the intent explicit
+    // per-card rather than relying only on the container-level bubbling.
+    slides.forEach(function (slide) {
+      slide.addEventListener("pointerenter", stopAuto);
+      slide.addEventListener("pointerleave", startAuto);
+    });
+
     if (!reduceMotion) {
       if ("IntersectionObserver" in window) {
         var autoIO = new IntersectionObserver(function (entries) {
@@ -500,7 +509,7 @@
 
         card.style.transform =
           "perspective(900px) rotateX(" + (0.5 - py) * 8 + "deg) rotateY(" +
-          (px - 0.5) * 10 + "deg) translateY(-6px)";
+          (px - 0.5) * 10 + "deg) translateY(-6px) scale(1.025)";
 
         if (glare) {
           glare.style.setProperty("--mx", px * 100 + "%");

@@ -702,6 +702,22 @@ body.has-pointer .cursor-glow { opacity: 1; }
   flex: 0 0 340px;
   scroll-snap-align: start;
   min-height: 240px;
+  transition: background .45s var(--ease-soft), border-color .45s var(--ease-soft),
+              box-shadow .5s var(--ease), filter .45s var(--ease-soft);
+}
+/* the hovered card visibly brightens — lighter glass, a lit border, a
+   soft accent glow lifting it off the row — on top of the 3D tilt the
+   pointer already drives (.tilt), so the whole thing feels alive, not
+   just tilted. Neighbours stay untouched, so it's always obvious which
+   one you're actually on. */
+.carousel__slide.glass:hover {
+  background: var(--glass-bg-2);
+  border-color: var(--glass-brd-hi);
+  box-shadow: 0 28px 64px -16px rgba(124,92,255,.4), inset 0 1px 0 rgba(255,255,255,.28);
+}
+.carousel__slide--cta:hover {
+  filter: brightness(1.12) saturate(1.15);
+  border-color: rgba(255,120,110,.55);
 }
 
 /* the closing slide — same shape as the others, unmissable colour */
