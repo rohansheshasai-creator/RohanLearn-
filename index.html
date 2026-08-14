@@ -79,6 +79,57 @@
 
   <!-- ===== HERO ===== -->
   <section class="hero">
+
+    <!-- Stylized stage illustration — spotlight beams + an abstract
+         silhouetted crowd. Deliberately illustrative/geometric, not a
+         photo — it's an ambition cue, not a claim that this happened. -->
+    <svg class="hero__stage" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="beamA" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#7c5cff" stop-opacity=".28"/>
+          <stop offset="100%" stop-color="#7c5cff" stop-opacity="0"/>
+        </linearGradient>
+        <linearGradient id="beamB" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#22d3ee" stop-opacity=".22"/>
+          <stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+        </linearGradient>
+        <radialGradient id="stageGlow" cx="50%" cy="0%" r="75%">
+          <stop offset="0%" stop-color="#9b87ff" stop-opacity=".35"/>
+          <stop offset="55%" stop-color="#9b87ff" stop-opacity=".08"/>
+          <stop offset="100%" stop-color="#9b87ff" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="crowdFade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%"  stop-color="#000" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#000" stop-opacity="1"/>
+        </linearGradient>
+        <path id="headShape" d="M0 22 C0 9 9 0 22 0 C35 0 44 9 44 22 L44 38 C44 38 33 33 22 33 C11 33 0 38 0 38 Z"/>
+        <pattern id="crowdRow" width="58" height="38" patternUnits="userSpaceOnUse">
+          <use href="#headShape" fill="#0a0a10"/>
+          <use href="#headShape" x="29" y="7" fill="#0a0a10"/>
+        </pattern>
+        <mask id="crowdMask">
+          <rect x="0" y="0" width="1600" height="900" fill="url(#crowdFade)"/>
+        </mask>
+      </defs>
+
+      <!-- converging spotlight beams -->
+      <polygon points="480,0 720,0 980,620 300,620" fill="url(#beamA)"/>
+      <polygon points="900,0 1140,0 1320,600 760,600" fill="url(#beamB)"/>
+      <ellipse cx="800" cy="40" rx="700" ry="260" fill="url(#stageGlow)"/>
+
+      <!-- abstract audience, silhouetted rows fading into the dark -->
+      <g mask="url(#crowdMask)">
+        <rect x="0" y="560" width="1600" height="70" fill="url(#crowdRow)"/>
+        <rect x="0" y="610" width="1600" height="80" fill="url(#crowdRow)" opacity=".92"/>
+        <rect x="0" y="665" width="1600" height="90" fill="url(#crowdRow)" opacity=".85"/>
+        <rect x="0" y="725" width="1600" height="100" fill="url(#crowdRow)" opacity=".78"/>
+        <rect x="0" y="790" width="1600" height="110" fill="url(#crowdRow)" opacity=".7"/>
+      </g>
+
+      <!-- stage-edge light line -->
+      <rect x="0" y="558" width="1600" height="2" fill="#9b87ff" opacity=".3"/>
+    </svg>
+
     <div class="container hero__inner">
 
       <div class="pill reveal" data-delay="0">
