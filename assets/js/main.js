@@ -327,6 +327,26 @@
     }
   }
 
+  /* ---------- Latest video: swap in the newest upload ----------
+     assets/latest-video.json is kept up to date by a scheduled
+     GitHub Action that reads the channel's YouTube RSS feed (see
+     .github/workflows/update-latest-video.yml) — nobody has to edit
+     this by hand. The iframe's hardcoded src/title stay in the HTML
+     as a fallback for if this fetch fails or JS is off. */
+  (function initLatestVideo() {
+    var frame = document.getElementById("latest-video-frame");
+    if (!frame) return;
+
+    fetch("assets/latest-video.json", { cache: "no-store" })
+      .then(function (res) { return res.ok ? res.json() : null; })
+      .then(function (data) {
+        if (!data || !data.videoId || data.videoId === frame.dataset.fallbackId) return;
+        frame.src = "https://www.youtube.com/embed/" + data.videoId + "?autoplay=1&mute=1&playsinline=1&rel=0";
+        if (data.title) frame.title = data.title;
+      })
+      .catch(function () { /* fallback src already in the markup */ });
+  })();
+
   /* ---------- Desktop-only pointer effects ---------- */
   if (finePointer && !reduceMotion) {
     document.body.classList.add("has-pointer");
