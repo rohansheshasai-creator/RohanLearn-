@@ -290,6 +290,21 @@
     });
   }
 
+  /* ---------- Live channel stats (subscribers/videos/views) ----------
+     assets/channel-stats.json is kept up to date by a scheduled
+     GitHub Action that reads the public YouTube channel page (see
+     .github/workflows/update-channel-stats.yml) — nobody has to edit
+     this by hand. The hardcoded data-count/data-suffix values in the
+     HTML stay as a fallback for if this fetch fails or is slow. */
+  function formatStatCount(n) {
+    if (n >= 1000) return { count: Math.round(n / 1000), suffix: "K+" };
+    return { count: n, suffix: "+" };
+  }
+
+  var statsFetch = fetch("assets/channel-stats.json", { cache: "no-store" })
+    .then(function (res) { return res.ok ? res.json() : null; })
+    .catch(function () { return null; });
+
   /* ---------- Animated counters in the stats row ---------- */
   var counters = document.querySelectorAll("[data-count]");
 
@@ -310,21 +325,40 @@
   }
 
   if (counters.length) {
-    if (reduceMotion || !("IntersectionObserver" in window)) {
-      counters.forEach(function (el) {
-        el.textContent = (parseFloat(el.dataset.count) || 0).toLocaleString() + (el.dataset.suffix || "");
-      });
-    } else {
-      var countObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (!entry.isIntersecting) return;
-          runCounter(entry.target);
-          countObserver.unobserve(entry.target);
+    // Give the live-stats fetch a brief chance to land before the
+    // counters read their data-count — falls back to the hardcoded
+    // HTML values (also correct as of the last manual update) if it's
+    // slow or fails, so the animation never visibly waits on network.
+    Promise.race([
+      statsFetch,
+      new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 1200); })
+    ]).then(function (stats) {
+      if (stats) {
+        counters.forEach(function (el) {
+          var key = el.dataset.stat;
+          if (!key || stats[key] == null) return;
+          var formatted = formatStatCount(stats[key]);
+          el.dataset.count  = formatted.count;
+          el.dataset.suffix = formatted.suffix;
         });
-      }, { threshold: 0.6 });
+      }
 
-      counters.forEach(function (el) { countObserver.observe(el); });
-    }
+      if (reduceMotion || !("IntersectionObserver" in window)) {
+        counters.forEach(function (el) {
+          el.textContent = (parseFloat(el.dataset.count) || 0).toLocaleString() + (el.dataset.suffix || "");
+        });
+      } else {
+        var countObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            runCounter(entry.target);
+            countObserver.unobserve(entry.target);
+          });
+        }, { threshold: 0.6 });
+
+        counters.forEach(function (el) { countObserver.observe(el); });
+      }
+    });
   }
 
   /* ---------- Latest video: swap in the newest upload ----------

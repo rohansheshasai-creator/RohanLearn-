@@ -1,0 +1,35 @@
+name: Update channel stats
+
+# Keeps assets/channel-stats.json in sync with the real subscriber,
+# video, and view counts on the Rohan Learn YouTube channel, so the
+# homepage's stats row updates itself — no manual edit or push needed.
+#
+# Runs once a day, plus can be triggered manually from the Actions tab.
+
+on:
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-channel-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check YouTube channel page for updated stats
+        id: fetch
+        run: python3 .github/scripts/fetch-channel-stats.py
+
+      - name: Commit and push if the stats changed
+        if: steps.fetch.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/channel-stats.json
+          git commit -m "Auto-update channel stats"
+          git push
