@@ -17,10 +17,12 @@ build, and no dependencies to break. Edit a file, save it, done.
 | `contact.html` | Sponsorships & promotions |
 | `404.html` | Shown when someone hits a link that doesn't exist |
 | `assets/css/style.css` | All the styling — colours, type, layout, motion |
-| `assets/js/main.js` | All the interactive bits — scroll animations, counters, live data |
+| `assets/js/main.js` | All the interactive bits — animations, live data, charts, ⌘K search |
+| `assets/fonts/` | The fonts, hosted on the site itself (fast, nothing loaded from Google) |
 | `assets/img/` | Photos, the share-preview image (`og-image.png`) and favicons |
 | `assets/latest-video.json` | Latest videos — **updated automatically** (see below) |
 | `assets/channel-stats.json` | Subscribers / videos / views — **updated automatically** |
+| `assets/stats-history.json` | One data point per day — the growth chart is drawn from this, **updated automatically** |
 | `.github/` | The two small automations that keep those two JSON files fresh |
 | `robots.txt`, `sitemap.xml`, `site.webmanifest` | Search-engine and install metadata |
 | `CNAME` | Tells GitHub this site lives at `rohanlearn.com` — **don't delete this** |
@@ -34,8 +36,9 @@ Two GitHub Actions run in the background. You don't need to do anything.
 - **Latest video** (every 6 hours): reads the channel's feed, skips YouTube Shorts,
   and updates `assets/latest-video.json`. The homepage's *Latest upload* player and
   *Recent breakdowns* cards read from it.
-- **Channel stats** (daily): updates `assets/channel-stats.json`. The numbers in the
-  hero and on the About / Contact pages read from it.
+- **Channel stats** (daily): updates `assets/channel-stats.json` and adds a point to
+  `assets/stats-history.json`. The numbers in the hero, the growth dashboard and the
+  About / Contact pages read from them.
 
 To refresh right after you upload: GitHub → **Actions** → *Update latest video* →
 **Run workflow**.
@@ -55,8 +58,14 @@ Change the accent and the whole site re-colours itself.
 
 ## Fonts
 
-*Instrument Serif* (headlines), *Inter* (text) and *JetBrains Mono* (small labels),
-loaded from Google Fonts.
+*Instrument Serif* (headlines), *Geist* (text) and *Geist Mono* (small labels and
+numbers). All three are open-source (SIL Open Font License) and hosted in
+`assets/fonts/`.
+
+## Handy shortcuts for visitors
+
+Press **⌘K** (Mac) or **Ctrl+K** — or **/** — anywhere on the site to open the
+search palette: pages, the latest videos, social links and quick actions.
 
 ---
 

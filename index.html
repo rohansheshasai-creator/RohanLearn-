@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
 <script>document.documentElement.classList.add("js")</script>
 
 <title>RohanLearn — Money, Power, Strategy. Explained simply.</title>
@@ -29,9 +30,9 @@
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/geist-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/instrument-serif-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/instrument-serif-italic-latin.woff2">
 <link rel="preload" as="image" href="assets/img/rohan-hero.webp" type="image/webp">
 <link rel="stylesheet" href="assets/css/style.css">
 
@@ -58,6 +59,17 @@
         "https://x.com/RohanSaikyw",
         "https://rohanlearn.blogspot.com"
       ]
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "When do new videos come out?", "acceptedAnswer": { "@type": "Answer", "text": "Every Saturday at 7:02 PM IST. Occasionally a special lands outside the usual slot, like the Independence Day video." } },
+        { "@type": "Question", "name": "What is RohanLearn about?", "acceptedAnswer": { "@type": "Answer", "text": "Money, power and global strategy, explained simply through real company case studies such as BYJU'S, Kalyan Jewellers and UPI vs Visa. Every video ends with 3 takeaways." } },
+        { "@type": "Question", "name": "What is the DTKT series?", "acceptedAnswer": { "@type": "Answer", "text": "DTKT is a 3-part series format: one big company story told across three videos." } },
+        { "@type": "Question", "name": "Can I suggest a company or topic?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Email the company or event you'd like broken down and why it's interesting — suggestions are welcome." } },
+        { "@type": "Question", "name": "How can I sponsor or collaborate?", "acceptedAnswer": { "@type": "Answer", "text": "Use the contact page for sponsorships, promotions, collabs and interviews, or long-term partnerships. Send the pitch, the numbers and the timeline." } },
+        { "@type": "Question", "name": "Is RohanLearn free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Every video is free to watch on YouTube." } }
+      ]
     }
   ]
 }
@@ -78,10 +90,24 @@
   <symbol id="i-x" viewBox="0 0 24 24"><path fill="currentColor" d="M18.9 2H22l-7.4 8.5L23.3 22h-6.8l-5.3-6.9L5 22H1.9l7.9-9L1 2h7l4.8 6.3L18.9 2Zm-1.2 18h1.9L7.4 4H5.3l12.4 16Z"/></symbol>
   <symbol id="i-fb" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21v-7.6h2.55l.38-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.28C16.3 4.2 15.4 4.13 14.35 4.13c-2.4 0-4.05 1.47-4.05 4.16v2.32H7.73v3h2.57V21h3.2Z"/></symbol>
   <symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9S14.6 18.4 12 21c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3Z"/></g></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></g></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></g></symbol>
+  <symbol id="i-page" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></g></symbol>
 </svg>
 
 <div class="bg" aria-hidden="true"><div class="bg__grid"></div><div class="bg__glow"></div><div class="bg__grain"></div></div>
 <div class="progress" aria-hidden="true"></div>
+
+<div class="announce" role="region" aria-label="Announcement">
+  <a class="announce__link" href="https://www.youtube.com/watch?v=3qxYlfArCe8" target="_blank" rel="noopener">
+    <span class="announce__badge">New</span>
+    <span class="announce__text js-announce-title">The Rise of Walmart: 12 Years as the Biggest Company on Earth</span>
+    <span class="announce__cta">Watch <svg><use href="#i-arrow"/></svg></span>
+  </a>
+  <button class="announce__close" type="button" aria-label="Dismiss announcement"><svg><use href="#i-close"/></svg></button>
+</div>
 
 <header class="nav">
   <div class="wrap nav__in">
@@ -98,6 +124,7 @@
     </nav>
 
     <div class="nav__right">
+      <button class="kbtn" type="button" data-cmdk aria-label="Open search" aria-haspopup="dialog"><svg><use href="#i-search"/></svg><span>Search</span><kbd>⌘K</kbd></button>
       <a class="btn btn--primary btn--sm" href="https://www.youtube.com/@rohanlearn?sub_confirmation=1" target="_blank" rel="noopener">
         <span class="btn__dot"></span> Subscribe
       </a>
@@ -166,9 +193,25 @@
           </div>
         </div>
 
-        <span class="tag tag--1" data-depth=".04"><i></i>Money</span>
-        <span class="tag tag--2" data-depth=".05"><i></i>Power</span>
-        <span class="tag tag--3" data-depth=".035"><i></i>Strategy</span>
+        <!-- floating "dashboard" cards (live data, filled in by main.js) -->
+        <div class="ui ui--next" data-depth=".05">
+          <div class="ui__top">
+            <span class="ui__label"><span class="live-dot"></span><span class="js-next-label">Next upload</span></span>
+            <span class="ui__chip">Sat · 7:02 PM IST</span>
+          </div>
+          <div class="ui__count" role="timer" aria-label="Time until the next upload">
+            <span><b class="js-cd-d">--</b><i>days</i></span>
+            <span><b class="js-cd-h">--</b><i>hrs</i></span>
+            <span><b class="js-cd-m">--</b><i>min</i></span>
+            <span><b class="js-cd-s">--</b><i>sec</i></span>
+          </div>
+        </div>
+
+        <div class="ui ui--subs" data-depth=".04">
+          <div class="ui__top"><span class="ui__label">Subscribers</span><span class="ui__delta js-subs-delta"></span></div>
+          <div class="ui__num js-subs-num">650</div>
+          <svg class="ui__spark js-subs-spark" viewBox="0 0 180 46" preserveAspectRatio="none" aria-hidden="true"></svg>
+        </div>
       </div>
 
     </div>
@@ -251,90 +294,146 @@
     </div>
   </section>
 
-  <!-- ===== PROCESS ===== -->
-  <section class="section">
-    <div class="wrap process">
-      <div class="process__aside">
+  <!-- ===== HOW IT WORKS (interactive walkthrough) ===== -->
+  <section class="section" id="format">
+    <div class="wrap showcase" data-showcase>
+      <div class="showcase__aside">
         <span class="eyebrow" data-reveal>The format</span>
         <h2 class="shead__title" data-split style="margin-top:22px">How every breakdown works</h2>
         <p data-reveal style="--d:.2s">No hypotheticals and no filler. Every video follows the same three steps, so you always know what you're getting.</p>
+
+        <div class="tabs" role="tablist" aria-label="Breakdown steps" data-reveal style="--d:.3s">
+          <button class="tab is-active" role="tab" id="tab-0" aria-selected="true" aria-controls="panel-0" data-tab="0">
+            <span class="tab__n">01</span>
+            <span><span class="tab__t">Start with a real company</span><span class="tab__d"><span>BYJU'S, Kalyan Jewellers, UPI vs Visa — real companies and real events. If it's in a video, it actually happened.</span></span></span>
+            <span class="tab__bar"><i></i></span>
+          </button>
+          <button class="tab" role="tab" id="tab-1" aria-selected="false" aria-controls="panel-1" tabindex="-1" data-tab="1">
+            <span class="tab__n">02</span>
+            <span><span class="tab__t">Follow the money and the power</span><span class="tab__d"><span>How the numbers, incentives and decisions connect — MBA-level ideas explained in plain language, without losing what makes them true.</span></span></span>
+            <span class="tab__bar"><i></i></span>
+          </button>
+          <button class="tab" role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2" tabindex="-1" data-tab="2">
+            <span class="tab__n">03</span>
+            <span><span class="tab__t">End with 3 takeaways</span><span class="tab__d"><span>Every video closes with the three things worth keeping. No ten minutes of padding for the algorithm.</span></span></span>
+            <span class="tab__bar"><i></i></span>
+          </button>
+        </div>
       </div>
 
-      <div class="steps">
-        <article class="step" data-reveal>
-          <div class="step__num">01</div>
-          <div class="step__body">
-            <svg class="step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21V8l8-5 8 5v13M9 21v-6h6v6M8 11h.01M12 11h.01M16 11h.01"/></svg>
-            <h3>Start with a real company</h3>
-            <p>BYJU'S, Kalyan Jewellers, UPI vs Visa — real companies and real events. If it's in a video, it actually happened.</p>
+      <div class="win" data-reveal style="--d:.15s">
+        <div class="win__bar">
+          <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="win__title">rohanlearn / breakdown</span>
+          <span class="win__tag">Illustrative</span>
+        </div>
+        <div class="win__body">
+
+          <div class="panel is-active" role="tabpanel" id="panel-0" aria-labelledby="tab-0">
+            <div class="panel__label"><span>Case files</span><span>Real companies</span></div>
+            <ul class="cases">
+              <li style="--i:0"><span class="cases__name">BYJU'S</span><span class="cases__note">The $22 billion gamble</span><span class="pill pill--down">Collapse</span></li>
+              <li style="--i:1"><span class="cases__name">Kalyan Jewellers</span><span class="cases__note">From textile shop to jewellery empire</span><span class="pill pill--up">Growth</span></li>
+              <li style="--i:2"><span class="cases__name">UPI vs Visa</span><span class="cases__note">India's payments rail takes on the giants</span><span class="pill pill--mid">Disruption</span></li>
+              <li style="--i:3"><span class="cases__name">FIFA World Cup</span><span class="cases__note">The $8.9 billion question</span><span class="pill pill--mid">Economics</span></li>
+            </ul>
           </div>
-        </article>
-        <article class="step" data-reveal>
-          <div class="step__num">02</div>
-          <div class="step__body">
-            <svg class="step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 6-6 4 4 8-8M15 7h6v6"/></svg>
-            <h3>Follow the money and the power</h3>
-            <p>How the numbers, incentives and decisions connect — MBA-level ideas explained in plain language, without losing what makes them true.</p>
+
+          <div class="panel" role="tabpanel" id="panel-1" aria-labelledby="tab-1">
+            <div class="panel__label"><span>The loop</span><span>Follow the incentives</span></div>
+            <svg class="flow" viewBox="0 0 520 290" aria-hidden="true">
+              <defs>
+                <marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1.5 8.5 5 1 8.5" fill="none" stroke="#a8a49b" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></marker>
+                <path id="f1" d="M180 62H340"/><path id="f2" d="M420 88V202"/><path id="f3" d="M340 228H180"/><path id="f4" d="M100 202V88"/>
+              </defs>
+              <rect class="node node--hot" x="20" y="36" width="160" height="52" rx="12"/><text class="node-t" x="100" y="62">MONEY</text>
+              <rect class="node" x="340" y="36" width="160" height="52" rx="12"/><text class="node-t" x="420" y="62">INCENTIVES</text>
+              <rect class="node" x="340" y="202" width="160" height="52" rx="12"/><text class="node-t" x="420" y="228">DECISIONS</text>
+              <rect class="node node--hot" x="20" y="202" width="160" height="52" rx="12"/><text class="node-t" x="100" y="228">POWER</text>
+              <use href="#f1" class="flow-line" marker-end="url(#arrowhead)"/><use href="#f2" class="flow-line" marker-end="url(#arrowhead)"/>
+              <use href="#f3" class="flow-line" marker-end="url(#arrowhead)"/><use href="#f4" class="flow-line" marker-end="url(#arrowhead)"/>
+              <circle class="flow-dot" r="4"><animateMotion dur="2.6s" repeatCount="indefinite"><mpath href="#f1"/></animateMotion></circle>
+              <circle class="flow-dot" r="4"><animateMotion dur="2.6s" begin="-1.95s" repeatCount="indefinite"><mpath href="#f2"/></animateMotion></circle>
+              <circle class="flow-dot" r="4"><animateMotion dur="2.6s" begin="-1.3s" repeatCount="indefinite"><mpath href="#f3"/></animateMotion></circle>
+              <circle class="flow-dot" r="4"><animateMotion dur="2.6s" begin="-.65s" repeatCount="indefinite"><mpath href="#f4"/></animateMotion></circle>
+              <text class="flow-cap" x="260" y="150">WHO REALLY CONTROLS WHAT?</text>
+            </svg>
           </div>
-        </article>
-        <article class="step" data-reveal>
-          <div class="step__num">03</div>
-          <div class="step__body">
-            <svg class="step__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h11M10 12h11M10 18h11M3.5 6l1.2 1.2L7 4.8M3.5 12l1.2 1.2L7 10.8M3.5 18l1.2 1.2L7 16.8"/></svg>
-            <h3>End with 3 takeaways</h3>
-            <p>Every video closes with the three things worth keeping. No ten minutes of padding for the algorithm.</p>
+
+          <div class="panel" role="tabpanel" id="panel-2" aria-labelledby="tab-2">
+            <div class="panel__label"><span>Takeaways</span><span>3 of 3</span></div>
+            <div class="takes">
+              <div class="take2" style="--i:0"><b>1</b><div class="ln"><span></span><span></span></div><span class="ok"><svg><use href="#i-check"/></svg></span></div>
+              <div class="take2" style="--i:1"><b>2</b><div class="ln"><span></span><span></span></div><span class="ok"><svg><use href="#i-check"/></svg></span></div>
+              <div class="take2" style="--i:2"><b>3</b><div class="ln"><span></span><span></span></div><span class="ok"><svg><use href="#i-check"/></svg></span></div>
+            </div>
+            <p class="takes__cap">Every video. Always three.</p>
           </div>
-        </article>
+
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ===== WHAT YOU GET ===== -->
+  <!-- ===== GROWTH DASHBOARD (real data) ===== -->
+  <section class="section section--tight" id="growth">
+    <div class="wrap">
+      <header class="shead shead--split">
+        <div style="display:grid;gap:22px">
+          <span class="eyebrow" data-reveal>Growing in public</span>
+          <h2 class="shead__title" data-split>The channel, by the numbers</h2>
+        </div>
+        <p class="shead__lede" data-reveal style="--d:.2s;max-width:36ch">Real figures pulled from YouTube every day. Tracking since <span class="js-g-since">15 Aug 2026</span>.</p>
+      </header>
+
+      <div class="kpis" data-reveal>
+        <article class="kpi" data-kpi="s">
+          <span class="kpi__label">Subscribers</span>
+          <span class="kpi__num js-kpi-num">650</span>
+          <span class="kpi__delta js-kpi-delta"></span>
+          <svg class="ui__spark js-kpi-spark" viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"></svg>
+        </article>
+        <article class="kpi" data-kpi="v">
+          <span class="kpi__label">Views</span>
+          <span class="kpi__num js-kpi-num">86,628</span>
+          <span class="kpi__delta js-kpi-delta"></span>
+          <svg class="ui__spark js-kpi-spark" viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"></svg>
+        </article>
+        <article class="kpi" data-kpi="n">
+          <span class="kpi__label">Videos</span>
+          <span class="kpi__num js-kpi-num">113</span>
+          <span class="kpi__delta js-kpi-delta"></span>
+          <svg class="ui__spark js-kpi-spark" viewBox="0 0 300 40" preserveAspectRatio="none" aria-hidden="true"></svg>
+        </article>
+      </div>
+
+      <div class="chart" data-reveal style="--d:.1s" data-chart>
+        <div class="chart__bar">
+          <div class="seg" role="tablist" aria-label="Chart metric">
+            <button role="tab" aria-selected="true" data-m="s">Subscribers</button>
+            <button role="tab" aria-selected="false" data-m="v">Views</button>
+          </div>
+          <span class="chart__src">Source: YouTube · updated daily</span>
+        </div>
+        <div class="chart__plot">
+          <svg class="chart__svg" aria-label="Growth chart of the channel"></svg>
+          <div class="chart__tip"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== WHY IT STICKS ===== -->
   <section class="section section--tight">
     <div class="wrap">
       <header class="shead">
-        <span class="eyebrow" data-reveal>What you get</span>
+        <span class="eyebrow" data-reveal>Why it sticks</span>
         <h2 class="shead__title" data-split>Strategy, without the textbook</h2>
       </header>
 
       <div class="bento">
 
-        <article class="tile tile--a" data-reveal>
-          <div class="tile__viz">
-            <svg class="viz-chart" viewBox="0 0 520 150" preserveAspectRatio="none" aria-hidden="true">
-              <rect class="bar" style="--i:0" x="8"   y="116" width="34" height="34" rx="4"/>
-              <rect class="bar" style="--i:1" x="66"  y="98"  width="34" height="52" rx="4"/>
-              <rect class="bar" style="--i:2" x="124" y="84"  width="34" height="66" rx="4"/>
-              <rect class="bar" style="--i:3" x="182" y="62"  width="34" height="88" rx="4"/>
-              <rect class="bar" style="--i:4" x="240" y="38"  width="34" height="112" rx="4"/>
-              <rect class="bar bar--hi" style="--i:5" x="298" y="20" width="34" height="130" rx="4"/>
-              <rect class="bar" style="--i:6" x="356" y="54"  width="34" height="96" rx="4"/>
-              <rect class="bar" style="--i:7" x="414" y="96"  width="34" height="54" rx="4"/>
-              <rect class="bar" style="--i:8" x="472" y="124" width="34" height="26" rx="4"/>
-              <path class="trend" pathLength="1" d="M25 108 L83 90 L141 76 L199 54 L257 30 L315 12 L373 46 L431 88 L489 116"/>
-              <circle class="end" cx="489" cy="116" r="4.5"/>
-            </svg>
-            <div class="chips"><span class="chip">BYJU'S</span><span class="chip">Kalyan Jewellers</span><span class="chip">UPI vs Visa</span><span class="chip">FIFA World Cup</span></div>
-          </div>
-          <div class="tile__text">
-            <h3>Real companies. Real numbers.</h3>
-            <p>Every breakdown is grounded in something that actually happened — how it rose, why it broke, and what it means.</p>
-          </div>
-        </article>
-
-        <article class="tile tile--b" data-reveal style="--d:.1s">
-          <div class="tile__viz viz-take">
-            <div class="take" style="--i:0"><b>1</b><span></span></div>
-            <div class="take" style="--i:1"><b>2</b><span></span></div>
-            <div class="take" style="--i:2"><b>3</b><span></span></div>
-          </div>
-          <div class="tile__text">
-            <h3>Three takeaways, every time.</h3>
-            <p>Each video is built backwards from the 3 things worth remembering.</p>
-          </div>
-        </article>
-
-        <article class="tile tile--c" data-reveal>
+        <article class="tile tile--sat" data-reveal>
           <div class="tile__viz">
             <div class="viz-week" aria-hidden="true">
               <span class="day" style="--i:0">M</span><span class="day" style="--i:1">T</span><span class="day" style="--i:2">W</span><span class="day" style="--i:3">T</span><span class="day" style="--i:4">F</span><span class="day day--on" style="--i:5">S</span><span class="day" style="--i:6">S</span>
@@ -347,7 +446,7 @@
           </div>
         </article>
 
-        <article class="tile tile--d" data-reveal style="--d:.1s">
+        <article class="tile tile--jar" data-reveal style="--d:.1s">
           <div class="tile__viz viz-jargon" aria-hidden="true">
             <div class="jr" style="--i:0"><span class="jr__a">Liquidity crunch</span><svg class="jr__arrow" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M0 6h20m-5-5 5 5-5 5"/></svg><span class="jr__b">They ran out of cash.</span></div>
             <div class="jr" style="--i:1"><span class="jr__a">Market share</span><svg class="jr__arrow" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M0 6h20m-5-5 5 5-5 5"/></svg><span class="jr__b">Who gets the customers.</span></div>
@@ -356,6 +455,28 @@
           <div class="tile__text">
             <h3>MBA-level. Zero jargon.</h3>
             <p>The ideas come from business school. The explanation doesn't sound like it.</p>
+          </div>
+        </article>
+
+        <article class="tile tile--glo" data-reveal>
+          <div class="tile__text">
+            <h3>A global lens, from an Indian point of view.</h3>
+            <p>India's UPI, the US dollar, China, Russia, BRICS — the big shifts in money and power, connected.</p>
+          </div>
+          <div class="tile__viz" aria-hidden="true">
+            <svg class="globe" viewBox="0 0 640 230">
+              <defs><pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" class="dotgrid"/></pattern></defs>
+              <rect width="640" height="230" fill="url(#dots)" opacity=".55"/>
+              <path class="arc" style="--i:0" pathLength="1" d="M92 108 Q 230 -10 372 150"/>
+              <path class="arc" style="--i:1" pathLength="1" d="M372 150 Q 350 40 336 62"/>
+              <path class="arc" style="--i:2" pathLength="1" d="M372 150 Q 470 60 530 108"/>
+              <path class="arc" style="--i:3" pathLength="1" d="M372 150 Q 260 250 148 184"/>
+              <circle class="city" cx="92" cy="108" r="5"/><text x="92" y="132" text-anchor="middle">USA</text>
+              <circle class="city" cx="148" cy="184" r="5"/><text x="148" y="208" text-anchor="middle">Venezuela</text>
+              <circle class="city" cx="336" cy="62" r="5"/><text x="336" y="42" text-anchor="middle">Russia</text>
+              <circle class="city" cx="530" cy="108" r="5"/><text x="530" y="132" text-anchor="middle">China</text>
+              <circle class="ring-p" cx="372" cy="150" r="9"/><circle class="city city--hub" cx="372" cy="150" r="7"/><text x="372" y="178" text-anchor="middle" style="fill:var(--text)">India</text>
+            </svg>
           </div>
         </article>
 
@@ -386,6 +507,44 @@
           locked behind MBA programs — explained simply enough that anyone can use them.
         </p>
         <a class="link-arrow" href="about.html" data-reveal style="--d:.35s">Read the full story <svg><use href="#i-arrow"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ ===== -->
+  <section class="section section--tight" id="faq">
+    <div class="wrap faq">
+      <div class="faq__aside">
+        <span class="eyebrow" data-reveal>FAQ</span>
+        <h2 class="shead__title" data-split style="margin-top:22px">Questions, answered</h2>
+        <p data-reveal style="--d:.2s">Something else on your mind? <a href="contact.html">Get in touch</a>.</p>
+      </div>
+
+      <div class="faq__list" data-reveal style="--d:.1s">
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" id="qq-0" aria-expanded="false" aria-controls="qa-0">When do new videos come out?<span class="qa__i" aria-hidden="true"></span></button></h3>
+          <div class="qa__a" id="qa-0" role="region" aria-labelledby="qq-0"><div><p>Every Saturday at 7:02 PM IST. Occasionally a special lands outside the usual slot, like the Independence Day video.</p></div></div>
+        </div>
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" id="qq-1" aria-expanded="false" aria-controls="qa-1">What is RohanLearn about?<span class="qa__i" aria-hidden="true"></span></button></h3>
+          <div class="qa__a" id="qa-1" role="region" aria-labelledby="qq-1"><div><p>Money, power and global strategy, explained simply through real case studies — BYJU'S, Kalyan Jewellers, UPI vs Visa and more. Every video ends with 3 takeaways.</p></div></div>
+        </div>
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" id="qq-2" aria-expanded="false" aria-controls="qa-2">What is the DTKT series?<span class="qa__i" aria-hidden="true"></span></button></h3>
+          <div class="qa__a" id="qa-2" role="region" aria-labelledby="qq-2"><div><p>DTKT is my 3-part series format: one big company story, told across three videos.</p></div></div>
+        </div>
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" id="qq-3" aria-expanded="false" aria-controls="qa-3">Can I suggest a company or topic?<span class="qa__i" aria-hidden="true"></span></button></h3>
+          <div class="qa__a" id="qa-3" role="region" aria-labelledby="qq-3"><div><p>Yes. Email the company or event you'd like broken down and why it's interesting — suggestions are welcome. You'll find the address on the <a href="contact.html">contact page</a>.</p></div></div>
+        </div>
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" id="qq-4" aria-expanded="false" aria-controls="qa-4">How can I sponsor or collaborate?<span class="qa__i" aria-hidden="true"></span></button></h3>
+          <div class="qa__a" id="qa-4" role="region" aria-labelledby="qq-4"><div><p>Head to the <a href="contact.html">contact page</a> — sponsorships, promotions, collabs and interviews, or long-term partnerships. Send the pitch, the numbers and the timeline.</p></div></div>
+        </div>
+        <div class="qa">
+          <h3 class="qa__h"><button class="qa__q" id="qq-5" aria-expanded="false" aria-controls="qa-5">Is RohanLearn free?<span class="qa__i" aria-hidden="true"></span></button></h3>
+          <div class="qa__a" id="qa-5" role="region" aria-labelledby="qq-5"><div><p>Yes. Every video is free to watch on YouTube.</p></div></div>
+        </div>
       </div>
     </div>
   </section>
@@ -439,6 +598,7 @@
     </div>
     <div class="footer__bottom">
       <span>© <span id="year">2026</span> B-RITE LEARNING LLP, RohanLearn. All rights reserved.</span>
+      <span class="footer__live"><span class="live-dot"></span> Live data · updated daily</span>
       <a href="#main">Back to top ↑</a>
     </div>
   </div>
