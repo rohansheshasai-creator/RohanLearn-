@@ -1,5 +1,32 @@
 {
   "videoId": "3qxYlfArCe8",
   "title": "The Rise of Walmart: 12 Years as the Biggest Company on Earth",
-  "publishedAt": "2026-10-03T13:32:30+00:00"
+  "publishedAt": "2026-10-03T13:32:30+00:00",
+  "videos": [
+    {
+      "id": "3qxYlfArCe8",
+      "title": "The Rise of Walmart: 12 Years as the Biggest Company on Earth",
+      "publishedAt": "2026-10-03T13:32:30+00:00"
+    },
+    {
+      "id": "FGkzeJM9LxI",
+      "title": "How a Rejected Idea Became a $2 Trillion Empire | The Comeback Series",
+      "publishedAt": "2026-09-26T13:32:09+00:00"
+    },
+    {
+      "id": "OtBNSe3AurA",
+      "title": "Your JOB is in Risk Now!",
+      "publishedAt": "2026-09-19T13:32:02+00:00"
+    },
+    {
+      "id": "LPR-zYHLDKM",
+      "title": "Why BRICS is Suddenly the World’s Biggest Threat to Dollar?",
+      "publishedAt": "2026-09-12T05:15:28+00:00"
+    },
+    {
+      "id": "onxEbLI_kU8",
+      "title": "The Death Of Jaguar: How A $2.3B Icon Failed",
+      "publishedAt": "2026-09-05T16:30:32+00:00"
+    }
+  ]
 }
