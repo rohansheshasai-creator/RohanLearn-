@@ -23,12 +23,32 @@ import urllib.request
 CHANNEL_ID = "UCxBbAhcn1PgxfV8kWD0o8Uw"  # Rohan Learn
 ABOUT_URL = f"https://www.youtube.com/channel/{CHANNEL_ID}/about"
 OUT_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "channel-stats.json")
+HISTORY_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "stats-history.json")
 
 PATTERNS = {
     "subscribers": r'"subscriberCountText":"([\d,]+) subscribers?"',
     "videos": r'"videoCountText":"([\d,]+) videos?"',
     "views": r'"viewCountText":"([\d,]+) views?"',
 }
+
+
+def update_history(stats):
+    """Keep one data point per day (s = subscribers, v = views, n = videos).
+    The homepage's growth chart is drawn from this file."""
+    point = {"d": stats["updatedAt"][:10], "s": stats["subscribers"], "v": stats["views"], "n": stats["videos"]}
+    points = []
+    if os.path.exists(HISTORY_PATH):
+        try:
+            with open(HISTORY_PATH, encoding="utf-8") as f:
+                points = json.load(f).get("points", [])
+        except (json.JSONDecodeError, OSError):
+            points = []
+    points = [p for p in points if p.get("d") != point["d"]]
+    points.append(point)
+    points.sort(key=lambda p: p["d"])
+    with open(HISTORY_PATH, "w", encoding="utf-8") as f:
+        json.dump({"points": points}, f, indent=1)
+        f.write("\n")
 
 
 def write_output(key, value):
@@ -76,6 +96,8 @@ def main():
     with open(OUT_PATH, "w", encoding="utf-8") as f:
         json.dump(stats, f, indent=2, ensure_ascii=False)
         f.write("\n")
+
+    update_history(stats)
 
     print(f"Updated channel stats: {stats}")
     write_output("changed", "true")
