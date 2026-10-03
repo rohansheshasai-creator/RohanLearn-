@@ -1,496 +1,353 @@
 /* ============================================================
-   RohanLearn — interactions & animations
-   Plain JavaScript, no libraries. Runs on every page.
+   RohanLearn — interactions & motion
+   Plain JavaScript, no libraries. Every effect degrades to a normal,
+   fully readable page if this file fails to load or the visitor has
+   "reduce motion" switched on.
    ============================================================ */
 
 (function () {
   "use strict";
 
-  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var finePointer  = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var d = document;
+  var root = d.documentElement;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var fine   = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var hasIO  = "IntersectionObserver" in window;
 
-  /* ---------- Fade the page in once it's ready ---------- */
-  requestAnimationFrame(function () {
-    document.body.classList.add("is-ready");
-  });
+  function $(s, c)  { return (c || d).querySelector(s); }
+  function $$(s, c) { return Array.prototype.slice.call((c || d).querySelectorAll(s)); }
 
-  /* ---------- Current year in the footer ---------- */
-  var year = document.getElementById("year");
+  /* ---------- Footer year ---------- */
+  var year = $("#year");
   if (year) year.textContent = new Date().getFullYear();
 
-  /* ---------- Hero headline: stagger each word ---------- */
-  document.querySelectorAll(".hero__title .word").forEach(function (word, i) {
-    word.style.animationDelay = (120 + i * 90) + "ms";
-  });
+  /* ---------- Nav: scrolled state + reading progress ---------- */
+  var nav = $(".nav");
+  var bar = $(".progress");
+  function onScroll() {
+    var y = window.scrollY || 0;
+    if (nav) nav.classList.toggle("is-scrolled", y > 8);
+    if (bar) {
+      var h = root.scrollHeight - window.innerHeight;
+      bar.style.transform = "scaleX(" + (h > 0 ? Math.min(y / h, 1) : 0) + ")";
+    }
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 
-  /* ---------- Letter-stagger reveal for section headings ----------
-     A text-level burst animation, distinct from the panel-level 3D
-     tilt used for cards/CTAs. Splits each .reveal-chars heading into
-     per-character spans (preserving nested tags like <em>), then
-     bursts them in, staggered, the first time the heading is scrolled
-     into view. */
-  (function initCharReveal() {
-    var headings = document.querySelectorAll(".reveal-chars");
-    if (!headings.length) return;
+  /* ---------- Nav: sliding underline ---------- */
+  (function initNavIndicator() {
+    var links = $(".nav__links");
+    if (!links) return;
+    var ind    = $(".nav__ind", links);
+    var items  = $$("a", links);
+    var active = items.filter(function (a) { return a.getAttribute("aria-current") === "page"; })[0];
 
-    var i;
-    headings.forEach(function (heading) {
-      i = 0;
-      (function wrap(node) {
-        Array.prototype.slice.call(node.childNodes).forEach(function (child) {
-          if (child.nodeType === 3) {                    // text node
-            var frag = document.createDocumentFragment();
-            // Split into words first, and keep each word's letters inside
-            // one no-wrap container — otherwise every letter is free to
-            // wrap independently and long words break mid-letter at the
-            // edge of the line (e.g. "strat" / "egy.").
-            child.textContent.split(" ").forEach(function (word, wi, words) {
-              if (word !== "") {
-                var wordSpan = document.createElement("span");
-                wordSpan.className = "char-word";
-                word.split("").forEach(function (ch) {
-                  var span = document.createElement("span");
-                  span.className = "char";
-                  span.style.setProperty("--i", i++);
-                  span.textContent = ch;
-                  wordSpan.appendChild(span);
-                });
-                frag.appendChild(wordSpan);
-              }
-              if (wi < words.length - 1) frag.appendChild(document.createTextNode(" "));
-            });
-            node.replaceChild(frag, child);
-          } else if (child.nodeType === 1) {
-            wrap(child);                                  // recurse into e.g. <em>
-          }
-        });
-      })(heading);
-    });
-
-    if (reduceMotion || !("IntersectionObserver" in window)) {
-      headings.forEach(function (h) { h.classList.add("is-in"); });
-      return;
+    function place(el) {
+      if (!el) { ind.style.opacity = 0; return; }
+      ind.style.opacity = 1;
+      ind.style.width = (el.offsetWidth - 32) + "px";
+      ind.style.transform = "translateX(" + (el.offsetLeft + 16) + "px)";
     }
 
-    var charObserver = new IntersectionObserver(function (entries) {
+    items.forEach(function (a) {
+      a.addEventListener("pointerenter", function () { place(a); });
+      a.addEventListener("focus", function () { place(a); });
+    });
+    links.addEventListener("pointerleave", function () { place(active); });
+    window.addEventListener("resize", function () { place(active); });
+
+    // first placement without the slide-in animation
+    ind.style.transition = "none";
+    place(active);
+    void ind.offsetWidth;
+    ind.style.transition = "";
+    if (d.fonts && d.fonts.ready) d.fonts.ready.then(function () { place(active); });
+  })();
+
+  /* ---------- Mobile menu ---------- */
+  (function initMenu() {
+    var burger = $(".burger");
+    var menu = $(".menu");
+    if (!burger || !menu) return;
+
+    function setOpen(open) {
+      root.classList.toggle("menu-open", open);
+      burger.setAttribute("aria-expanded", String(open));
+      burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      menu.setAttribute("aria-hidden", String(!open));
+    }
+    burger.addEventListener("click", function () { setOpen(!root.classList.contains("menu-open")); });
+    $$("a", menu).forEach(function (a) { a.addEventListener("click", function () { setOpen(false); }); });
+    d.addEventListener("keydown", function (e) { if (e.key === "Escape") setOpen(false); });
+    window.addEventListener("resize", function () { if (window.innerWidth > 760) setOpen(false); });
+  })();
+
+  /* ---------- Split headings into words for the masked rise-in ---------- */
+  function splitWords(el) {
+    var idx = 0;
+    (function walk(node) {
+      Array.prototype.slice.call(node.childNodes).forEach(function (child) {
+        if (child.nodeType === 3) {
+          var frag = d.createDocumentFragment();
+          child.textContent.split(/(\s+)/).forEach(function (part) {
+            if (!part) return;
+            if (/^\s+$/.test(part)) { frag.appendChild(d.createTextNode(" ")); return; }
+            var w  = d.createElement("span");
+            var wi = d.createElement("span");
+            w.className = "w";
+            wi.className = "wi";
+            wi.textContent = part;
+            wi.style.setProperty("--i", idx++);
+            w.appendChild(wi);
+            frag.appendChild(w);
+          });
+          node.replaceChild(frag, child);
+        } else if (child.nodeType === 1) {
+          walk(child);
+        }
+      });
+    })(el);
+  }
+  $$("[data-split]").forEach(splitWords);
+
+  /* ---------- Reveal on scroll ---------- */
+  var revealTargets = $$("[data-split], [data-reveal], [data-stage], [data-observe], .tl");
+  if (!hasIO || reduce) {
+    revealTargets.forEach(function (el) { el.classList.add("is-in"); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (!entry.isIntersecting) return;
         entry.target.classList.add("is-in");
-        charObserver.unobserve(entry.target);
+        io.unobserve(entry.target);
       });
-    }, { threshold: 0.4 });
-
-    headings.forEach(function (h) { charObserver.observe(h); });
-  })();
-
-  /* ---------- Button ripple — click-triggered, not hover/scroll ---------- */
-  document.querySelectorAll(".btn").forEach(function (btn) {
-    btn.addEventListener("pointerdown", function (e) {
-      var r = btn.getBoundingClientRect();
-      var size = Math.max(r.width, r.height) * 1.6;
-      var ripple = document.createElement("span");
-      ripple.className = "btn__ripple";
-      ripple.style.width = ripple.style.height = size + "px";
-      ripple.style.left = (e.clientX - r.left - size / 2) + "px";
-      ripple.style.top  = (e.clientY - r.top  - size / 2) + "px";
-      btn.appendChild(ripple);
-      ripple.addEventListener("animationend", function () { ripple.remove(); });
-    });
-  });
-
-  /* ==========================================================
-     Scroll-scrubbed 3D reveal (Apple-product-page style)
-     Every .reveal element tracks a continuous progress value
-     (0→1) as it crosses a window in the viewport. The value is
-     eased frame-by-frame (like the cursor glow below) so it
-     feels silky rather than snapping to the raw scroll position,
-     and it runs both ways — scroll back up and it un-reveals.
-     data-delay (ms) is reused as a stagger: it nudges an
-     element's reveal window later, so grouped items (e.g. a row
-     of cards) settle into place one after another.
-     ========================================================== */
-  var revealTargets = Array.prototype.map.call(
-    document.querySelectorAll(".reveal"),
-    function (el) {
-      return { el: el, current: 0, target: 0, stagger: parseFloat(el.dataset.delay) || 0 };
-    }
-  );
-
-  if (reduceMotion || !revealTargets.length) {
-    revealTargets.forEach(function (t) { t.el.style.setProperty("--p", 1); });
-  } else {
-    // The ticker only runs while something is actually moving, and goes
-    // back to sleep once every element has settled — instead of running
-    // requestAnimationFrame forever for the entire life of the page (which
-    // burns battery/CPU even while you're just reading, motionless).
-    var revealRafId = null;
-
-    var ensureRevealLoop = function () {
-      if (revealRafId === null) revealRafId = requestAnimationFrame(tickReveal);
-    };
-
-    function tickReveal() {
-      var stillMoving = false;
-      revealTargets.forEach(function (t) {
-        var diff = t.target - t.current;
-        if (Math.abs(diff) > 0.001) {
-          t.current += diff * 0.16;
-          stillMoving = true;
-        } else if (t.current !== t.target) {
-          t.current = t.target;
-        }
-        t.el.style.setProperty("--p", t.current.toFixed(4));
-      });
-      revealRafId = stillMoving ? requestAnimationFrame(tickReveal) : null;
-    }
-
-    var computeRevealTargets = function () {
-      var vh = window.innerHeight;
-      var changed = false;
-      revealTargets.forEach(function (t) {
-        var rect = t.el.getBoundingClientRect();
-        var start = vh * 0.92 + t.stagger * 0.4;   // window opens here (element still low on screen)
-        var end   = vh * 0.55 + t.stagger * 0.4;   // fully settled by here
-        var raw   = (start - rect.top) / (start - end);
-        var next  = Math.min(1, Math.max(0, raw));
-        if (next !== t.target) { t.target = next; changed = true; }
-      });
-      if (changed) ensureRevealLoop();
-    };
-
-    computeRevealTargets();
-    ensureRevealLoop();
+    }, { threshold: 0.15, rootMargin: "0px 0px -6% 0px" });
+    revealTargets.forEach(function (el) { io.observe(el); });
   }
 
-  /* ---------- Nav: liquid-glass morph + progress bar + bg parallax ---------- */
-  var nav      = document.getElementById("nav");
-  var progress = document.querySelector(".progress__bar");
-  var ticking  = false;
-
-  function computeRevealTargetsSafe() {
-    if (typeof computeRevealTargets === "function") computeRevealTargets();
-  }
-
-  function onScroll() {
-    // ---- read phase first (avoids forcing a layout flush mid-frame) ----
-    var y        = window.scrollY;
-    var scrollMax = document.documentElement.scrollHeight - window.innerHeight;
-    if (!reduceMotion) computeRevealTargetsSafe();   // reads getBoundingClientRect
-
-    // ---- write phase ----
-    if (nav) {
-      nav.classList.toggle("is-stuck", y > 30);
-      // continuous "compactness" 0→1 over the first 260px of scroll —
-      // the nav pill gently shrinks and tightens as you scroll, like a
-      // liquid-glass tab bar settling into a smaller capsule.
-      nav.style.setProperty("--nav-compact", Math.min(1, y / 260).toFixed(3));
-    }
-
-    if (progress) {
-      progress.style.width = (scrollMax > 0 ? (y / scrollMax) * 100 : 0) + "%";
-    }
-
-    // subtle background parallax
-    document.documentElement.style.setProperty(
-      "--scroll-parallax", Math.min(60, y * 0.06).toFixed(1) + "px"
-    );
-
-    ticking = false;
-  }
-
-  window.addEventListener("scroll", function () {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(onScroll);
-  }, { passive: true });
-
-  window.addEventListener("resize", function () {
-    requestAnimationFrame(onScroll);
-  });
-
-  onScroll();
-
-  /* ---------- Liquid-glass sliding nav indicator ---------- */
-  (function initNavIndicator() {
-    var wrap  = document.querySelector(".nav__links");
-    if (!wrap) return;
-    var links = Array.prototype.slice.call(wrap.querySelectorAll("a"));
-    if (!links.length) return;
-
-    var indicator = document.createElement("span");
-    indicator.className = "nav__indicator";
-    indicator.setAttribute("aria-hidden", "true");
-    wrap.insertBefore(indicator, wrap.firstChild);
-
-    var activeLink = wrap.querySelector("a.is-active") || links[0];
-
-    function moveTo(el) {
-      if (!el) return;
-      var wrapRect = wrap.getBoundingClientRect();
-      var elRect   = el.getBoundingClientRect();
-      indicator.style.left  = (elRect.left - wrapRect.left) + "px";
-      indicator.style.width = elRect.width + "px";
-    }
-
-    // Place it instantly the first time — without this, the indicator's own
-    // hover transition would animate it growing from a zero-width sliver on
-    // every page load, which reads as a glitch rather than an entrance.
-    indicator.style.transition = "none";
-    moveTo(activeLink);
-    void indicator.offsetWidth;           // force layout so the "none" takes hold
-    indicator.style.transition = "";      // restore the CSS-defined glide
-    requestAnimationFrame(function () { indicator.classList.add("is-ready"); });
-
-    links.forEach(function (link) {
-      link.addEventListener("pointerenter", function () { moveTo(link); });
-      link.addEventListener("focus", function () { moveTo(link); });
-    });
-    wrap.addEventListener("pointerleave", function () { moveTo(activeLink); });
-
-    // Keyboard users: once focus leaves the nav entirely, snap back to
-    // showing the real active page instead of leaving the pill stranded
-    // under whichever link was last tabbed to.
-    wrap.addEventListener("focusout", function (e) {
-      if (!wrap.contains(e.relatedTarget)) moveTo(activeLink);
-    });
-
-    window.addEventListener("resize", function () { moveTo(activeLink); });
-  })();
-
-  /* ---------- Carousel ("The channel" section) ----------
-     No JS at all now — it's a pure CSS animation (see .carousel__track
-     in style.css), the same duplicate-and-loop technique as the ticker
-     marquee. Pausing on hover is animation-play-state via :hover, which
-     is instant and jank-free in both directions with zero timers. */
-
-  /* ---------- Mobile menu ---------- */
-  var burger = document.querySelector(".nav__burger");
-  var menu   = document.getElementById("mobile-menu");
-
-  if (burger && menu) {
-    burger.addEventListener("click", function () {
-      var open = burger.getAttribute("aria-expanded") === "true";
-      burger.setAttribute("aria-expanded", String(!open));
-      menu.hidden = open;
-    });
-
-    menu.querySelectorAll("a").forEach(function (link) {
-      link.addEventListener("click", function () {
-        burger.setAttribute("aria-expanded", "false");
-        menu.hidden = true;
-      });
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !menu.hidden) {
-        burger.setAttribute("aria-expanded", "false");
-        menu.hidden = true;
-        burger.focus();
-      }
-    });
-  }
-
-  /* ---------- Live channel stats (subscribers/videos/views) ----------
-     assets/channel-stats.json is kept up to date by a scheduled
-     GitHub Action that reads the public YouTube channel page (see
-     .github/workflows/update-channel-stats.yml) — nobody has to edit
-     this by hand. The hardcoded data-count/data-suffix values in the
-     HTML stay as a fallback for if this fetch fails or is slow. */
-  function formatStatCount(n) {
+  /* ---------- Live channel stats ----------
+     assets/channel-stats.json is refreshed daily by a GitHub Action.
+     The numbers written in the HTML are the fallback. */
+  function formatStat(n) {
     if (n >= 1000) return { count: Math.round(n / 1000), suffix: "K+" };
     return { count: n, suffix: "+" };
   }
 
-  var statsFetch = fetch("assets/channel-stats.json", { cache: "no-store" })
+  var statsReq = fetch("assets/channel-stats.json", { cache: "no-store" })
     .then(function (res) { return res.ok ? res.json() : null; })
     .catch(function () { return null; });
 
-  /* ---------- Animated counters in the stats row ---------- */
-  var counters = document.querySelectorAll("[data-count]");
+  function applyStats(stats) {
+    if (!stats) return;
+    $$("[data-stat]").forEach(function (el) {
+      var key = el.dataset.stat;
+      if (stats[key] == null) return;
+      var f = formatStat(stats[key]);
+      el.dataset.count = f.count;
+      el.dataset.suffix = f.suffix;
+      if (el.dataset.done) el.textContent = f.count.toLocaleString() + f.suffix;
+    });
+    $$("[data-live]").forEach(function (el) {
+      var key = el.dataset.live;
+      if (stats[key] == null) return;
+      var f = formatStat(stats[key]);
+      el.textContent = f.count.toLocaleString() + f.suffix;
+    });
+  }
 
   function runCounter(el) {
     var target = parseFloat(el.dataset.count) || 0;
     var suffix = el.dataset.suffix || "";
-    var dur    = 1600;
-    var start  = null;
-
+    var dur = 1700;
+    var start = null;
     function step(now) {
       if (start === null) start = now;
       var p = Math.min((now - start) / dur, 1);
-      var eased = 1 - Math.pow(1 - p, 3);
+      var eased = 1 - Math.pow(1 - p, 4);
       el.textContent = Math.round(target * eased).toLocaleString() + suffix;
       if (p < 1) requestAnimationFrame(step);
+      else el.dataset.done = "1";
     }
     requestAnimationFrame(step);
   }
 
-  if (counters.length) {
-    // Give the live-stats fetch a brief chance to land before the
-    // counters read their data-count — falls back to the hardcoded
-    // HTML values (also correct as of the last manual update) if it's
-    // slow or fails, so the animation never visibly waits on network.
-    Promise.race([
-      statsFetch,
-      new Promise(function (resolve) { setTimeout(function () { resolve(null); }, 1200); })
-    ]).then(function (stats) {
-      if (stats) {
-        counters.forEach(function (el) {
-          var key = el.dataset.stat;
-          if (!key || stats[key] == null) return;
-          var formatted = formatStatCount(stats[key]);
-          el.dataset.count  = formatted.count;
-          el.dataset.suffix = formatted.suffix;
-        });
-      }
+  (function initCounters() {
+    var counters = $$("[data-stat][data-count]");
+    if (!counters.length) { statsReq.then(applyStats); return; }
 
-      if (reduceMotion || !("IntersectionObserver" in window)) {
-        counters.forEach(function (el) {
-          el.textContent = (parseFloat(el.dataset.count) || 0).toLocaleString() + (el.dataset.suffix || "");
-        });
-      } else {
-        var countObserver = new IntersectionObserver(function (entries) {
+    // give the live numbers a brief head start before the count-up reads them
+    Promise.race([statsReq, new Promise(function (r) { setTimeout(function () { r(null); }, 1200); })])
+      .then(function (stats) {
+        applyStats(stats);
+        if (reduce || !hasIO) {
+          counters.forEach(function (el) {
+            el.textContent = (parseFloat(el.dataset.count) || 0).toLocaleString() + (el.dataset.suffix || "");
+            el.dataset.done = "1";
+          });
+          return;
+        }
+        counters.forEach(function (el) { el.textContent = "0" + (el.dataset.suffix || ""); });
+        var co = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
             runCounter(entry.target);
-            countObserver.unobserve(entry.target);
+            co.unobserve(entry.target);
           });
         }, { threshold: 0.6 });
+        counters.forEach(function (el) { co.observe(el); });
+      });
+    statsReq.then(applyStats); // late arrivals still update
+  })();
 
-        counters.forEach(function (el) { countObserver.observe(el); });
-      }
-    });
+  /* ---------- Latest video + recent breakdowns ----------
+     assets/latest-video.json is refreshed every few hours by a GitHub
+     Action reading the channel feed (Shorts filtered out). The video and
+     cards written in the HTML are the fallback. */
+  // Dates are shown in IST (the channel's timezone) with fixed month names,
+  // so every visitor sees the same thing regardless of browser or locale.
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  function fmtDate(iso) {
+    var t = Date.parse(iso);
+    if (isNaN(t)) return "";
+    var ist = new Date(t + 19800000); // +5:30
+    return ist.getUTCDate() + " " + MONTHS[ist.getUTCMonth()] + " " + ist.getUTCFullYear();
   }
 
-  /* ---------- Latest video: swap in the newest upload ----------
-     assets/latest-video.json is kept up to date by a scheduled
-     GitHub Action that reads the channel's YouTube RSS feed (see
-     .github/workflows/update-latest-video.yml) — nobody has to edit
-     this by hand. The iframe's hardcoded src/title stay in the HTML
-     as a fallback for if this fetch fails or JS is off. */
+  function buildCard(v, i) {
+    var a = d.createElement("a");
+    a.className = "vcard is-in";
+    a.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(v.id);
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.setAttribute("data-reveal", "");
+    a.style.setProperty("--d", (i % 3) * 0.1 + "s");
+
+    var thumb = d.createElement("div");
+    thumb.className = "vcard__thumb";
+    var img = d.createElement("img");
+    img.width = 1280; img.height = 720; img.alt = ""; img.loading = "lazy";
+    img.src = "https://i.ytimg.com/vi/" + v.id + "/maxresdefault.jpg";
+    img.onerror = function () { img.onerror = null; img.src = "https://i.ytimg.com/vi/" + v.id + "/hqdefault.jpg"; };
+    var play = d.createElement("span");
+    play.className = "vcard__play";
+    play.innerHTML = '<svg><use href="#i-play"/></svg>';
+    thumb.appendChild(img);
+    thumb.appendChild(play);
+
+    var date = d.createElement("span");
+    date.className = "vcard__date";
+    date.textContent = fmtDate(v.publishedAt);
+
+    var title = d.createElement("h3");
+    title.className = "vcard__title";
+    title.textContent = v.title;
+
+    a.appendChild(thumb); a.appendChild(date); a.appendChild(title);
+    return a;
+  }
+
   (function initLatestVideo() {
-    var frame = document.getElementById("latest-video-frame");
-    if (!frame) return;
+    var frame = $("#latest-video-frame");
+    var grid  = $("#vgrid");
+    if (!frame && !grid) return;
 
     fetch("assets/latest-video.json", { cache: "no-store" })
       .then(function (res) { return res.ok ? res.json() : null; })
       .then(function (data) {
-        if (!data || !data.videoId || data.videoId === frame.dataset.fallbackId) return;
-        frame.src = "https://www.youtube.com/embed/" + data.videoId + "?autoplay=1&mute=1&playsinline=1&rel=0";
-        if (data.title) frame.title = data.title;
+        if (!data) return;
+        var vids = (data.videos && data.videos.length)
+          ? data.videos
+          : (data.videoId ? [{ id: data.videoId, title: data.title, publishedAt: data.publishedAt }] : []);
+        if (!vids.length) return;
+        var latest = vids[0];
+
+        if (frame && latest.id && latest.id !== frame.dataset.fallbackId) {
+          frame.src = "https://www.youtube.com/embed/" + latest.id + "?autoplay=1&mute=1&playsinline=1&rel=0";
+        }
+        if (frame && latest.title) frame.title = latest.title;
+
+        var t = $(".js-latest-title"); if (t && latest.title) t.textContent = latest.title;
+        var dt = $(".js-latest-date"); if (dt && latest.publishedAt) dt.textContent = fmtDate(latest.publishedAt);
+        var lk = $(".js-latest-link"); if (lk && latest.id) lk.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(latest.id);
+
+        if (grid && vids.length >= 4) {
+          var rest = vids.slice(1);
+          var n = rest.length >= 6 ? 6 : 3;
+          grid.textContent = "";
+          rest.slice(0, n).forEach(function (v, i) { grid.appendChild(buildCard(v, i)); });
+        }
       })
-      .catch(function () { /* fallback src already in the markup */ });
+      .catch(function () { /* fallback markup stays */ });
   })();
 
-  /* ---------- Desktop-only pointer effects ---------- */
-  if (finePointer && !reduceMotion) {
-    document.body.classList.add("has-pointer");
-
-    /* Glow that trails the cursor (smoothed) — only ticks while it's
-       actually catching up to the pointer, not forever in the background. */
-    var glow    = document.querySelector(".cursor-glow");
-    var target  = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
-    var pos     = { x: target.x, y: target.y };
-    var glowRaf = null;
-
-    function tickGlow() {
-      var dx = target.x - pos.x, dy = target.y - pos.y;
-      if (Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
-        pos.x += dx * 0.12;
-        pos.y += dy * 0.12;
-        if (glow) glow.style.transform = "translate3d(" + pos.x + "px," + pos.y + "px,0)";
-        glowRaf = requestAnimationFrame(tickGlow);
-      } else {
-        glowRaf = null;
-      }
-    }
-
-    window.addEventListener("pointermove", function (e) {
-      target.x = e.clientX;
-      target.y = e.clientY;
-      if (glowRaf === null) glowRaf = requestAnimationFrame(tickGlow);
-    }, { passive: true });
-
-    /* Magnetic buttons — they lean toward the cursor */
-    document.querySelectorAll(".magnetic").forEach(function (el) {
-      el.addEventListener("pointermove", function (e) {
-        var r = el.getBoundingClientRect();
-        var dx = e.clientX - (r.left + r.width / 2);
-        var dy = e.clientY - (r.top + r.height / 2);
-        el.style.transform = "translate(" + dx * 0.22 + "px," + dy * 0.3 + "px)";
-      });
-      el.addEventListener("pointerleave", function () {
-        el.style.transform = "";
-      });
-    });
-
-    /* 3D tilt + moving glare on cards — overrides the scroll-reveal
-       transform inline while hovered; reverts to the CSS-driven
-       reveal transform (still tracking --p) on pointerleave. */
-    document.querySelectorAll(".tilt").forEach(function (card) {
-      var glare = card.querySelector(".card__glare");
-
-      card.addEventListener("pointermove", function (e) {
-        var r  = card.getBoundingClientRect();
-        var px = (e.clientX - r.left) / r.width;
-        var py = (e.clientY - r.top) / r.height;
-
-        card.style.transform =
-          "perspective(900px) rotateX(" + (0.5 - py) * 8 + "deg) rotateY(" +
-          (px - 0.5) * 10 + "deg) translateY(-6px) scale(1.025)";
-
-        if (glare) {
-          glare.style.setProperty("--mx", px * 100 + "%");
-          glare.style.setProperty("--my", py * 100 + "%");
-        }
-      });
-
-      card.addEventListener("pointerleave", function () {
-        card.style.transform = "";
-      });
-    });
-
-    /* Poster row — widths are set as explicit px values (not flex-grow)
-       so the transition is a plain numeric interpolation: smooth every
-       time, in both directions, with no snap. The hovered card is sized
-       to exactly height * 16/9; the rest split what's left evenly. */
-    (function initPosterRow() {
-      var row = document.querySelector(".posters");
-      if (!row) return;
-      var posters = Array.prototype.slice.call(row.querySelectorAll(".poster"));
-      if (!posters.length) return;
-
-      var GAP = 8; // must match the CSS `gap` on .posters
-
-      function layout(hoveredIndex) {
-        var rowRect = row.getBoundingClientRect();
-        var n = posters.length;
-        var available = rowRect.width - GAP * (n - 1);
-
-        if (hoveredIndex === -1) {
-          var equalWidth = available / n;
-          posters.forEach(function (p) { p.style.width = equalWidth + "px"; });
-          return;
-        }
-
-        var hoveredWidth = Math.min(rowRect.height * (16 / 9), available - (n - 1) * 60);
-        var restWidth = (available - hoveredWidth) / (n - 1);
-        posters.forEach(function (p, i) {
-          p.style.width = (i === hoveredIndex ? hoveredWidth : restWidth) + "px";
+  /* ---------- Hero: scroll parallax + pointer depth ---------- */
+  if (!reduce) {
+    (function initParallax() {
+      var layers = $$("[data-parallax]");
+      if (!layers.length) return;
+      var ticking = false;
+      function update() {
+        ticking = false;
+        var y = Math.min(window.scrollY || 0, window.innerHeight * 1.3);
+        layers.forEach(function (el) {
+          el.style.transform = "translate3d(0," + (y * parseFloat(el.dataset.parallax)).toFixed(1) + "px,0)";
         });
       }
+      window.addEventListener("scroll", function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+    })();
 
-      layout(-1);
+    (function initDepth() {
+      var stage = $("[data-stage]");
+      if (!stage || !fine) return;
+      var hero = stage.closest(".hero");
+      var layers = $$("[data-depth]", stage);
+      var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
 
-      posters.forEach(function (poster, i) {
-        poster.addEventListener("pointerenter", function () { layout(i); });
+      function loop() {
+        cx += (tx - cx) * 0.08;
+        cy += (ty - cy) * 0.08;
+        layers.forEach(function (el) {
+          var k = parseFloat(el.dataset.depth) * 1000;
+          el.style.translate = (cx * k).toFixed(2) + "px " + (cy * k).toFixed(2) + "px";
+        });
+        raf = (Math.abs(tx - cx) > 0.0005 || Math.abs(ty - cy) > 0.0005) ? requestAnimationFrame(loop) : 0;
+      }
+      hero.addEventListener("pointermove", function (e) {
+        var r = hero.getBoundingClientRect();
+        tx = (e.clientX - r.left) / r.width - 0.5;
+        ty = (e.clientY - r.top) / r.height - 0.5;
+        if (!raf) raf = requestAnimationFrame(loop);
       });
-      row.addEventListener("pointerleave", function () { layout(-1); });
-
-      window.addEventListener("resize", function () {
-        var hoveredNow = posters.findIndex(function (p) { return p.matches(":hover"); });
-        layout(hoveredNow);
+      hero.addEventListener("pointerleave", function () {
+        tx = 0; ty = 0;
+        if (!raf) raf = requestAnimationFrame(loop);
       });
     })();
   }
 
+  /* ---------- Magnetic buttons + card spotlight (mouse only) ---------- */
+  if (fine && !reduce) {
+    $$("[data-magnetic]").forEach(function (el) {
+      el.addEventListener("pointermove", function (e) {
+        var r = el.getBoundingClientRect();
+        var x = (e.clientX - r.left - r.width / 2) * 0.18;
+        var y = (e.clientY - r.top - r.height / 2) * 0.28;
+        el.style.translate = x.toFixed(1) + "px " + y.toFixed(1) + "px";
+      });
+      el.addEventListener("pointerleave", function () { el.style.translate = ""; });
+    });
+  }
+  if (fine) {
+    $$(".tile").forEach(function (t) {
+      t.addEventListener("pointermove", function (e) {
+        var r = t.getBoundingClientRect();
+        t.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        t.style.setProperty("--my", (e.clientY - r.top) + "px");
+      });
+    });
+  }
 })();

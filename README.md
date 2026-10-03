@@ -12,73 +12,68 @@ build, and no dependencies to break. Edit a file, save it, done.
 
 | File | What it is |
 |---|---|
-| `index.html` | The home page — channel intro + a short "about me" section |
-| `about.html` | The full About Me page |
+| `index.html` | Home page — hero, latest upload, recent breakdowns, format, about teaser |
+| `about.html` | The full About page |
+| `contact.html` | Sponsorships & promotions |
 | `404.html` | Shown when someone hits a link that doesn't exist |
-| `assets/css/style.css` | All the styling (colours, layout, animations) |
-| `assets/js/main.js` | All the interactive bits (scroll reveals, hover effects, counters) |
-| `assets/img/` | Put your photos here |
-| `CNAME` | Tells GitHub that this site lives at `rohanlearn.com` — **don't delete this** |
+| `assets/css/style.css` | All the styling — colours, type, layout, motion |
+| `assets/js/main.js` | All the interactive bits — scroll animations, counters, live data |
+| `assets/img/` | Photos, the share-preview image (`og-image.png`) and favicons |
+| `assets/latest-video.json` | Latest videos — **updated automatically** (see below) |
+| `assets/channel-stats.json` | Subscribers / videos / views — **updated automatically** |
+| `.github/` | The two small automations that keep those two JSON files fresh |
+| `robots.txt`, `sitemap.xml`, `site.webmanifest` | Search-engine and install metadata |
+| `CNAME` | Tells GitHub this site lives at `rohanlearn.com` — **don't delete this** |
 
 ---
 
-## How to change the text
+## Things that update themselves
 
-Open `index.html` or `about.html` in any text editor. Every spot that's meant
-to be personalised is marked with a comment like this:
+Two GitHub Actions run in the background. You don't need to do anything.
 
-```html
-<!-- EDIT: your channel's one-line pitch -->
-```
+- **Latest video** (every 6 hours): reads the channel's feed, skips YouTube Shorts,
+  and updates `assets/latest-video.json`. The homepage's *Latest upload* player and
+  *Recent breakdowns* cards read from it.
+- **Channel stats** (daily): updates `assets/channel-stats.json`. The numbers in the
+  hero and on the About / Contact pages read from it.
 
-Search for `EDIT:` to find them all. Change the words between the tags, save,
-and push (see below).
+To refresh right after you upload: GitHub → **Actions** → *Update latest video* →
+**Run workflow**.
 
-## How to add your photo
-
-1. Save your photo as `assets/img/rohan.jpg`
-2. In `index.html`, find the block marked `EDIT: to use a real photo`
-3. Replace the whole `<div class="avatar">…</div>` block with:
-
-```html
-<img src="assets/img/rohan.jpg" alt="Rohan" class="avatar-img">
-```
-
-4. Do the same in `about.html` (use `class="avatar-img avatar-img--lg"` there)
+---
 
 ## How to change the colours
 
-Open `assets/css/style.css`. The first few lines look like this:
+Open `assets/css/style.css`. The first lines are the design tokens:
 
 ```css
---accent:   #7c5cff;   /* violet */
---accent-2: #22d3ee;   /* cyan   */
+--accent: #f0b34a;   /* the one accent colour used everywhere */
+--bg:     #09090a;   /* page background */
 ```
 
-Change those two hex codes and the entire site re-colours itself.
+Change the accent and the whole site re-colours itself.
+
+## Fonts
+
+*Instrument Serif* (headlines), *Inter* (text) and *JetBrains Mono* (small labels),
+loaded from Google Fonts.
 
 ---
 
 ## Previewing it on your computer
 
-Just double-click `index.html` — it opens straight in your browser.
-
-For a more accurate preview (closer to how it behaves live), run this in the
-project folder and then open http://localhost:8000:
-
 ```bash
 python3 -m http.server 8000
 ```
 
+Then open http://localhost:8000. (Opening the files by double-click mostly works,
+but the live data needs a local server.)
+
 ## Publishing your changes
 
-From inside this folder:
-
-```bash
-git add -A && git commit -m "Update site" && git push
-```
-
-GitHub Pages redeploys automatically, usually within a minute.
+Commit, then push (GitHub Desktop → **Push origin**). GitHub Pages redeploys
+automatically, usually within a minute. Browsers keep files for up to 10 minutes,
+so use a hard refresh (Cmd+Shift+R) or a private window to see changes immediately.
 
 ---
 
