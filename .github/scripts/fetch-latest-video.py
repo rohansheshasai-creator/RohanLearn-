@@ -1,30 +1,60 @@
 #!/usr/bin/env python3
 """
-Reads the RohanLearn YouTube channel's public RSS feed and, if the
-newest video has changed, updates assets/latest-video.json.
+Reads the RohanLearn YouTube channel's public RSS feed and keeps
+assets/latest-video.json up to date with the most recent FULL-LENGTH
+videos (YouTube Shorts are skipped).
+
+The homepage shows videos[0] in the "Latest upload" player and the next
+few in "Recent breakdowns". The file keeps the older top-level keys
+(videoId / title / publishedAt) too, so nothing that read it before
+breaks.
 
 Why RSS and not the YouTube Data API: RSS needs no API key, so nothing
-secret has to live in the repo or in GitHub Actions settings. Why this
-runs in a GitHub Action and not in the browser: YouTube's RSS feed
-doesn't send CORS headers, so a page running in a visitor's browser
-can reach the feed but isn't allowed to read the response — this has
-to run server-side instead.
+secret has to live in the repo. Why this runs in a GitHub Action and
+not in the browser: YouTube's RSS feed doesn't send CORS headers, so a
+visitor's browser can't read it.
+
+How Shorts are detected: https://www.youtube.com/shorts/<id> answers
+200 for a Short and redirects (303) to the normal watch page for a
+regular video.
 """
 
 import json
 import os
 import sys
+import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
 
 CHANNEL_ID = "UCxBbAhcn1PgxfV8kWD0o8Uw"  # Rohan Learn
 FEED_URL = f"https://www.youtube.com/feeds/videos.xml?channel_id={CHANNEL_ID}"
 OUT_PATH = os.path.join(os.path.dirname(__file__), "..", "..", "assets", "latest-video.json")
+KEEP = 7  # latest + 6 more is plenty for the homepage
+UA = {"User-Agent": "Mozilla/5.0"}
 
 NS = {
     "atom": "http://www.w3.org/2005/Atom",
     "yt": "http://www.youtube.com/xml/schemas/2015",
 }
+
+
+class NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, *args, **kwargs):
+        return None
+
+
+_opener = urllib.request.build_opener(NoRedirect)
+
+
+def is_short(video_id):
+    req = urllib.request.Request(f"https://www.youtube.com/shorts/{video_id}", method="HEAD", headers=UA)
+    try:
+        with _opener.open(req, timeout=10) as resp:
+            return resp.status == 200
+    except urllib.error.HTTPError:
+        return False  # redirected (or otherwise not a Short page) -> regular video
+    except Exception:
+        return False  # can't tell -> keep it rather than hide a real video
 
 
 def write_output(key, value):
@@ -35,7 +65,7 @@ def write_output(key, value):
 
 
 def main():
-    req = urllib.request.Request(FEED_URL, headers={"User-Agent": "Mozilla/5.0"})
+    req = urllib.request.Request(FEED_URL, headers=UA)
     try:
         with urllib.request.urlopen(req, timeout=15) as resp:
             raw = resp.read()
@@ -44,40 +74,56 @@ def main():
         write_output("changed", "false")
         sys.exit(1)
 
-    root = ET.fromstring(raw)
-    entry = root.find("atom:entry", NS)
-    if entry is None:
+    entries = ET.fromstring(raw).findall("atom:entry", NS)
+    if not entries:
         print("No entries found in feed", file=sys.stderr)
         write_output("changed", "false")
         sys.exit(1)
 
-    video_id = entry.find("yt:videoId", NS).text
-    title = entry.find("atom:title", NS).text
-    published = entry.find("atom:published", NS).text
+    videos = []
+    for entry in entries:
+        vid = entry.find("yt:videoId", NS).text
+        if is_short(vid):
+            continue
+        videos.append({
+            "id": vid,
+            "title": entry.find("atom:title", NS).text,
+            "publishedAt": entry.find("atom:published", NS).text,
+        })
+        if len(videos) >= KEEP:
+            break
 
-    old_video_id = None
+    if not videos:
+        print("Feed had no full-length videos", file=sys.stderr)
+        write_output("changed", "false")
+        sys.exit(1)
+
+    latest = videos[0]
+    new_data = {
+        "videoId": latest["id"],
+        "title": latest["title"],
+        "publishedAt": latest["publishedAt"],
+        "videos": videos,
+    }
+
+    old_data = None
     if os.path.exists(OUT_PATH):
         try:
             with open(OUT_PATH, encoding="utf-8") as f:
-                old_video_id = json.load(f).get("videoId")
+                old_data = json.load(f)
         except (json.JSONDecodeError, OSError):
             pass
 
-    if old_video_id == video_id:
-        print(f"No change — latest video is still {video_id}")
+    if old_data == new_data:
+        print(f"No change — latest is still {latest['id']}")
         write_output("changed", "false")
         return
 
     with open(OUT_PATH, "w", encoding="utf-8") as f:
-        json.dump(
-            {"videoId": video_id, "title": title, "publishedAt": published},
-            f,
-            indent=2,
-            ensure_ascii=False,
-        )
+        json.dump(new_data, f, indent=2, ensure_ascii=False)
         f.write("\n")
 
-    print(f"Updated latest video: {video_id} — {title}")
+    print(f"Updated: latest is {latest['id']} — {latest['title']} ({len(videos)} videos kept)")
     write_output("changed", "true")
 
 

@@ -1,16 +1,22 @@
 name: Update latest video
 
-# Keeps assets/latest-video.json in sync with the newest upload on the
-# Rohan Learn YouTube channel, so the homepage's "Watch the newest
-# breakdown" embed updates itself — no manual edit or push needed.
+# Keeps assets/latest-video.json in sync with the newest full-length
+# uploads on the Rohan Learn YouTube channel (Shorts are skipped), so the
+# homepage's "Latest upload" player and "Recent breakdowns" update
+# themselves — no manual edit or push needed.
 #
-# Runs every 6 hours, plus can be triggered manually from the Actions
-# tab (workflow_dispatch) right after a new video goes live.
+# Runs every 6 hours, can be triggered manually from the Actions tab
+# right after a new video goes live, and runs once whenever this script
+# or workflow is changed.
 
 on:
   schedule:
     - cron: "0 */6 * * *"
   workflow_dispatch: {}
+  push:
+    paths:
+      - ".github/scripts/fetch-latest-video.py"
+      - ".github/workflows/update-latest-video.yml"
 
 permissions:
   contents: write
@@ -22,15 +28,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check YouTube RSS feed for a new video
+      - name: Check YouTube RSS feed for new videos
         id: fetch
         run: python3 .github/scripts/fetch-latest-video.py
 
-      - name: Commit and push if the latest video changed
+      - name: Commit and push if the videos changed
         if: steps.fetch.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add assets/latest-video.json
           git commit -m "Auto-update latest video embed"
+          git pull --rebase origin main
           git push
