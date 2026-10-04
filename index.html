@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <script>document.documentElement.classList.add("js")</script>
 
@@ -34,6 +34,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/instrument-serif-latin.woff2">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/instrument-serif-italic-latin.woff2">
 <link rel="preload" as="image" href="assets/img/rohan-hero.webp" type="image/webp">
+<link rel="preconnect" href="https://i.ytimg.com">
 <link rel="stylesheet" href="assets/css/style.css">
 
 <script type="application/ld+json">
@@ -100,6 +101,7 @@
 <div class="bg" aria-hidden="true"><div class="bg__grid"></div><div class="bg__glow"></div><div class="bg__grain"></div></div>
 <div class="progress" aria-hidden="true"></div>
 
+<div class="topbar">
 <div class="announce" role="region" aria-label="Announcement">
   <a class="announce__link" href="https://www.youtube.com/watch?v=3qxYlfArCe8" target="_blank" rel="noopener">
     <span class="announce__badge">New</span>
@@ -132,6 +134,8 @@
     </div>
   </div>
 </header>
+</div>
+<script>try{var l=document.querySelector(".announce__link"),m=/[?&]v=([\w-]+)/.exec(l&&l.href);if(m&&localStorage.getItem("rl-announce-dismissed")===m[1])document.documentElement.classList.add("ann-off")}catch(e){}</script>
 
 <div class="menu" id="menu" aria-hidden="true">
   <a href="index.html"><small>01</small>Home</a>
@@ -176,20 +180,22 @@
       </div>
 
       <div class="stage" data-stage>
-        <svg class="stage__rings" viewBox="0 0 600 600" aria-hidden="true" data-depth="-.02">
+        <svg class="stage__layer" viewBox="0 0 600 600" aria-hidden="true" data-depth="-.02">
           <circle class="ring ring-draw" cx="300" cy="300" r="140" pathLength="1"/>
           <circle class="ring ring-draw" cx="300" cy="300" r="196" pathLength="1"/>
-          <g class="orbit orbit--b"><circle class="ring ring--ticks" cx="300" cy="300" r="252"/></g>
-          <g class="orbit orbit--a">
-            <circle class="ring ring--accent" cx="300" cy="300" r="196" pathLength="100" stroke-dasharray="11 89" stroke-dashoffset="-89"/>
-            <circle class="dot" cx="496" cy="300" r="5"/>
-          </g>
+        </svg>
+        <svg class="stage__layer stage__layer--b" viewBox="0 0 600 600" aria-hidden="true" data-depth="-.02">
+          <circle class="ring ring--ticks" cx="300" cy="300" r="252"/>
+        </svg>
+        <svg class="stage__layer stage__layer--a" viewBox="0 0 600 600" aria-hidden="true" data-depth="-.02">
+          <circle class="ring ring--accent" cx="300" cy="300" r="196" pathLength="100" stroke-dasharray="11 89" stroke-dashoffset="-89"/>
+          <circle class="dot" cx="496" cy="300" r="5"/>
         </svg>
         <div class="stage__glow" aria-hidden="true"></div>
 
         <div class="stage__parallax" data-parallax="0.05">
           <div class="stage__photo" data-depth=".012">
-            <img src="assets/img/rohan-hero.webp" width="760" height="1450" alt="Rohan, the creator of RohanLearn, speaking with a microphone" fetchpriority="high">
+            <img decoding="async" src="assets/img/rohan-hero.webp" width="760" height="1450" alt="Rohan, the creator of RohanLearn, speaking with a microphone" fetchpriority="high">
           </div>
         </div>
 
@@ -250,15 +256,17 @@
         </div>
 
         <div data-reveal style="--d:.15s">
-          <div class="player frame">
-            <iframe
-              id="latest-video-frame"
-              data-fallback-id="3qxYlfArCe8"
-              src="https://www.youtube.com/embed/3qxYlfArCe8?autoplay=1&mute=1&playsinline=1&rel=0"
-              title="The Rise of Walmart: 12 Years as the Biggest Company on Earth"
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen></iframe>
+          <div class="player frame" id="latest-player" style="--poster:url(https://i.ytimg.com/vi/3qxYlfArCe8/maxresdefault.jpg)">
+              <iframe
+                id="latest-video-frame"
+                data-fallback-id="3qxYlfArCe8"
+                data-id="3qxYlfArCe8"
+                title="The Rise of Walmart: 12 Years as the Biggest Company on Earth"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen></iframe>
+              <a class="player__poster js-latest-poster" href="https://www.youtube.com/watch?v=3qxYlfArCe8" target="_blank" rel="noopener" aria-label="Play the latest video">
+                <span class="vcard__play"><svg><use href="#i-play"/></svg></span>
+              </a>
           </div>
           <p class="player-hint">Playing muted — tap the video to unmute</p>
         </div>
@@ -276,17 +284,17 @@
 
       <div class="vgrid" id="vgrid">
         <a class="vcard" href="https://www.youtube.com/watch?v=FGkzeJM9LxI" target="_blank" rel="noopener" data-reveal>
-          <div class="vcard__thumb"><img src="https://i.ytimg.com/vi/FGkzeJM9LxI/maxresdefault.jpg" width="1280" height="720" alt="" loading="lazy"><span class="vcard__play"><svg><use href="#i-play"/></svg></span></div>
+          <div class="vcard__thumb"><img decoding="async" src="https://i.ytimg.com/vi/FGkzeJM9LxI/maxresdefault.jpg" width="1280" height="720" alt="" loading="lazy"><span class="vcard__play"><svg><use href="#i-play"/></svg></span></div>
           <span class="vcard__date">26 Sep 2026</span>
           <h3 class="vcard__title">How a Rejected Idea Became a $2 Trillion Empire | The Comeback Series</h3>
         </a>
         <a class="vcard" href="https://www.youtube.com/watch?v=OtBNSe3AurA" target="_blank" rel="noopener" data-reveal style="--d:.1s">
-          <div class="vcard__thumb"><img src="https://i.ytimg.com/vi/OtBNSe3AurA/maxresdefault.jpg" width="1280" height="720" alt="" loading="lazy"><span class="vcard__play"><svg><use href="#i-play"/></svg></span></div>
+          <div class="vcard__thumb"><img decoding="async" src="https://i.ytimg.com/vi/OtBNSe3AurA/maxresdefault.jpg" width="1280" height="720" alt="" loading="lazy"><span class="vcard__play"><svg><use href="#i-play"/></svg></span></div>
           <span class="vcard__date">19 Sep 2026</span>
           <h3 class="vcard__title">Your JOB is in Risk Now!</h3>
         </a>
         <a class="vcard" href="https://www.youtube.com/watch?v=LPR-zYHLDKM" target="_blank" rel="noopener" data-reveal style="--d:.2s">
-          <div class="vcard__thumb"><img src="https://i.ytimg.com/vi/LPR-zYHLDKM/maxresdefault.jpg" width="1280" height="720" alt="" loading="lazy"><span class="vcard__play"><svg><use href="#i-play"/></svg></span></div>
+          <div class="vcard__thumb"><img decoding="async" src="https://i.ytimg.com/vi/LPR-zYHLDKM/maxresdefault.jpg" width="1280" height="720" alt="" loading="lazy"><span class="vcard__play"><svg><use href="#i-play"/></svg></span></div>
           <span class="vcard__date">12 Sep 2026</span>
           <h3 class="vcard__title">Why BRICS is Suddenly the World’s Biggest Threat to Dollar?</h3>
         </a>
@@ -489,7 +497,7 @@
     <div class="wrap about">
       <div class="frame" data-reveal>
         <div class="about__photo">
-          <img src="assets/img/rohan-portrait.webp" width="800" height="1000" alt="Rohan, creator of RohanLearn" loading="lazy">
+          <img decoding="async" src="assets/img/rohan-portrait.webp" width="800" height="1000" alt="Rohan, creator of RohanLearn" loading="lazy">
           <span class="about__cap">Rohan · 17</span>
         </div>
       </div>

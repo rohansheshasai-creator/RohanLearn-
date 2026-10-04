@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <script>document.documentElement.classList.add("js")</script>
 
 <title>About — RohanLearn</title>
@@ -56,6 +56,7 @@
 <div class="bg" aria-hidden="true"><div class="bg__grid"></div><div class="bg__glow"></div><div class="bg__grain"></div></div>
 <div class="progress" aria-hidden="true"></div>
 
+<div class="topbar">
 <div class="announce" role="region" aria-label="Announcement">
   <a class="announce__link" href="https://www.youtube.com/watch?v=3qxYlfArCe8" target="_blank" rel="noopener">
     <span class="announce__badge">New</span>
@@ -88,6 +89,8 @@
     </div>
   </div>
 </header>
+</div>
+<script>try{var l=document.querySelector(".announce__link"),m=/[?&]v=([\w-]+)/.exec(l&&l.href);if(m&&localStorage.getItem("rl-announce-dismissed")===m[1])document.documentElement.classList.add("ann-off")}catch(e){}</script>
 
 <div class="menu" id="menu" aria-hidden="true">
   <a href="index.html"><small>01</small>Home</a>
@@ -116,7 +119,7 @@
     <div class="wrap about-grid">
 
       <aside class="profile" data-reveal>
-        <div class="profile__photo"><img src="assets/img/rohan-portrait.webp" width="800" height="1000" alt="Rohan, creator of RohanLearn" style="object-position:50% 12%"></div>
+        <div class="profile__photo"><img decoding="async" src="assets/img/rohan-portrait.webp" width="800" height="1000" alt="Rohan, creator of RohanLearn" style="object-position:50% 12%"></div>
         <div class="profile__body">
           <h2 class="profile__name">Rohan</h2>
           <p class="profile__role">Creator of RohanLearn</p>

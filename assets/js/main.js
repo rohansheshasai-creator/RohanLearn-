@@ -20,6 +20,10 @@
   var fine   = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var hasIO  = "IntersectionObserver" in window;
   var EMAIL  = "knowledgegrowthhubb@gmail.com";
+  var conn   = navigator.connection || {};
+  var saveData = !!conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "");
+  // fewer continuous animations on very low-power / data-saver devices
+  if (saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) || (navigator.deviceMemory && navigator.deviceMemory <= 2)) root.classList.add("lite");
 
   function $(s, c)  { return (c || d).querySelector(s); }
   function $$(s, c) { return Array.prototype.slice.call((c || d).querySelectorAll(s)); }
@@ -60,27 +64,36 @@
     return data.videoId ? [{ id: data.videoId, title: data.title, publishedAt: data.publishedAt }] : [];
   }
 
-  /* ---------- 3. Nav ---------- */
-  var nav = $(".nav");
+  /* ---------- 3. Nav + one shared scroll loop ----------
+     Every scroll-driven effect runs from this single requestAnimationFrame
+     callback. Page height is measured only when the layout changes (never
+     while scrolling), and the browser is only asked to change compositor-
+     friendly properties (transform, class toggles). */
+  var topbar = $(".topbar");
   var bar = $(".progress");
-  var announce = $(".announce");
+  var scrollHooks = [];
+  var queued = false, scrolled = false, docH = 0, viewH = window.innerHeight, lastP = -1;
 
-  function updateAnnounceOffset() {
-    var h = (announce && !announce.classList.contains("is-gone")) ? announce.offsetHeight : 0;
-    root.style.setProperty("--ann", Math.max(0, h - (window.scrollY || 0)) + "px");
-  }
-  function onScroll() {
-    var y = window.scrollY || 0;
-    if (nav) nav.classList.toggle("is-scrolled", y > 8);
+  function measure() { docH = root.scrollHeight; viewH = window.innerHeight; }
+  function frame() {
+    queued = false;
+    var y = window.pageYOffset || 0;
+    var s = y > 8;
+    if (s !== scrolled) { scrolled = s; if (topbar) topbar.classList.toggle("is-scrolled", s); }
     if (bar) {
-      var h = root.scrollHeight - window.innerHeight;
-      bar.style.transform = "scaleX(" + (h > 0 ? Math.min(y / h, 1) : 0) + ")";
+      var max = docH - viewH;
+      var p = max > 0 ? Math.min(y / max, 1) : 0;
+      if (Math.abs(p - lastP) > 0.0005) { lastP = p; bar.style.transform = "scaleX(" + p.toFixed(4) + ")"; }
     }
-    updateAnnounceOffset();
+    for (var i = 0; i < scrollHooks.length; i++) scrollHooks[i](y);
   }
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", updateAnnounceOffset);
-  onScroll();
+  function queue() { if (!queued) { queued = true; requestAnimationFrame(frame); } }
+  window.addEventListener("scroll", queue, { passive: true });
+  window.addEventListener("resize", function () { measure(); queue(); });
+  window.addEventListener("load", function () { measure(); queue(); });
+  if ("ResizeObserver" in window) new ResizeObserver(function () { measure(); queue(); }).observe(d.body);
+  measure();
+  frame();
 
   var year = $("#year");
   if (year) year.textContent = new Date().getFullYear();
@@ -95,8 +108,7 @@
     function place(el) {
       if (!el) { ind.style.opacity = 0; return; }
       ind.style.opacity = 1;
-      ind.style.width = (el.offsetWidth - 32) + "px";
-      ind.style.transform = "translateX(" + (el.offsetLeft + 16) + "px)";
+      ind.style.transform = "translateX(" + (el.offsetLeft + 16) + "px) scaleX(" + (el.offsetWidth - 32) + ")";
     }
     items.forEach(function (a) {
       a.addEventListener("pointerenter", function () { place(a); });
@@ -222,7 +234,11 @@
           });
           return;
         }
-        counters.forEach(function (el) { el.textContent = "0" + (el.dataset.suffix || ""); });
+        // measure every stat with its final number, lock that width, then reset to 0:
+        // the digits can now count up without the row re-flowing every frame
+        counters.forEach(function (el) { el.textContent = (parseFloat(el.dataset.count) || 0).toLocaleString() + (el.dataset.suffix || ""); });
+        var widths = counters.map(function (el) { var st = el.closest(".stat") || el; return Math.ceil(st.getBoundingClientRect().width); });
+        counters.forEach(function (el, i) { (el.closest(".stat") || el).style.minWidth = widths[i] + "px"; el.textContent = "0" + (el.dataset.suffix || ""); });
         var co = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
             if (!entry.isIntersecting) return;
@@ -271,19 +287,61 @@
   }
 
   (function initLatestVideo() {
-    var frame = $("#latest-video-frame");
-    var grid  = $("#vgrid");
+    var frame  = $("#latest-video-frame");
+    var player = $("#latest-player");
+    var poster = $(".js-latest-poster");
+    var grid   = $("#vgrid");
     if (!frame && !grid) return;
+
+    var current = frame ? (frame.dataset.id || frame.dataset.fallbackId) : "";
+    var loaded = false, autoPaused = false;
+    var canAuto = !reduce && !saveData && hasIO;
+
+    function embedUrl(id, auto, muted) {
+      return "https://www.youtube.com/embed/" + id + "?autoplay=" + (auto ? 1 : 0) + "&mute=" + (muted ? 1 : 0) +
+             "&playsinline=1&rel=0&enablejsapi=1";
+    }
+    function load(auto, muted) {
+      if (!frame || loaded || !current) return;
+      loaded = true;
+      frame.addEventListener("load", function () { if (player) player.classList.add("is-loaded"); }, { once: true });
+      frame.src = embedUrl(current, auto, muted);
+    }
+    function command(fn) {
+      try { frame.contentWindow.postMessage(JSON.stringify({ event: "command", func: fn, args: [] }), "*"); } catch (e) { /* not ready */ }
+    }
+
+    // The player stays a lightweight poster until it is actually on screen
+    // (the YouTube embed is ~1 MB of script that would otherwise compete with scrolling).
+    if (player && poster) {
+      poster.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (!loaded) load(true, false);        // a tap/click is a user gesture: play with sound
+      });
+    }
+    if (player && canAuto) {
+      new IntersectionObserver(function (entries) {
+        var visible = entries[0].isIntersecting;
+        if (visible) {
+          if (!loaded) load(true, true);
+          else if (autoPaused) { command("playVideo"); autoPaused = false; }
+        } else if (loaded) { command("pauseVideo"); autoPaused = true; }
+      }, { threshold: 0.45 }).observe(player);
+    }
 
     videosReq.then(function (data) {
       var vids = getVideos(data);
       if (!vids.length) return;
       var latest = vids[0];
 
-      if (frame && latest.id && latest.id !== frame.dataset.fallbackId) {
-        frame.src = "https://www.youtube.com/embed/" + latest.id + "?autoplay=1&mute=1&playsinline=1&rel=0";
+      if (latest.id && latest.id !== current) {
+        current = latest.id;
+        if (frame) frame.dataset.id = latest.id;
+        if (loaded && frame) frame.src = embedUrl(current, true, true);
+        if (player) player.style.setProperty("--poster", "url(https://i.ytimg.com/vi/" + latest.id + "/maxresdefault.jpg)");
       }
       if (frame && latest.title) frame.title = latest.title;
+      if (poster && latest.id) poster.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(latest.id);
 
       var t = $(".js-latest-title"); if (t && latest.title) t.textContent = latest.title;
       var dt = $(".js-latest-date"); if (dt && latest.publishedAt) dt.textContent = fmtDate(latest.publishedAt);
@@ -291,27 +349,26 @@
 
       if (grid && vids.length >= 4) {
         var rest = vids.slice(1);
-        var n = rest.length >= 6 ? 6 : 3;
+        var cnt = rest.length >= 6 ? 6 : 3;
         grid.textContent = "";
-        rest.slice(0, n).forEach(function (v, i) { grid.appendChild(buildCard(v, i)); });
+        rest.slice(0, cnt).forEach(function (v, i) { grid.appendChild(buildCard(v, i)); });
       }
     });
   })();
 
   /* ---------- 7. Announcement bar ---------- */
   (function initAnnounce() {
+    var announce = $(".announce");
     if (!announce) return;
     var KEY = "rl-announce-dismissed";
     var link  = $(".announce__link", announce);
     var close = $(".announce__close", announce);
     function idOf(href) { var m = /[?&]v=([\w-]+)/.exec(href || ""); return m ? m[1] : ""; }
     function dismissed(id) { try { return localStorage.getItem(KEY) === id; } catch (e) { return false; } }
-    function hide() { announce.classList.add("is-gone"); updateAnnounceOffset(); }
 
-    if (dismissed(idOf(link.href))) hide();
     close.addEventListener("click", function () {
       try { localStorage.setItem(KEY, idOf(link.href)); } catch (e) { /* private mode */ }
-      hide();
+      root.classList.add("ann-off");
     });
 
     videosReq.then(function (data) {
@@ -320,10 +377,8 @@
       link.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(latest.id);
       var t = $(".js-announce-title", announce);
       if (t) t.textContent = latest.title;
-      if (dismissed(latest.id)) hide();
-      else { announce.classList.remove("is-gone"); updateAnnounceOffset(); }
+      root.classList.toggle("ann-off", dismissed(latest.id));
     });
-    updateAnnounceOffset();
   })();
 
   /* ---------- 8. Hero cards: upload countdown + subscriber sparkline ---------- */
@@ -335,24 +390,32 @@
     return slot;
   }
 
+  var heroVisible = true;
+  (function trackHero() {
+    var hero = $(".hero");
+    if (!hero || !hasIO) return;
+    new IntersectionObserver(function (e) { heroVisible = e[0].isIntersecting; }, { rootMargin: "80px 0px" }).observe(hero);
+  })();
+
   (function initCountdown() {
     var dEl = $(".js-cd-d");
     if (!dEl) return;
     var hEl = $(".js-cd-h"), mEl = $(".js-cd-m"), sEl = $(".js-cd-s"), label = $(".js-next-label");
     function pad(n) { return n < 10 ? "0" + n : String(n); }
+    function set(el, v) { if (el._v !== v) { el._v = v; el.textContent = v; } }
     function tick() {
       var now = new Date();
       var next = nextSlot(now);
       var sinceDrop = now.getTime() - (next.getTime() - 7 * 864e5);
-      if (label) label.textContent = sinceDrop < 3 * 36e5 ? "Out now" : "Next upload";
+      if (label) set(label, sinceDrop < 3 * 36e5 ? "Out now" : "Next upload");
       var diff = Math.max(0, Math.floor((next.getTime() - now.getTime()) / 1000));
-      dEl.textContent = pad(Math.floor(diff / 86400));
-      hEl.textContent = pad(Math.floor(diff % 86400 / 3600));
-      mEl.textContent = pad(Math.floor(diff % 3600 / 60));
-      sEl.textContent = pad(diff % 60);
+      set(dEl, pad(Math.floor(diff / 86400)));
+      set(hEl, pad(Math.floor(diff % 86400 / 3600)));
+      set(mEl, pad(Math.floor(diff % 3600 / 60)));
+      set(sEl, pad(diff % 60));
     }
     tick();
-    setInterval(function () { if (!d.hidden) tick(); }, 1000);
+    setInterval(function () { if (!d.hidden && heroVisible) tick(); }, 1000);
   })();
 
   /* ---------- 9. Sparklines + growth dashboard (real daily data) ---------- */
@@ -608,7 +671,15 @@
     if (!sc) return;
     var tabs = $$(".tab", sc);
     var panels = $$(".panel", sc);
-    var idx = 0;
+    var flow = $("svg.flow", sc);
+    var idx = 0, scVisible = false;
+
+    // SVG motion (the travelling dots) keeps running even when hidden, so pause it
+    // unless that panel is the active one and on screen.
+    function syncFlow() {
+      if (!flow || !flow.pauseAnimations) return;
+      if (!reduce && scVisible && idx === 1) flow.unpauseAnimations(); else flow.pauseAnimations();
+    }
 
     function select(i, manual) {
       idx = i;
@@ -622,6 +693,7 @@
       });
       panels.forEach(function (p, k) { p.classList.toggle("is-active", k === i); });
       if (manual) { sc.classList.add("is-manual"); sc.classList.remove("is-playing", "is-paused"); }
+      syncFlow();
     }
 
     tabs.forEach(function (t, k) {
@@ -638,19 +710,29 @@
       });
     });
 
-    if (reduce || !hasIO) { sc.classList.add("is-manual"); return; }
+    syncFlow();
+    if (!hasIO) { sc.classList.add("is-manual"); return; }
     new IntersectionObserver(function (entries) {
-      if (sc.classList.contains("is-manual")) return;
-      sc.classList.toggle("is-playing", entries[0].isIntersecting);
+      scVisible = entries[0].isIntersecting;
+      syncFlow();
+      if (reduce || sc.classList.contains("is-manual")) return;
+      sc.classList.toggle("is-playing", scVisible);
     }, { threshold: 0.4 }).observe(sc);
+    if (reduce) sc.classList.add("is-manual");
     if (fine) {
       sc.addEventListener("pointerenter", function () { sc.classList.add("is-paused"); });
       sc.addEventListener("pointerleave", function () { sc.classList.remove("is-paused"); });
     }
   })();
 
-  // paused flow animation for visitors who prefer reduced motion
-  if (reduce) $$("svg.flow").forEach(function (s) { if (s.pauseAnimations) s.pauseAnimations(); });
+  // pause every endless animation inside a section while it is off screen
+  (function initPauseOffscreen() {
+    if (!hasIO) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.classList.toggle("is-off", !e.isIntersecting); });
+    }, { rootMargin: "160px 0px" });
+    $$(".hero, .tape, .cta, .bento").forEach(function (el) { io.observe(el); });
+  })();
 
   /* ---------- 11. FAQ ---------- */
   (function initFaq() {
@@ -859,23 +941,20 @@
     $$("[data-cmdk]").forEach(function (b) { b.addEventListener("click", open); });
   })();
 
-  /* ---------- 14. Pointer effects: parallax, depth, magnetic buttons, spotlight ---------- */
+  /* ---------- 14. Parallax, depth, magnetic buttons, spotlight ---------- */
   if (!reduce) {
     (function initParallax() {
       var layers = $$("[data-parallax]");
       if (!layers.length) return;
-      var ticking = false;
-      function update() {
-        ticking = false;
-        var y = Math.min(window.scrollY || 0, window.innerHeight * 1.3);
-        layers.forEach(function (el) {
-          el.style.transform = "translate3d(0," + (y * parseFloat(el.dataset.parallax)).toFixed(1) + "px,0)";
+      var shown = [];
+      scrollHooks.push(function (y) {
+        if (!heroVisible) return;
+        var yy = Math.min(y, viewH * 1.3);
+        layers.forEach(function (el, i) {
+          var v = +(yy * parseFloat(el.dataset.parallax)).toFixed(1);
+          if (shown[i] !== v) { shown[i] = v; el.style.transform = "translate3d(0," + v + "px,0)"; }
         });
-      }
-      window.addEventListener("scroll", function () {
-        if (!ticking) { ticking = true; requestAnimationFrame(update); }
-      }, { passive: true });
-      update();
+      });
     })();
 
     (function initDepth() {
@@ -883,7 +962,7 @@
       if (!stage || !fine) return;
       var hero = stage.closest(".hero");
       var layers = $$("[data-depth]", stage);
-      var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+      var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0, w = 1, h = 1, left = 0, top = 0;
 
       function loop() {
         cx += (tx - cx) * 0.08;
@@ -894,10 +973,12 @@
         });
         raf = (Math.abs(tx - cx) > 0.0005 || Math.abs(ty - cy) > 0.0005) ? requestAnimationFrame(loop) : 0;
       }
+      hero.addEventListener("pointerenter", function () {
+        var r = hero.getBoundingClientRect(); left = r.left; top = r.top; w = r.width; h = r.height;
+      });
       hero.addEventListener("pointermove", function (e) {
-        var r = hero.getBoundingClientRect();
-        tx = (e.clientX - r.left) / r.width - 0.5;
-        ty = (e.clientY - r.top) / r.height - 0.5;
+        tx = (e.clientX - left) / w - 0.5;
+        ty = (e.clientY - top) / h - 0.5;
         if (!raf) raf = requestAnimationFrame(loop);
       });
       hero.addEventListener("pointerleave", function () {
@@ -907,24 +988,34 @@
     })();
   }
 
+  // run a handler at most once per frame
+  function perFrame(fn) {
+    var pending = false, last = null;
+    return function (e) {
+      last = e;
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(function () { pending = false; fn(last); });
+    };
+  }
+
   if (fine && !reduce) {
     $$("[data-magnetic]").forEach(function (el) {
-      el.addEventListener("pointermove", function (e) {
+      var move = perFrame(function (e) {
         var r = el.getBoundingClientRect();
-        var x = (e.clientX - r.left - r.width / 2) * 0.18;
-        var y = (e.clientY - r.top - r.height / 2) * 0.28;
-        el.style.translate = x.toFixed(1) + "px " + y.toFixed(1) + "px";
+        el.style.translate = ((e.clientX - r.left - r.width / 2) * 0.18).toFixed(1) + "px " + ((e.clientY - r.top - r.height / 2) * 0.28).toFixed(1) + "px";
       });
+      el.addEventListener("pointermove", move);
       el.addEventListener("pointerleave", function () { el.style.translate = ""; });
     });
   }
   if (fine) {
     $$(".tile").forEach(function (t) {
-      t.addEventListener("pointermove", function (e) {
+      t.addEventListener("pointermove", perFrame(function (e) {
         var r = t.getBoundingClientRect();
         t.style.setProperty("--mx", (e.clientX - r.left) + "px");
         t.style.setProperty("--my", (e.clientY - r.top) + "px");
-      });
+      }));
     });
   }
 })();

@@ -62,6 +62,15 @@ Change the accent and the whole site re-colours itself.
 numbers). All three are open-source (SIL Open Font License) and hosted in
 `assets/fonts/`.
 
+## Devices
+
+Built mobile-first and checked from a 360px phone up to a 2560px monitor:
+phones (portrait and landscape, notch-safe), iPad (portrait and landscape),
+MacBooks and large desktops (text and page width scale up on 1800px+ screens).
+Touch screens get bigger tap targets; low-power or data-saver devices get a
+"lite" mode (fewer animations, the video waits for a tap); visitors who prefer
+reduced motion get a calm, still version.
+
 ## Handy shortcuts for visitors
 
 Press **⌘K** (Mac) or **Ctrl+K** — or **/** — anywhere on the site to open the
