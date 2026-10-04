@@ -403,15 +403,15 @@ p { margin: 0; text-wrap: pretty; }
 .tape { overflow: hidden; border-block: 1px solid var(--line-2); background: rgb(var(--ink) / .035); }
 .tape__label {
   position: absolute; z-index: 2; left: 0; top: 0; bottom: 0; display: flex; align-items: center;
-  padding: 0 clamp(32px, 4vw, 56px) 0 var(--gut); background: linear-gradient(90deg, var(--bg) 72%, transparent);
-  font: 600 0.9375rem/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--accent);
+  padding: 0 clamp(40px, 5.6vw, 78px) 0 var(--gut); background: linear-gradient(90deg, var(--bg) 72%, transparent);
+  font: 600 1.3125rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent);
 }
 .tape { position: relative; }
-.tape__track { display: flex; width: max-content; animation: tape 78s linear infinite; will-change: transform; }
+.tape__track { display: flex; width: max-content; animation: tape 110s linear infinite; will-change: transform; }
 .tape:hover .tape__track { animation-play-state: paused; }
-.tape__set { display: flex; flex: none; align-items: center; padding: clamp(24px, 2.6vw, 34px) 0; }
-.tape__item { display: inline-flex; align-items: center; font: 600 clamp(1rem, 1.7vw, 1.3125rem)/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text); white-space: nowrap; }
-.tape__item::after { content: ""; width: 9px; height: 9px; margin: 0 clamp(28px, 3.4vw, 48px); background: var(--accent); transform: rotate(45deg); }
+.tape__set { display: flex; flex: none; align-items: center; padding: clamp(34px, 3.6vw, 48px) 0; }
+.tape__item { display: inline-flex; align-items: center; font: 600 clamp(1.4rem, 2.4vw, 1.84rem)/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text); white-space: nowrap; }
+.tape__item::after { content: ""; width: 13px; height: 13px; margin: 0 clamp(40px, 4.8vw, 68px); background: var(--accent); transform: rotate(45deg); }
 
 /* ---------- 8. Latest & videos ---------- */
 .latest { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: clamp(28px, 5vw, 80px); align-items: center; }
@@ -1126,7 +1126,7 @@ a, button, [role="tab"] { -webkit-tap-highlight-color: transparent; touch-action
 /* --- phones: lighter motion budget (phones have the least headroom) --- */
 @media (max-width: 760px) {
   .stage__layer--b { animation: none; }
-  .tape__track { animation-duration: 100s; }
+  .tape__track { animation-duration: 140s; }
 }
 
 /* ============================================================
