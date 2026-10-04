@@ -791,7 +791,9 @@
   // the button, the remembered choice, and the animated switch.
   var THEME_KEY = "rl-theme";
   function theme() { return root.getAttribute("data-theme") === "light" ? "light" : "dark"; }
+  var cur = theme(), vt = null;   // cur is updated at once, so fast double-clicks never get out of step
   function paintTheme(t) {
+    cur = t;
     root.setAttribute("data-theme", t);
     var cs = $('meta[name="color-scheme"]'), tc = $('meta[name="theme-color"]');
     if (cs) cs.content = t;
@@ -799,30 +801,24 @@
     var label = t === "light" ? "Switch to dark mode" : "Switch to light mode";
     $$("[data-theme-toggle]").forEach(function (b) { b.setAttribute("aria-label", label); b.title = label; });
   }
-  function switchTheme(from) {
-    var next = theme() === "light" ? "dark" : "light";
+  function switchTheme() {
+    var next = cur === "light" ? "dark" : "light";
+    cur = next;
     try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
-    if (reduce || root.classList.contains("lite")) { paintTheme(next); return; }
-    if (d.startViewTransition) {
-      // a circle of the new theme grows out of the button
-      var b = from || $("[data-theme-toggle]"), r = b ? b.getBoundingClientRect() : null;
-      var x = r ? r.left + r.width / 2 : window.innerWidth - 40, y = r ? r.top + r.height / 2 : 40;
-      var rad = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
-      var vt = d.startViewTransition(function () { paintTheme(next); });
-      vt.ready.then(function () {
-        root.animate(
-          { clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + rad + "px at " + x + "px " + y + "px)"] },
-          { duration: 750, easing: "cubic-bezier(.16, 1, .3, 1)", pseudoElement: "::view-transition-new(root)" }
-        );
-      }, function () {});
-      return;
-    }
-    root.classList.add("theme-fade");
-    paintTheme(next);
-    setTimeout(function () { root.classList.remove("theme-fade"); }, 450);
+    if (vt) { try { vt.skipTransition(); } catch (e) {} vt = null; }
+    if (reduce || root.classList.contains("lite") || !d.startViewTransition) { paintTheme(next); return; }
+    var me;
+    try {
+      root.classList.add("theme-switching");
+      me = vt = d.startViewTransition(function () { paintTheme(next); });
+    } catch (e) { root.classList.remove("theme-switching"); paintTheme(next); return; }
+    var done = function () { if (vt === me) { vt = null; root.classList.remove("theme-switching"); } };
+    var quiet = function () {};   // a skipped transition rejects these promises; that is expected, not an error
+    me.ready.catch(quiet); me.updateCallbackDone.catch(quiet);
+    me.finished.then(done, done);
   }
   paintTheme(theme());
-  $$("[data-theme-toggle]").forEach(function (b) { b.addEventListener("click", function () { switchTheme(b); }); });
+  $$("[data-theme-toggle]").forEach(function (b) { b.addEventListener("click", switchTheme); });
   // keep other open tabs in step
   window.addEventListener("storage", function (e) { if (e.key === THEME_KEY) paintTheme(e.newValue === "light" ? "light" : "dark"); });
 
@@ -852,7 +848,7 @@
 
     function themeItem() {
       var light = theme() === "light";
-      return { g: "Actions", t: light ? "Switch to dark mode" : "Switch to light mode", run: function () { switchTheme(null); },
+      return { g: "Actions", t: light ? "Switch to dark mode" : "Switch to light mode", run: switchTheme,
                icon: light ? "i-moon" : "i-sun", k: "theme appearance dark light mode night day" };
     }
     function buildAll() {

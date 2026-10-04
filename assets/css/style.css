@@ -90,13 +90,13 @@
   --text-hi:   #000;
   --on-text:   #f6f3ec;
   --dim:       #57534a;
-  --faint:     #7d796f;
+  --faint:     #6a665c;
   --scrim:     rgba(24, 22, 16, .42);
   --scroll:    #cdc8ba;
   --ok:        #0f7a4f;
   --down:      #c42f22;
 
-  --accent:    #a35c00;
+  --accent:    #9a5800;
   --accent-ink:#fffaf0;
 }
 
@@ -1133,29 +1133,28 @@ a, button, [role="tab"] { -webkit-tap-highlight-color: transparent; touch-action
    20. Theme switch (dark is the default; light is opt-in)
    ============================================================ */
 
-/* the toggle button in the nav (needs JS, like the search button) */
+/* the toggle in the nav: a text button that names the mode you will switch TO
+   ("Light mode" while dark, "Dark mode" while light). The words come from CSS so they
+   are right on the very first paint. Needs JS, like the search button. */
 .themebtn {
-  display: none; place-items: center; position: relative; flex: none;
-  width: 40px; height: 40px; border: 1px solid var(--line-2); border-radius: 50%;
-  color: var(--dim); transition: color .3s, border-color .3s, background .3s;
+  display: none; align-items: center; justify-content: center; gap: .3em; flex: none;
+  height: 40px; min-width: 106px; padding: 0 16px;
+  border: 1px solid var(--line-2); border-radius: 999px; color: var(--dim);
+  font: 500 0.8438rem/1 var(--sans); white-space: nowrap;
+  transition: color .3s, border-color .3s, background .3s;
 }
-.js .themebtn { display: grid; }
+.js .themebtn { display: inline-flex; }
 .themebtn:hover { color: var(--text); border-color: var(--text); }
-.themebtn svg { grid-area: 1 / 1; width: 17px; height: 17px; transition: transform .7s var(--ease), opacity .4s var(--ease); }
-/* dark shows the moon, light shows the sun; the other one turns away */
-.themebtn .i-sun { opacity: 0; transform: rotate(-80deg) scale(.4); }
-:root[data-theme="light"] .themebtn .i-sun  { opacity: 1; transform: none; }
-:root[data-theme="light"] .themebtn .i-moon { opacity: 0; transform: rotate(80deg) scale(.4); }
-@media (pointer: coarse) { .themebtn { width: 44px; height: 44px; } }
+.themebtn__w::before { content: "Light"; }
+:root[data-theme="light"] .themebtn__w::before { content: "Dark"; }
+@media (pointer: coarse) { .themebtn { height: 44px; } }
+/* short form ("Light" / "Dark") wherever the bar gets tight: phones and small tablets */
+@media (max-width: 920px) { .themebtn { min-width: 0; padding: 0 14px; } .themebtn__m { display: none; } }
 
-/* the switch itself: a circle of the new theme grows out of the button (View Transitions);
-   browsers without it get a short colour cross-fade instead */
-::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
-::view-transition-old(root) { z-index: 1; }
-::view-transition-new(root) { z-index: 2; }
-html.theme-fade, html.theme-fade *, html.theme-fade *::before, html.theme-fade *::after {
-  transition: background-color .4s ease, color .4s ease, border-color .4s ease, fill .4s ease, stroke .4s ease, box-shadow .4s ease !important;
-}
+/* the switch itself: a short cross-fade (View Transitions). While it runs, every other
+   transition on the page is switched off so nothing lags behind in the old colours. */
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .4s; animation-timing-function: cubic-bezier(.4, 0, .2, 1); }
+html.theme-switching, html.theme-switching *, html.theme-switching *::before, html.theme-switching *::after { transition: none !important; }
 
 /* light theme: only what the colour tokens above cannot express on their own */
 :root[data-theme="light"] .bg__grain { display: none; }

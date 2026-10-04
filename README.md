@@ -73,9 +73,9 @@ reduced motion get a calm, still version.
 
 ## Light and dark mode
 
-Dark is the default (and the original look) for everyone. The sun/moon button in
-the top bar switches to a light theme, and the choice is remembered on that device.
-It also appears in the ⌘K palette as *Switch to light/dark mode*.
+Dark is the default (and the original look) for everyone. The **Light mode / Dark
+mode** button in the top bar switches themes, and the choice is remembered on that
+device. It also appears in the ⌘K palette as *Switch to light/dark mode*.
 
 All colours live in the tokens at the top of `assets/css/style.css`: the `:root`
 block is dark, and the `:root[data-theme="light"]` block right under it is light.
@@ -103,6 +103,10 @@ but the live data needs a local server.)
 Commit, then push (GitHub Desktop → **Push origin**). GitHub Pages redeploys
 automatically, usually within a minute. Browsers keep files for up to 10 minutes,
 so use a hard refresh (Cmd+Shift+R) or a private window to see changes immediately.
+
+Each page links its CSS and JS with a version (`style.css?v=20261004a`). When you
+change either file, change that `v=` value in the four HTML pages (any new text
+works) so every visitor gets the new file straight away instead of an old cached one.
 
 ---
 
