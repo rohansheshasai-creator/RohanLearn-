@@ -71,6 +71,17 @@ Touch screens get bigger tap targets; low-power or data-saver devices get a
 "lite" mode (fewer animations, the video waits for a tap); visitors who prefer
 reduced motion get a calm, still version.
 
+## Light and dark mode
+
+Dark is the default (and the original look) for everyone. The sun/moon button in
+the top bar switches to a light theme, and the choice is remembered on that device.
+It also appears in the ⌘K palette as *Switch to light/dark mode*.
+
+All colours live in the tokens at the top of `assets/css/style.css`: the `:root`
+block is dark, and the `:root[data-theme="light"]` block right under it is light.
+To tweak the light theme, change values there. The theme is set by a tiny script in
+each page's `<head>` so there is no flash of the wrong colours while loading.
+
 ## Handy shortcuts for visitors
 
 Press **⌘K** (Mac) or **Ctrl+K** — or **/** — anywhere on the site to open the

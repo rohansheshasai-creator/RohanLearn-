@@ -7,7 +7,7 @@
    Contents: 1 helpers · 2 shared data · 3 nav · 4 reveal · 5 live
    stats & counters · 6 videos · 7 announcement · 8 hero cards ·
    9 growth dashboard · 10 walkthrough · 11 FAQ · 12 toast & copy ·
-   13 command palette · 14 pointer effects
+   13 theme switch · 14 command palette · 15 pointer effects
    ============================================================ */
 
 (function () {
@@ -453,7 +453,7 @@
     s.setAttribute("aria-hidden", "true");
     s.style.position = "absolute";
     s.innerHTML = '<defs><linearGradient id="sparkFill" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0" stop-color="#f0b34a" stop-opacity=".30"/><stop offset="1" stop-color="#f0b34a" stop-opacity="0"/></linearGradient></defs>';
+      '<stop offset="0" style="stop-color:var(--accent)" stop-opacity=".30"/><stop offset="1" style="stop-color:var(--accent)" stop-opacity="0"/></linearGradient></defs>';
     d.body.appendChild(s);
   })();
 
@@ -573,7 +573,7 @@
       var line = monotonePath(pts);
       var baseY = H - pad.b;
       var html = '<defs><linearGradient id="gFill" x1="0" y1="0" x2="0" y2="1">' +
-        '<stop offset="0" stop-color="#f0b34a" stop-opacity=".26"/><stop offset="1" stop-color="#f0b34a" stop-opacity="0"/></linearGradient></defs>';
+        '<stop offset="0" style="stop-color:var(--accent)" stop-opacity=".26"/><stop offset="1" style="stop-color:var(--accent)" stop-opacity="0"/></linearGradient></defs>';
 
       for (var v = y0; v <= y1 + 1e-6; v += step) {
         var gy = Y(v).toFixed(1);
@@ -786,7 +786,47 @@
     b.addEventListener("click", function () { copyText(b.dataset.copy, "Email copied to clipboard"); });
   });
 
-  /* ---------- 13. Command palette (⌘K / Ctrl+K) ---------- */
+  /* ---------- 13. Theme switch (dark is the default, light is opt-in) ---------- */
+  // The page's first paint is already themed by a tiny script in each <head>; this adds
+  // the button, the remembered choice, and the animated switch.
+  var THEME_KEY = "rl-theme";
+  function theme() { return root.getAttribute("data-theme") === "light" ? "light" : "dark"; }
+  function paintTheme(t) {
+    root.setAttribute("data-theme", t);
+    var cs = $('meta[name="color-scheme"]'), tc = $('meta[name="theme-color"]');
+    if (cs) cs.content = t;
+    if (tc) tc.content = t === "light" ? "#f6f3ec" : "#09090a";
+    var label = t === "light" ? "Switch to dark mode" : "Switch to light mode";
+    $$("[data-theme-toggle]").forEach(function (b) { b.setAttribute("aria-label", label); b.title = label; });
+  }
+  function switchTheme(from) {
+    var next = theme() === "light" ? "dark" : "light";
+    try { localStorage.setItem(THEME_KEY, next); } catch (e) {}
+    if (reduce || root.classList.contains("lite")) { paintTheme(next); return; }
+    if (d.startViewTransition) {
+      // a circle of the new theme grows out of the button
+      var b = from || $("[data-theme-toggle]"), r = b ? b.getBoundingClientRect() : null;
+      var x = r ? r.left + r.width / 2 : window.innerWidth - 40, y = r ? r.top + r.height / 2 : 40;
+      var rad = Math.hypot(Math.max(x, window.innerWidth - x), Math.max(y, window.innerHeight - y));
+      var vt = d.startViewTransition(function () { paintTheme(next); });
+      vt.ready.then(function () {
+        root.animate(
+          { clipPath: ["circle(0px at " + x + "px " + y + "px)", "circle(" + rad + "px at " + x + "px " + y + "px)"] },
+          { duration: 750, easing: "cubic-bezier(.16, 1, .3, 1)", pseudoElement: "::view-transition-new(root)" }
+        );
+      }, function () {});
+      return;
+    }
+    root.classList.add("theme-fade");
+    paintTheme(next);
+    setTimeout(function () { root.classList.remove("theme-fade"); }, 450);
+  }
+  paintTheme(theme());
+  $$("[data-theme-toggle]").forEach(function (b) { b.addEventListener("click", function () { switchTheme(b); }); });
+  // keep other open tabs in step
+  window.addEventListener("storage", function (e) { if (e.key === THEME_KEY) paintTheme(e.newValue === "light" ? "light" : "dark"); });
+
+  /* ---------- 14. Command palette (⌘K / Ctrl+K) ---------- */
   (function initCommandPalette() {
     var isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
     $$(".kbtn kbd").forEach(function (k) { k.textContent = isMac ? "⌘K" : "Ctrl K"; });
@@ -810,11 +850,16 @@
       { g: "Actions", t: "Copy business email", run: function () { copyText(EMAIL, "Email copied to clipboard"); }, icon: "i-copy", k: "clipboard" }
     ];
 
+    function themeItem() {
+      var light = theme() === "light";
+      return { g: "Actions", t: light ? "Switch to dark mode" : "Switch to light mode", run: function () { switchTheme(null); },
+               icon: light ? "i-moon" : "i-sun", k: "theme appearance dark light mode night day" };
+    }
     function buildAll() {
       var vids = videos.slice(0, 5).map(function (v) {
         return { g: "Latest videos", t: v.title, href: "https://www.youtube.com/watch?v=" + v.id, icon: "i-play", k: "watch video", small: fmtDate(v.publishedAt) };
       });
-      all = STATIC.concat(vids, AFTER);
+      all = STATIC.concat(vids, AFTER, [themeItem()]);
     }
     videosReq.then(function (data) { videos = getVideos(data); buildAll(); if (el && el.classList.contains("is-open")) render(); });
     buildAll();
@@ -915,6 +960,7 @@
     function open() {
       if (!el) build();
       lastFocus = d.activeElement;
+      buildAll();   // refreshes the theme action's label
       input.value = "";
       active = 0;
       render();
@@ -941,7 +987,7 @@
     $$("[data-cmdk]").forEach(function (b) { b.addEventListener("click", open); });
   })();
 
-  /* ---------- 14. Parallax, depth, magnetic buttons, spotlight ---------- */
+  /* ---------- 15. Parallax, depth, magnetic buttons, spotlight ---------- */
   if (!reduce) {
     (function initParallax() {
       var layers = $$("[data-parallax]");
