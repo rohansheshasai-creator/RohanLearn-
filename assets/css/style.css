@@ -1035,6 +1035,18 @@ a, button, [role="tab"] { -webkit-tap-highlight-color: transparent; touch-action
   .hero__sub { order: 3; margin-top: 28px; }
   .stats { order: 4; }
   .announce__close { width: 40px; height: 40px; right: 2px; }
+
+  /* everything in the first section sits on the same centre line as the portrait */
+  .stage { justify-self: center; margin-inline: auto; width: min(80%, 330px); }
+  .hero__copy { align-items: center; text-align: center; }
+  .hero__eyebrow { align-self: center; }
+  .hero__sub { margin-inline: auto; }
+  .hero__actions { justify-content: center; width: 100%; }
+  .stats { width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); justify-content: stretch; }
+  .stat { display: block; margin: 0; padding: 18px 6px 0; border-right: 1px solid var(--line); border-bottom: 0; text-align: center; }
+  .stat:last-child { border-right: 0; padding-right: 6px; }
+  .stat__num { text-align: center; }
+  .stat__label { margin-top: 8px; font-size: .625rem; letter-spacing: .1em; }
 }
 
 /* --- phones in landscape (and any very short window): lay the hero out sideways --- */
