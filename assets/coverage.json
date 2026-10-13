@@ -1,5 +1,5 @@
 {
- "_how": "Powers the 'Brands I've broken down' wall and the world map on the home page. To add a video: put it in 'videos' (id: title + date), then reference its id from a brand and/or from each country it covers. Brand 'verdict' is one of: rise, comeback, fall, threat, power. Countries use 2-letter codes (IN, US, CN...) with a pin position in degrees (lon, lat).",
+ "_how": "Powers the 'Brands I've broken down' wall and the world map on the home page. To add a video: put it in 'videos' (id: title + date), then reference its id from a brand and/or from each country it covers. Brand 'verdict' is one of: rise, comeback, fall, threat, power. Countries use 2-letter codes (IN, US, CN...) with a pin position in degrees (lon, lat). The first 8 brands in the list are the ones shown before 'Show all' is clicked, so order them best first.",
  "videos": {
   "t0h2oP_XjAA": {
    "t": "Microsoft Lost 10 Years and $7.6 Billion. So Why Is It Winning Now?",
@@ -128,11 +128,60 @@
  },
  "brands": [
   {
+   "name": "Google",
+   "sector": "Search & ads",
+   "country": "US",
+   "verdict": "comeback",
+   "video": "FGkzeJM9LxI"
+  },
+  {
+   "name": "Microsoft",
+   "sector": "Software",
+   "country": "US",
+   "verdict": "comeback",
+   "video": "t0h2oP_XjAA"
+  },
+  {
+   "name": "Nvidia",
+   "sector": "AI chips",
+   "country": "US",
+   "verdict": "comeback",
+   "video": "M1zs_ecyOyE"
+  },
+  {
+   "name": "Apple",
+   "sector": "Consumer tech",
+   "country": "US",
+   "verdict": "threat",
+   "video": "n_QPARbnj6A"
+  },
+  {
    "name": "Walmart",
    "sector": "Retail",
    "country": "US",
    "verdict": "rise",
    "video": "3qxYlfArCe8"
+  },
+  {
+   "name": "ASML",
+   "sector": "Semiconductors",
+   "country": "NL",
+   "verdict": "power",
+   "video": "8E47OF_uZvY"
+  },
+  {
+   "name": "Jaguar",
+   "sector": "Automotive",
+   "country": "GB",
+   "verdict": "fall",
+   "video": "onxEbLI_kU8"
+  },
+  {
+   "name": "BYJU'S",
+   "sector": "Edtech",
+   "country": "IN",
+   "verdict": "fall",
+   "video": "-VSel3RcixI"
   },
   {
    "name": "Kalyan Jewellers",
@@ -156,34 +205,6 @@
    "video": "V2G06btgQz4"
   },
   {
-   "name": "Google",
-   "sector": "Search & ads",
-   "country": "US",
-   "verdict": "comeback",
-   "video": "FGkzeJM9LxI"
-  },
-  {
-   "name": "Microsoft",
-   "sector": "Software",
-   "country": "US",
-   "verdict": "comeback",
-   "video": "t0h2oP_XjAA"
-  },
-  {
-   "name": "Nvidia",
-   "sector": "AI chips",
-   "country": "US",
-   "verdict": "comeback",
-   "video": "M1zs_ecyOyE"
-  },
-  {
-   "name": "Jaguar",
-   "sector": "Automotive",
-   "country": "GB",
-   "verdict": "fall",
-   "video": "onxEbLI_kU8"
-  },
-  {
    "name": "Evergrande",
    "sector": "Real estate",
    "country": "CN",
@@ -198,32 +219,11 @@
    "video": "wUT71G9Dq4s"
   },
   {
-   "name": "BYJU'S",
-   "sector": "Edtech",
-   "country": "IN",
-   "verdict": "fall",
-   "video": "-VSel3RcixI"
-  },
-  {
-   "name": "Apple",
-   "sector": "Consumer tech",
-   "country": "US",
-   "verdict": "threat",
-   "video": "n_QPARbnj6A"
-  },
-  {
    "name": "Visa & Mastercard",
    "sector": "Payments",
    "country": "US",
    "verdict": "threat",
    "video": "tENejOtXb6M"
-  },
-  {
-   "name": "ASML",
-   "sector": "Semiconductors",
-   "country": "NL",
-   "verdict": "power",
-   "video": "8E47OF_uZvY"
   },
   {
    "name": "FIFA",

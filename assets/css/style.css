@@ -1295,6 +1295,16 @@ html.theme-switching, html.theme-switching *, html.theme-switching *::before, ht
 .brand.has-media:hover .vtag, .brand.has-media:focus-visible .vtag { color: #fff; }
 .brand.has-media:hover .brand__go, .brand.has-media:focus-visible .brand__go { color: #f0b34a; }
 @media (hover: none) { .brand__go { opacity: 1; translate: none; } }
+.bmore { display: flex; justify-content: center; margin-top: 22px; }
+.bmore[hidden] { display: none; }
+.bmore__btn {
+  display: inline-flex; align-items: center; gap: 10px; height: 46px; padding: 0 22px;
+  border: 1px solid var(--line-2); border-radius: 999px; color: var(--text); font: 500 .875rem/1 var(--sans);
+  transition: border-color .3s, background .3s;
+}
+.bmore__btn:hover { border-color: var(--accent); background: rgb(var(--glow) / .08); }
+.bmore__btn svg { width: 16px; height: 16px; color: var(--accent); transition: transform .5s var(--ease); }
+.bmore__btn[aria-expanded="true"] svg { transform: rotate(180deg); }
 
 /* ============================================================
    23. World map (the "global lens" tile)

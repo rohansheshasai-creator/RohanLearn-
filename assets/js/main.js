@@ -1177,29 +1177,60 @@
       if (fine) wall.addEventListener("pointerover", warm);
       wall.addEventListener("focusin", warm);
 
-      // filtering: fade the leavers out, then swap, then fade the newcomers in
-      var swapTimer = 0;
-      bar.addEventListener("click", function (e) {
-        var chip = e.target.closest(".bchip");
-        if (!chip || chip.getAttribute("aria-pressed") === "true") return;
-        var f = chip.dataset.f;
-        $$(".bchip", bar).forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
-        var tiles = $$(".brand", wall);
-        function match(a) { return f === "all" || a.dataset.v === f; }
-        tiles.forEach(function (a) { if (!match(a) && !a.hidden) a.classList.add("is-out"); });
+      // "All" shows the first TOP brands until "Show all" is pressed; an outcome filter shows every match
+      var TOP = 8, filter = "all", expanded = false, swapTimer = 0;
+      var tiles = $$(".brand", wall);
+      var more = null;
+      if (tiles.length > TOP) {
+        more = d.createElement("div");
+        more.className = "bmore";
+        more.innerHTML = '<button class="bmore__btn" type="button" aria-expanded="false" aria-controls="bwall"><span></span>' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>';
+        wall.insertAdjacentElement("afterend", more);
+      }
+      function wanted(a, i) {
+        if (filter !== "all") return a.dataset.v === filter;
+        return expanded || i < TOP;
+      }
+      function syncMore() {
+        if (!more) return;
+        var btn = $(".bmore__btn", more);
+        more.hidden = filter !== "all";
+        btn.setAttribute("aria-expanded", String(expanded));
+        $("span", btn).textContent = expanded ? "Show fewer" : "Show all " + tiles.length + " brands";
+      }
+      // first paint: no animation
+      tiles.forEach(function (a, i) { a.hidden = !wanted(a, i); });
+      syncMore();
+
+      // fade the leavers out, then swap, then fade the newcomers in (one after another)
+      function show() {
+        syncMore();
+        tiles.forEach(function (a, i) { if (!wanted(a, i) && !a.hidden) a.classList.add("is-out"); });
         clearTimeout(swapTimer);
         swapTimer = setTimeout(function () {
           var k = 0;
-          tiles.forEach(function (a) {
-            if (match(a)) {
-              if (a.hidden) { a.hidden = false; a.classList.add("is-out"); }
-              a.style.setProperty("--k", k++);
-            } else { a.hidden = true; }
+          tiles.forEach(function (a, i) {
+            if (wanted(a, i)) {
+              if (a.hidden) { a.hidden = false; a.classList.add("is-out"); a.style.setProperty("--k", k++); }
+            } else { a.hidden = true; a.classList.remove("is-out"); }
           });
-          requestAnimationFrame(function () { requestAnimationFrame(function () {
-            tiles.forEach(function (a) { if (!a.hidden) a.classList.remove("is-out"); });
-          }); });
+          void wall.offsetWidth;   // commit the hidden-state styles, so removing the class animates
+          tiles.forEach(function (a) { if (!a.hidden) a.classList.remove("is-out"); });
         }, reduce ? 0 : 220);
+      }
+      bar.addEventListener("click", function (e) {
+        var chip = e.target.closest(".bchip");
+        if (!chip || chip.getAttribute("aria-pressed") === "true") return;
+        filter = chip.dataset.f;
+        $$(".bchip", bar).forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
+        show();
+      });
+      if (more) $(".bmore__btn", more).addEventListener("click", function () {
+        expanded = !expanded;
+        show();
+        // after collapsing, keep the button where the visitor's eyes are
+        if (!expanded) setTimeout(function () { more.scrollIntoView({ block: "nearest", behavior: reduce ? "auto" : "smooth" }); }, reduce ? 0 : 240);
       });
     });
   })();

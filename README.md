@@ -96,7 +96,9 @@ source. A video with no entry simply shows no box.
 
 ## Brands wall and world map
 
-Both are drawn from `assets/coverage.json`, so a new video takes three small edits:
+Both are drawn from `assets/coverage.json`. The wall shows the **first 8 brands** in that
+list, then a *Show all* button, so keep the list ordered best first. A new video takes
+three small edits:
 
 1. Add it under `"videos"`: `"VIDEO_ID": { "t": "Title", "d": "2026-10-17" }`
 2. If it is about a company, add a brand:
@@ -150,7 +152,7 @@ Commit, then push (GitHub Desktop → **Push origin**). GitHub Pages redeploys
 automatically, usually within a minute. Browsers keep files for up to 10 minutes,
 so use a hard refresh (Cmd+Shift+R) or a private window to see changes immediately.
 
-Each page links its CSS and JS with a version (`style.css?v=20261013d`). When you
+Each page links its CSS and JS with a version (`style.css?v=20261013e`). When you
 change either file, change that `v=` value in the four HTML pages (any new text
 works) so every visitor gets the new file straight away instead of an old cached one.
 
