@@ -1374,6 +1374,36 @@ html.theme-switching, html.theme-switching *, html.theme-switching *::before, ht
   .vtag { padding: 4px 6px; font-size: .5625rem; }
 }
 
+/* ============================================================
+   24. Page transitions (Home <-> About <-> Contact)
+   Cross-document View Transitions: pure CSS, no script. The top bar and the
+   background are given their own names so they stay perfectly still while
+   the page content fades and glides. Browsers without support simply load
+   the next page as normal.
+   ============================================================ */
+@view-transition { navigation: auto; types: page; }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+
+.topbar { view-transition-name: topbar; }
+.bg { view-transition-name: backdrop; }
+
+html:active-view-transition-type(page)::view-transition-old(root) {
+  animation: pageOut .26s cubic-bezier(.4, 0, 1, 1) both;
+}
+html:active-view-transition-type(page)::view-transition-new(root) {
+  animation: pageIn .62s cubic-bezier(.16, 1, .3, 1) .06s both;
+}
+/* the fixed pieces don't fade: they just hold still (or slide, if the bar moved) */
+html:active-view-transition-type(page)::view-transition-old(topbar),
+html:active-view-transition-type(page)::view-transition-old(backdrop) { animation: none; opacity: 0; }
+html:active-view-transition-type(page)::view-transition-new(topbar),
+html:active-view-transition-type(page)::view-transition-new(backdrop) { animation: none; }
+html:active-view-transition-type(page)::view-transition-group(topbar) { animation-duration: .5s; animation-timing-function: cubic-bezier(.16, 1, .3, 1); }
+html:active-view-transition-type(page)::view-transition-group(backdrop) { animation: none; }
+
+@keyframes pageOut { to { opacity: 0; transform: translateY(-10px); } }
+@keyframes pageIn  { from { opacity: 0; transform: translateY(18px); } }
+
 /* --- print --- */
 @media print {
   .topbar, .menu, .bg, .progress, .tape, .player, .cmdk, .toast, .hero__scroll, .stage, .seal, .bfilter, .wmap { display: none !important; }
