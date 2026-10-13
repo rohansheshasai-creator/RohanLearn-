@@ -1,0 +1,24 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//RohanLearn//Saturday upload//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:RohanLearn
+BEGIN:VEVENT
+UID:saturday-upload@rohanlearn.com
+DTSTAMP:20261013T000000Z
+DTSTART:20261017T133200Z
+DURATION:PT30M
+RRULE:FREQ=WEEKLY;BYDAY=SA
+SUMMARY:New RohanLearn case study
+DESCRIPTION:A new breakdown of money\, power and strategy is live on YouTube.\nWatch: https://www.youtube.com/@rohanlearn/videos
+URL:https://www.youtube.com/@rohanlearn/videos
+LOCATION:https://www.youtube.com/@rohanlearn
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:New RohanLearn video is live
+TRIGGER:PT0M
+END:VALARM
+END:VEVENT
+END:VCALENDAR

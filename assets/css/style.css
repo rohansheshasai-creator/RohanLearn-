@@ -1235,7 +1235,11 @@ html.theme-switching, html.theme-switching *, html.theme-switching *::before, ht
 .latest__seal:empty { display: none; }
 .seal--feature { margin-top: 26px; max-width: 500px; }
 .seal--feature .seal__line { font-size: .9688rem; }
-.seal__foot { margin: 0; padding: 12px 16px 14px; border-top: 1px solid var(--line); font: 500 .6562rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.seal__sub { display: flex; align-items: center; gap: 8px; margin: 0; padding: 12px 16px; border-top: 1px solid var(--line); font: 500 .6562rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.seal__sub > span:nth-child(2) { flex: 1; min-width: 0; }
+.seal__sub a { color: var(--text); border-bottom: 1px solid var(--line-2); padding-bottom: 1px; transition: color .3s, border-color .3s; }
+.seal__sub a:hover { color: var(--yt); border-color: var(--yt); }
+.seal__sub .btn__dot { width: 6px; height: 6px; }
 .lite .seal.is-open .redact::after { animation: none; }
 @media (max-width: 1020px) { .seal--feature { max-width: none; } }
 
@@ -1404,9 +1408,76 @@ html:active-view-transition-type(page)::view-transition-group(backdrop) { animat
 @keyframes pageOut { to { opacity: 0; transform: translateY(-10px); } }
 @keyframes pageIn  { from { opacity: 0; transform: translateY(18px); } }
 
+/* ============================================================
+   25. Sticky subscribe bar + "Remind me every Saturday"
+   ============================================================ */
+.subbar {
+  position: fixed; z-index: 44; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex; align-items: center; gap: 12px; width: max-content; max-width: calc(100% - 24px);
+  padding: 8px 8px 8px 10px; border: 1px solid var(--line-2); border-radius: 999px;
+  background: rgb(var(--card-rgb) / .96); color: var(--text);
+  box-shadow: 0 24px 50px -22px rgb(var(--sh) / .8), inset 0 1px 0 rgb(var(--ink) / .05);
+  translate: -50% calc(100% + 40px); opacity: 0; pointer-events: none;
+  transition: translate .7s var(--ease), opacity .4s var(--ease);
+}
+.subbar.is-on { translate: -50% 0; opacity: 1; pointer-events: auto; }
+:root[data-theme="light"] .subbar { box-shadow: 0 18px 40px -20px rgb(var(--sh) / .45), 0 0 0 1px rgb(var(--ink) / .03); }
+.subbar__mark { display: grid; place-items: center; flex: none; width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line-2); color: var(--accent); font: 400 1.25rem/1 var(--serif); }
+.subbar__txt { display: grid; gap: 3px; min-width: 0; line-height: 1.1; }
+.subbar__txt b { font: 500 .875rem/1.1 var(--sans); }
+.subbar__txt > span { display: flex; gap: 6px; font: 500 .625rem/1.2 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.js-subbar-n + .subbar__more::before { content: "·"; margin-right: 6px; }
+.subbar__btn {
+  display: inline-flex; align-items: center; gap: 8px; flex: none; height: 38px; margin-left: 6px; padding: 0 16px;
+  border-radius: 999px; background: var(--yt); color: #fff; font: 600 .8438rem/1 var(--sans);
+  transition: box-shadow .35s var(--ease), transform .35s var(--ease);
+}
+.subbar__btn .btn__dot { background: #fff; }
+.subbar__btn:hover { transform: translateY(-1px); box-shadow: 0 10px 28px -10px rgba(255, 59, 48, .75); }
+.subbar__x { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; color: var(--faint); transition: color .3s, background .3s; }
+.subbar__x:hover { color: var(--text); background: rgb(var(--ink) / .07); }
+.subbar__x svg { width: 14px; height: 14px; }
+.has-subbar .toast { bottom: calc(86px + env(safe-area-inset-bottom, 0px)); }
+.menu-open .subbar { opacity: 0; pointer-events: none; }
+@media (max-width: 560px) {
+  .subbar { left: 12px; right: 12px; width: auto; max-width: none; translate: 0 calc(100% + 40px); }
+  .subbar.is-on { translate: 0 0; }
+  .subbar__txt { flex: 1; }
+  .subbar__more { display: none; }
+  .js-subbar-n + .subbar__more::before { content: none; }
+  .subbar__btn { margin-left: 0; padding: 0 14px; }
+}
+@media (pointer: coarse) { .subbar__x { width: 40px; height: 40px; } .subbar__btn { height: 42px; } }
+
+/* reminder: a button with a small two-choice menu */
+.remind { position: relative; }
+.remind__btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.remind__ico { width: 16px; height: 16px; flex: none; }
+.remind--card { margin-top: 12px; }
+.remind--card .remind__btn {
+  width: 100%; height: 36px; border-radius: 10px; border: 1px solid var(--line-2); color: var(--dim);
+  font: 500 .75rem/1 var(--sans); transition: color .3s, border-color .3s, background .3s;
+}
+.remind--card .remind__btn:hover, .remind--card.is-open .remind__btn { color: var(--text); border-color: var(--accent); background: rgb(var(--glow) / .08); }
+.remind--card .remind__ico { width: 14px; height: 14px; color: var(--accent); }
+.remind__menu {
+  position: absolute; z-index: 6; left: 0; top: calc(100% + 8px); min-width: 220px; padding: 6px;
+  border: 1px solid var(--line-2); border-radius: 14px; background: var(--bg-1);
+  box-shadow: 0 24px 50px -20px rgb(var(--sh) / .8);
+  opacity: 0; translate: 0 -6px; transition: opacity .2s var(--ease), translate .3s var(--ease);
+}
+.remind--card .remind__menu { left: auto; right: 0; min-width: 240px; }
+.remind.is-open .remind__menu { opacity: 1; translate: none; }
+.remind__item { display: flex; align-items: center; justify-content: space-between; gap: 14px; white-space: nowrap; padding: 11px 12px; border-radius: 10px; color: var(--text); font: 500 .8438rem/1.2 var(--sans); }
+.remind__item small { font: 500 .625rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+.remind__item:hover, .remind__item:focus-visible { background: rgb(var(--ink) / .06); outline: none; }
+:root[data-theme="light"] .remind__menu { box-shadow: 0 18px 40px -18px rgb(var(--sh) / .4); }
+@media (pointer: coarse) { .remind--card .remind__btn { height: 42px; } .remind__item { padding-block: 14px; } }
+@media (max-height: 520px) and (orientation: landscape) { .remind--card { display: none; } }
+
 /* --- print --- */
 @media print {
-  .topbar, .menu, .bg, .progress, .tape, .player, .cmdk, .toast, .hero__scroll, .stage, .seal, .bfilter, .wmap { display: none !important; }
+  .topbar, .menu, .bg, .progress, .tape, .player, .cmdk, .toast, .hero__scroll, .stage, .seal, .bfilter, .wmap, .subbar, .remind { display: none !important; }
   body { background: #fff; color: #000; }
   * { color: #000 !important; background: transparent !important; box-shadow: none !important; }
   a { text-decoration: underline; }

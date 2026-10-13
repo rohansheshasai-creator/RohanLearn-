@@ -36,7 +36,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/instrument-serif-italic-latin.woff2">
 <link rel="preload" as="image" href="assets/img/rohan-hero.webp" type="image/webp">
 <link rel="preconnect" href="https://i.ytimg.com">
-<link rel="stylesheet" href="assets/css/style.css?v=20261013c">
+<link rel="stylesheet" href="assets/css/style.css?v=20261013d">
 
 <script type="application/ld+json">
 {
@@ -214,6 +214,13 @@
             <span><b class="js-cd-h">--</b><i>hrs</i></span>
             <span><b class="js-cd-m">--</b><i>min</i></span>
             <span><b class="js-cd-s">--</b><i>sec</i></span>
+          </div>
+          <div class="remind remind--card" data-remind>
+            <button class="remind__btn" type="button" aria-haspopup="true" aria-expanded="false"><svg class="remind__ico" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13v4M10 15h4"/></g></svg><span>Remind me every Saturday</span></button>
+            <div class="remind__menu" role="menu" hidden>
+              <a class="remind__item js-gcal" role="menuitem" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=New%20RohanLearn%20case%20study&amp;recur=RRULE:FREQ%3DWEEKLY;BYDAY%3DSA" target="_blank" rel="noopener"><span>Google Calendar</span><small>Opens Google</small></a>
+              <a class="remind__item" role="menuitem" href="assets/rohanlearn-saturday.ics"><span>Apple / Outlook</span><small>Calendar file</small></a>
+            </div>
           </div>
         </div>
 
@@ -598,6 +605,13 @@
       <p class="cta__sub" data-reveal style="--d:.2s">Subscribe and the next one comes to you — free. New video every Saturday at 7:02 PM.</p>
       <div class="cta__actions" data-reveal style="--d:.3s">
         <a class="btn btn--yt" href="https://www.youtube.com/@rohanlearn?sub_confirmation=1" target="_blank" rel="noopener" data-magnetic><svg><use href="#i-yt"/></svg> Subscribe on YouTube</a>
+        <div class="remind remind--cta" data-remind>
+          <button class="remind__btn btn btn--ghost" type="button" aria-haspopup="true" aria-expanded="false"><svg class="remind__ico" viewBox="0 0 24 24" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13v4M10 15h4"/></g></svg><span>Remind me on Saturdays</span></button>
+          <div class="remind__menu" role="menu" hidden>
+            <a class="remind__item js-gcal" role="menuitem" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=New%20RohanLearn%20case%20study&amp;recur=RRULE:FREQ%3DWEEKLY;BYDAY%3DSA" target="_blank" rel="noopener"><span>Google Calendar</span><small>Opens Google</small></a>
+            <a class="remind__item" role="menuitem" href="assets/rohanlearn-saturday.ics"><span>Apple / Outlook</span><small>Calendar file</small></a>
+          </div>
+        </div>
         <a class="btn btn--ghost" href="contact.html">Work with me <svg class="arr"><use href="#i-arrow"/></svg></a>
       </div>
     </div>
@@ -640,6 +654,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=20261013c"></script>
+<script src="assets/js/main.js?v=20261013d"></script>
 </body>
 </html>

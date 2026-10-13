@@ -106,6 +106,17 @@ Both are drawn from `assets/coverage.json`, so a new video takes three small edi
    country, add `{ "code": "JP", "name": "Japan", "lon": 138, "lat": 37, "videos": ["VIDEO_ID"] }`.
    The 2-letter code lights the country up on the map, and `lon`/`lat` place its pin.
 
+## Subscribe bar and Saturday reminder
+
+- **Subscribe bar:** slides in at the bottom once a visitor scrolls past the first
+  screen, with the live subscriber count. It steps aside near the end of the page,
+  hides for a week if closed, and for a month once someone clicks any Subscribe link.
+- **Remind me every Saturday:** on the countdown card and in the closing section.
+  Google Calendar gets a weekly event starting at the next upload;
+  `assets/rohanlearn-saturday.ics` is the same event for Apple Calendar and Outlook.
+  If the upload time ever changes, update the time in that file and in `nextSlot()`
+  in `assets/js/main.js`.
+
 ## Light and dark mode
 
 Dark is the default (and the original look) for everyone. The **Light mode / Dark
@@ -139,7 +150,7 @@ Commit, then push (GitHub Desktop → **Push origin**). GitHub Pages redeploys
 automatically, usually within a minute. Browsers keep files for up to 10 minutes,
 so use a hard refresh (Cmd+Shift+R) or a private window to see changes immediately.
 
-Each page links its CSS and JS with a version (`style.css?v=20261013c`). When you
+Each page links its CSS and JS with a version (`style.css?v=20261013d`). When you
 change either file, change that `v=` value in the four HTML pages (any new text
 works) so every visitor gets the new file straight away instead of an old cached one.
 

@@ -8,7 +8,7 @@
    stats & counters · 6 videos · 7 announcement · 8 hero cards ·
    9 growth dashboard · 10 walkthrough · 11 FAQ · 12 toast & copy ·
    13 theme switch · 14 command palette · 15 brands wall & world map ·
-   16 pointer effects
+   16 subscribe bar & Saturday reminder · 17 pointer effects
    ============================================================ */
 
 (function () {
@@ -359,13 +359,13 @@
     });
     inner.appendChild(list);
 
-    if (feature) {
-      // the big "Watch on YouTube" button sits right below, so this one only points at it
-      var foot = d.createElement("p");
-      foot.className = "seal__foot";
-      foot.textContent = "The full takeaways are in the video";
-      inner.appendChild(foot);
-    } else {
+    // the moment someone is curious enough to peek is the moment to ask
+    var sub = d.createElement("p");
+    sub.className = "seal__sub";
+    sub.innerHTML = '<span class="btn__dot" aria-hidden="true"></span><span>New case study every Saturday</span>' +
+                    '<a href="https://www.youtube.com/@rohanlearn?sub_confirmation=1" target="_blank" rel="noopener" data-sub>Subscribe</a>';
+    inner.appendChild(sub);
+    if (!feature) {
       var cta = d.createElement("a");
       cta.className = "seal__cta";
       cta.href = url; cta.target = "_blank"; cta.rel = "noopener";
@@ -1340,7 +1340,118 @@
     }
   })();
 
-  /* ---------- 16. Parallax, depth, magnetic buttons, spotlight ---------- */
+  /* ---------- 16. Subscribe bar + Saturday reminder ---------- */
+  var SUB_URL = "https://www.youtube.com/@rohanlearn?sub_confirmation=1";
+  function store(key, val) { try { if (val === undefined) return localStorage.getItem(key); localStorage.setItem(key, val); } catch (e) { return null; } }
+
+  // "Remind me every Saturday": Google Calendar (a weekly event starting at the next
+  // upload) or a calendar file that Apple Calendar / Outlook open directly
+  (function initReminder() {
+    var boxes = $$("[data-remind]");
+    if (!boxes.length) return;
+    function stamp(dt) { return dt.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, ""); }
+    var start = nextSlot(new Date()), end = new Date(start.getTime() + 30 * 60000);
+    var gcal = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      "&text=" + encodeURIComponent("New RohanLearn case study") +
+      "&dates=" + stamp(start) + "/" + stamp(end) +
+      "&recur=" + encodeURIComponent("RRULE:FREQ=WEEKLY;BYDAY=SA") +
+      "&details=" + encodeURIComponent("A new breakdown of money, power and strategy is live.\nWatch: https://www.youtube.com/@rohanlearn/videos");
+    $$(".js-gcal").forEach(function (a) { a.href = gcal; });
+
+    function close(box, focus) {
+      var btn = $(".remind__btn", box), menu = $(".remind__menu", box);
+      if (menu.hidden) return;
+      box.classList.remove("is-open"); btn.setAttribute("aria-expanded", "false");
+      setTimeout(function () { if (!box.classList.contains("is-open")) menu.hidden = true; }, reduce ? 0 : 200);
+      if (focus) btn.focus();
+    }
+    boxes.forEach(function (box) {
+      var btn = $(".remind__btn", box), menu = $(".remind__menu", box);
+      btn.addEventListener("click", function () {
+        if (box.classList.contains("is-open")) { close(box); return; }
+        boxes.forEach(function (b) { if (b !== box) close(b); });
+        menu.hidden = false;
+        requestAnimationFrame(function () { box.classList.add("is-open"); });
+        btn.setAttribute("aria-expanded", "true");
+      });
+      box.addEventListener("keydown", function (e) {
+        var items = $$(".remind__item", box), i = items.indexOf(d.activeElement);
+        if (e.key === "Escape") { close(box, true); }
+        else if (e.key === "ArrowDown" && box.classList.contains("is-open")) { e.preventDefault(); (items[i + 1] || items[0]).focus(); }
+        else if (e.key === "ArrowUp" && box.classList.contains("is-open")) { e.preventDefault(); (items[i - 1] || items[items.length - 1]).focus(); }
+      });
+      $$(".remind__item", box).forEach(function (a) {
+        a.addEventListener("click", function () { close(box); toast("Reminder added. See you Saturday"); });
+      });
+    });
+    d.addEventListener("click", function (e) {
+      boxes.forEach(function (b) { if (!b.contains(e.target)) close(b); });
+    });
+  })();
+
+  // a slim bar that slides in once the visitor has scrolled past the first screen,
+  // and gets out of the way near the end of the page (where the big Subscribe button is)
+  (function initSubBar() {
+    var HIDE_KEY = "rl-subbar";
+    var until = +(store(HIDE_KEY) || 0);
+    if (until && until > Date.now()) return;
+    var first = $(".hero") || $(".phero");
+    if (!first) return;
+
+    var bar = d.createElement("div");
+    bar.className = "subbar";
+    bar.setAttribute("role", "complementary");
+    bar.setAttribute("aria-label", "Subscribe to RohanLearn");
+    bar.innerHTML =
+      '<span class="subbar__mark" aria-hidden="true">R</span>' +
+      '<span class="subbar__txt"><b>RohanLearn</b><span><span class="js-subbar-n"></span><span class="subbar__more">New case study every Saturday</span></span></span>' +
+      '<a class="subbar__btn" href="' + SUB_URL + '" target="_blank" rel="noopener" data-sub><span class="btn__dot"></span>Subscribe</a>' +
+      '<button class="subbar__x" type="button" aria-label="Hide for a week"><svg aria-hidden="true"><use href="#i-close"/></svg></button>';
+    d.body.appendChild(bar);
+
+    statsReq.then(function (st) {
+      var n = st && st.subscribers;
+      if (n) $(".js-subbar-n", bar).textContent = Number(n).toLocaleString("en-IN") + " subscribers";
+      else $(".js-subbar-n", bar).remove();
+    });
+
+    // positions are measured only when the layout changes; the scroll path just compares numbers
+    var showAt = 0, hideAt = Infinity, vh = window.innerHeight, gone = false, on = false;
+    function measureBar() {
+      var y = window.pageYOffset || 0;
+      var r = first.getBoundingClientRect();
+      showAt = r.bottom + y - 40;
+      var ends = $$(".cta, .footer").map(function (el) { return el.getBoundingClientRect().top + y; });
+      hideAt = ends.length ? Math.min.apply(null, ends) : Infinity;
+      vh = window.innerHeight;
+    }
+    function check(y) {
+      var want = !gone && y > showAt && y + vh < hideAt + 60;
+      if (want === on) return;
+      on = want;
+      bar.classList.toggle("is-on", on);
+      root.classList.toggle("has-subbar", on);
+    }
+    measureBar();
+    window.addEventListener("resize", measureBar);
+    window.addEventListener("load", measureBar);
+    if ("ResizeObserver" in window) new ResizeObserver(measureBar).observe(d.body);
+    scrollHooks.push(check);
+    check(window.pageYOffset || 0);
+
+    function dismiss(days) {
+      gone = true; check(window.pageYOffset || 0);
+      store(HIDE_KEY, String(Date.now() + days * 864e5));
+    }
+    $(".subbar__x", bar).addEventListener("click", function () { dismiss(7); });
+    // anyone who clicks Subscribe (here or anywhere else) is not asked again for a month
+    d.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest('a[href*="sub_confirmation"]');
+      if (a) dismiss(30);
+    });
+  })();
+
+  /* ---------- 17. Parallax, depth, magnetic buttons, spotlight ---------- */
   if (!reduce) {
     (function initParallax() {
       var layers = $$("[data-parallax]");
