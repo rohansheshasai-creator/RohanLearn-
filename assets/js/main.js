@@ -54,6 +54,7 @@
   /* ---------- 2. Shared data (each file is fetched once) ---------- */
   var videosReq  = fetchJSON("assets/latest-video.json");
   var statsReq   = fetchJSON("assets/channel-stats.json");
+  var takeReq    = fetchJSON("assets/takeaways.json");
   var historyReq = fetchJSON("assets/stats-history.json").then(function (data) {
     return data && data.points && data.points.length > 1 ? data.points : null;
   });
@@ -254,13 +255,15 @@
 
   /* ---------- 6. Latest video + recent breakdowns ---------- */
   function buildCard(v, i) {
+    var card = d.createElement("article");
+    card.className = "vcard is-in";
+    card.setAttribute("data-reveal", "");
+    card.style.setProperty("--d", (i % 3) * 0.1 + "s");
     var a = d.createElement("a");
-    a.className = "vcard is-in";
+    a.className = "vcard__link";
     a.href = "https://www.youtube.com/watch?v=" + encodeURIComponent(v.id);
     a.target = "_blank";
     a.rel = "noopener";
-    a.setAttribute("data-reveal", "");
-    a.style.setProperty("--d", (i % 3) * 0.1 + "s");
 
     var thumb = d.createElement("div");
     thumb.className = "vcard__thumb";
@@ -283,8 +286,118 @@
     title.textContent = v.title;
 
     a.appendChild(thumb); a.appendChild(date); a.appendChild(title);
-    return a;
+    card.appendChild(a);
+    return card;
   }
+
+  /* ---- sealed takeaways ----
+     Each video can carry a "N takeaways inside" box: the lines are shown with their key words
+     blacked out (assets/takeaways.json). The hidden words are never sent to the browser, and the
+     only way to read them is the video, which is the point. */
+  var LOCK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+             '<rect x="5" y="11" width="14" height="9.5" rx="2.5"/><path class="shackle" d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+  var sealCount = 0;
+
+  function fillRedacted(el, text) {
+    text.split(/(█+)/).forEach(function (part) {
+      if (!part) return;
+      if (part.charAt(0) === "█") {
+        var bar = d.createElement("span");
+        bar.className = "redact";
+        bar.style.setProperty("--n", part.length);
+        bar.innerHTML = '<span class="sr-only">hidden</span>';
+        el.appendChild(bar);
+      } else {
+        el.appendChild(d.createTextNode(part));
+      }
+    });
+  }
+
+  function setSeal(seal, open) {
+    seal.classList.toggle("is-open", open);
+    var b = $(".seal__btn", seal);
+    if (b) b.setAttribute("aria-expanded", String(open));
+  }
+
+  function buildSeal(id, lines, feature) {
+    if (!id || !lines || !lines.length) return null;
+    var uid = "seal-" + (++sealCount);
+    var url = "https://www.youtube.com/watch?v=" + encodeURIComponent(id);
+
+    var seal = d.createElement("div");
+    seal.className = "seal" + (feature ? " seal--feature is-open" : "");
+
+    var btn = d.createElement("button");
+    btn.type = "button";
+    btn.className = "seal__btn";
+    btn.setAttribute("aria-expanded", feature ? "true" : "false");
+    btn.setAttribute("aria-controls", uid);
+    btn.innerHTML = '<span class="seal__lock">' + LOCK + '</span><span class="seal__t"></span><span class="seal__hint"></span>' +
+      '<svg class="seal__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+    $(".seal__t", btn).textContent = lines.length + (lines.length === 1 ? " takeaway inside" : " takeaways inside");
+
+    var panel = d.createElement("div");
+    panel.className = "seal__panel";
+    panel.id = uid;
+    var inner = d.createElement("div");
+    inner.className = "seal__inner";
+    var list = d.createElement("ol");
+    list.className = "seal__list";
+    lines.forEach(function (text, i) {
+      var li = d.createElement("li");
+      li.style.setProperty("--i", i);
+      var n = d.createElement("span");
+      n.className = "seal__n";
+      n.textContent = "0" + (i + 1);
+      var p = d.createElement("p");
+      p.className = "seal__line";
+      fillRedacted(p, text);
+      li.appendChild(n); li.appendChild(p);
+      list.appendChild(li);
+    });
+    inner.appendChild(list);
+
+    if (feature) {
+      // the big "Watch on YouTube" button sits right below, so this one only points at it
+      var foot = d.createElement("p");
+      foot.className = "seal__foot";
+      foot.textContent = "The full takeaways are in the video";
+      inner.appendChild(foot);
+    } else {
+      var cta = d.createElement("a");
+      cta.className = "seal__cta";
+      cta.href = url; cta.target = "_blank"; cta.rel = "noopener";
+      cta.innerHTML = '<span class="seal__cta-l"><span class="seal__lock seal__lock--sm">' + LOCK + '</span>Watch to unlock all ' + lines.length + '</span>' +
+                      '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-arrow-up"/></svg>';
+      inner.appendChild(cta);
+    }
+    panel.appendChild(inner);
+    seal.appendChild(btn); seal.appendChild(panel);
+    return seal;
+  }
+
+  function attachSeals(scope, tk) {
+    if (!tk || !tk.videos) return;
+    $$(".vcard", scope).forEach(function (card) {
+      if ($(".seal", card)) return;
+      var link = $(".vcard__link", card);
+      var m = link && /[?&]v=([\w-]{11})/.exec(link.href);
+      var seal = m && buildSeal(m[1], tk.videos[m[1]], false);
+      if (seal) card.appendChild(seal);
+    });
+  }
+
+  d.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest(".seal__btn") : null;
+    if (!b) return;
+    var seal = b.closest(".seal");
+    var open = !seal.classList.contains("is-open");
+    // one box open at a time in the grid (the featured one stays as it is)
+    if (open && !seal.classList.contains("seal--feature")) {
+      $$(".seal.is-open:not(.seal--feature)").forEach(function (o) { if (o !== seal) setSeal(o, false); });
+    }
+    setSeal(seal, open);
+  });
 
   (function initLatestVideo() {
     var frame  = $("#latest-video-frame");
@@ -329,11 +442,8 @@
       }, { threshold: 0.45 }).observe(player);
     }
 
-    videosReq.then(function (data) {
-      var vids = getVideos(data);
-      if (!vids.length) return;
+    function applyLatest(vids) {
       var latest = vids[0];
-
       if (latest.id && latest.id !== current) {
         current = latest.id;
         if (frame) frame.dataset.id = latest.id;
@@ -353,6 +463,19 @@
         grid.textContent = "";
         rest.slice(0, cnt).forEach(function (v, i) { grid.appendChild(buildCard(v, i)); });
       }
+    }
+
+    Promise.all([videosReq, takeReq]).then(function (res) {
+      var vids = getVideos(res[0]), tk = res[1];
+      if (vids.length) applyLatest(vids);
+
+      // sealed takeaways: the featured video first, then every card in the grid
+      var slot = $("[data-seal-slot]");
+      if (slot && tk && tk.videos) {
+        var seal = buildSeal(current, tk.videos[current], true);
+        if (seal) { slot.textContent = ""; slot.appendChild(seal); }
+      }
+      if (grid) attachSeals(grid, tk);
     });
   })();
 

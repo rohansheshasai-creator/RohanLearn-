@@ -435,7 +435,7 @@ p { margin: 0; text-wrap: pretty; }
 .player-hint { margin-top: 14px; font: 500 0.6875rem/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
 
 .vgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px 24px; }
-.vcard { display: block; }
+.vcard, .vcard__link { display: block; }
 .vcard__thumb {
   position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: var(--r);
   background: var(--bg-2); border: 1px solid var(--line);
@@ -457,11 +457,11 @@ p { margin: 0; text-wrap: pretty; }
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
   transition: color .3s;
 }
-.vcard:hover .vcard__thumb { border-color: var(--line-2); }
-.vcard:hover .vcard__thumb img { transform: scale(1.06); }
-.vcard:hover .vcard__thumb::after { opacity: 1; }
-.vcard:hover .vcard__play { transform: scale(1); opacity: 1; }
-.vcard:hover .vcard__title { color: var(--accent); }
+.vcard__link:hover .vcard__thumb { border-color: var(--line-2); }
+.vcard__link:hover .vcard__thumb img { transform: scale(1.06); }
+.vcard__link:hover .vcard__thumb::after { opacity: 1; }
+.vcard__link:hover .vcard__play { transform: scale(1); opacity: 1; }
+.vcard__link:hover .vcard__title { color: var(--accent); }
 
 /* ---------- 9. Split layout (heading left, content right) ---------- */
 .split { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
@@ -1172,9 +1172,76 @@ html.theme-switching, html.theme-switching *, html.theme-switching *::before, ht
 :root[data-theme="light"] .contact__card { background: linear-gradient(180deg, #fff, var(--bg-1)); box-shadow: 0 1px 0 rgb(var(--ink) / .03), 0 18px 36px -28px rgb(var(--sh) / .3); }
 :root[data-theme="light"] .btn--primary:hover { box-shadow: 0 12px 30px -12px rgb(var(--ink) / .55); }
 
+/* ============================================================
+   21. Sealed takeaways ("3 takeaways inside")
+   A teaser under each video: three lines with their key words blacked out,
+   and a button that sends people to the video to read the rest.
+   ============================================================ */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
+
+.seal {
+  margin-top: 16px; border: 1px solid var(--line-2); border-radius: 14px; overflow: hidden;
+  background: linear-gradient(180deg, rgb(var(--ink) / .04), rgb(var(--ink) / .012));
+  transition: border-color .4s var(--ease);
+  animation: sealIn .9s var(--ease) both;
+}
+.seal:hover, .seal.is-open { border-color: rgb(var(--glow) / .5); }
+@keyframes sealIn { from { opacity: 0; translate: 0 10px; } }
+
+.seal__btn { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 54px; padding: 8px 16px 8px 10px; text-align: left; color: var(--text); }
+.seal__lock { display: grid; place-items: center; flex: none; width: 34px; height: 34px; border-radius: 50%; color: var(--accent); background: rgb(var(--glow) / .15); }
+.seal__lock svg { width: 17px; height: 17px; overflow: visible; }
+.shackle { transform-box: fill-box; transform-origin: 100% 100%; transition: transform .55s var(--ease); }
+.seal__btn:hover .shackle, .seal.is-open .seal__btn .shackle, .seal__cta:hover .shackle { transform: translate(1px, -2.5px) rotate(-22deg); }
+.seal__t { flex: 1; min-width: 0; font: 500 .9062rem/1.2 var(--sans); letter-spacing: -.005em; }
+.seal__hint { font: 500 .6875rem/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.seal__hint::before { content: "Peek"; }
+.seal.is-open .seal__hint::before { content: "Hide"; }
+.seal__chev { flex: none; width: 15px; height: 15px; color: var(--faint); transition: transform .5s var(--ease), color .3s; }
+.seal.is-open .seal__chev { transform: rotate(180deg); color: var(--accent); }
+
+/* opens like the FAQ (animating the row height), hidden from tab order while closed */
+.seal__panel { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows .6s var(--ease), visibility 0s linear .6s; }
+.seal.is-open .seal__panel { grid-template-rows: 1fr; visibility: visible; transition-delay: 0s; }
+.seal__inner { overflow: hidden; min-height: 0; }
+.seal__list { list-style: none; margin: 0; padding: 0 16px; border-top: 1px solid var(--line); }
+.seal__list li {
+  display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 10px; padding: 14px 0; border-bottom: 1px solid var(--line);
+  opacity: 0; translate: 0 8px; transition: opacity .45s var(--ease), translate .6s var(--ease);
+}
+.seal__list li:last-child { border-bottom: 0; }
+.seal.is-open .seal__list li { opacity: 1; translate: none; transition-delay: calc(.1s + var(--i, 0) * .09s); }
+.seal__n { font: 500 .6875rem/2.1 var(--mono); letter-spacing: .08em; color: var(--accent); }
+.seal__line { font-size: .9062rem; line-height: 1.6; color: var(--text); }
+
+/* a blacked-out word; one soft sheen passes over it when the box opens */
+.redact { position: relative; display: inline-block; width: calc(var(--n, 4) * .56em); height: .82em; margin: 0 .06em; vertical-align: -.1em; border-radius: 3px; overflow: hidden; background: rgb(var(--ink) / .2); }
+.redact::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 25%, rgb(var(--ink) / .36) 50%, transparent 75%); transform: translateX(-130%); }
+.seal.is-open .redact::after { animation: sheen 1.5s var(--ease) calc(.35s + var(--i, 0) * .09s) 1 both; }
+@keyframes sheen { to { transform: translateX(130%); } }
+
+.seal__cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 12px 12px; min-height: 48px; padding: 0 18px 0 8px;
+  border-radius: 999px; background: var(--accent); color: var(--accent-ink); font: 600 .875rem/1 var(--sans);
+  transition: transform .4s var(--ease), box-shadow .4s var(--ease);
+}
+.seal__cta-l { display: inline-flex; align-items: center; gap: 10px; }
+.seal__lock--sm { width: 32px; height: 32px; color: inherit; background: rgb(255 255 255 / .24); }
+.seal__cta > svg { width: 16px; height: 16px; flex: none; transition: transform .4s var(--ease); }
+.seal__cta:hover { transform: translateY(-1px); box-shadow: 0 12px 30px -12px rgb(var(--glow) / .85); }
+.seal__cta:hover > svg { transform: translate(3px, -3px); }
+
+/* the featured video's box sits open beside the player */
+.latest__seal:empty { display: none; }
+.seal--feature { margin-top: 26px; max-width: 500px; }
+.seal--feature .seal__line { font-size: .9688rem; }
+.seal__foot { margin: 0; padding: 12px 16px 14px; border-top: 1px solid var(--line); font: 500 .6562rem/1.4 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--faint); }
+.lite .seal.is-open .redact::after { animation: none; }
+@media (max-width: 1020px) { .seal--feature { max-width: none; } }
+
 /* --- print --- */
 @media print {
-  .topbar, .menu, .bg, .progress, .tape, .player, .cmdk, .toast, .hero__scroll, .stage { display: none !important; }
+  .topbar, .menu, .bg, .progress, .tape, .player, .cmdk, .toast, .hero__scroll, .stage, .seal { display: none !important; }
   body { background: #fff; color: #000; }
   * { color: #000 !important; background: transparent !important; box-shadow: none !important; }
   a { text-decoration: underline; }

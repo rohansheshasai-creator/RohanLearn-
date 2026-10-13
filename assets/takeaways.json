@@ -1,0 +1,30 @@
+{
+  "_how": "Teasers for the 'N takeaways inside' boxes on the home page. Add one entry per video: the video id (the part after v= in the YouTube link) mapped to its three takeaways. Replace the words you want to hide with block characters (the █ character, one per letter, roughly). Hidden words are NEVER sent to visitors' browsers, so the surprise stays a surprise until they watch. Videos with no entry simply show no box.",
+  "videos": {
+    "3qxYlfArCe8": [
+      "Find the ██████ everyone else ██████ ██ ███ █████",
+      "Cut costs in the ████ ███, not on the ███████",
+      "Keep █████████ after you ███, not just ██████"
+    ],
+    "FGkzeJM9LxI": [
+      "Fix the ████ everyone else ███████ as ██████",
+      "Give away the ███████. Charge for the ███████",
+      "Ask what █████ you ████, not what you're ███████ ██"
+    ],
+    "OtBNSe3AurA": [
+      "Being █████ used to be your ████ — now it's the ███ thing they █████",
+      "This was never about what AI can ██ — it was about your ██████████ to ████████ it",
+      "Stop trying to out-█████ 500,000 other ████████. Build a █████ ███████"
+    ],
+    "LPR-zYHLDKM": [
+      "The dollar's power was never the ████████ — it was the ██████████",
+      "Never judge a country by its ████████. Judge it by what it ████ ████",
+      "India's greatest asset right now is that ██████ ██████ which ████ we are on"
+    ],
+    "onxEbLI_kU8": [
+      "For entrepreneurs: never sell the ███████ before the ███████ even ██████",
+      "For investors: █████████ ████ is a ████ ████ now, not a ████████",
+      "For Indians: owning a global ████████ brand is a real █████ and a real ████████ in the same package"
+    ]
+  }
+}

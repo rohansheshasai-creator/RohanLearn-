@@ -23,6 +23,7 @@ build, and no dependencies to break. Edit a file, save it, done.
 | `assets/latest-video.json` | Latest videos — **updated automatically** (see below) |
 | `assets/channel-stats.json` | Subscribers / videos / views — **updated automatically** |
 | `assets/stats-history.json` | One data point per day — the growth chart is drawn from this, **updated automatically** |
+| `assets/takeaways.json` | The "3 takeaways inside" teasers under each video — **you edit this** (see below) |
 | `.github/` | The two small automations that keep those two JSON files fresh |
 | `robots.txt`, `sitemap.xml`, `site.webmanifest` | Search-engine and install metadata |
 | `CNAME` | Tells GitHub this site lives at `rohanlearn.com` — **don't delete this** |
@@ -71,6 +72,26 @@ Touch screens get bigger tap targets; low-power or data-saver devices get a
 "lite" mode (fewer animations, the video waits for a tap); visitors who prefer
 reduced motion get a calm, still version.
 
+## "3 takeaways inside" teasers
+
+Under the latest video and each card in *Recent breakdowns* there is a sealed box
+with the video's three takeaways, key words blacked out, and a **Watch to unlock all 3**
+button. They come from `assets/takeaways.json`.
+
+For a new video, add a line with its id (the part after `v=` in the YouTube link) and
+its three takeaways, typing `█` in place of the words you want hidden:
+
+```json
+"VIDEO_ID": [
+  "Find the ██████ everyone else ██████ ██ ███ █████",
+  "Cut costs in the ████ ███, not on the ███████",
+  "Keep █████████ after you ███, not just ██████"
+]
+```
+
+The hidden words are never sent to visitors, so nobody can read them in the page
+source. A video with no entry simply shows no box.
+
 ## Light and dark mode
 
 Dark is the default (and the original look) for everyone. The **Light mode / Dark
@@ -104,7 +125,7 @@ Commit, then push (GitHub Desktop → **Push origin**). GitHub Pages redeploys
 automatically, usually within a minute. Browsers keep files for up to 10 minutes,
 so use a hard refresh (Cmd+Shift+R) or a private window to see changes immediately.
 
-Each page links its CSS and JS with a version (`style.css?v=20261004a`). When you
+Each page links its CSS and JS with a version (`style.css?v=20261013a`). When you
 change either file, change that `v=` value in the four HTML pages (any new text
 works) so every visitor gets the new file straight away instead of an old cached one.
 
