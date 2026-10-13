@@ -7,7 +7,8 @@
    Contents: 1 helpers · 2 shared data · 3 nav · 4 reveal · 5 live
    stats & counters · 6 videos · 7 announcement · 8 hero cards ·
    9 growth dashboard · 10 walkthrough · 11 FAQ · 12 toast & copy ·
-   13 theme switch · 14 command palette · 15 pointer effects
+   13 theme switch · 14 command palette · 15 brands wall & world map ·
+   16 pointer effects
    ============================================================ */
 
 (function () {
@@ -55,6 +56,7 @@
   var videosReq  = fetchJSON("assets/latest-video.json");
   var statsReq   = fetchJSON("assets/channel-stats.json");
   var takeReq    = fetchJSON("assets/takeaways.json");
+  var coverReq   = fetchJSON("assets/coverage.json");
   var historyReq = fetchJSON("assets/stats-history.json").then(function (data) {
     return data && data.points && data.points.length > 1 ? data.points : null;
   });
@@ -1106,7 +1108,239 @@
     $$("[data-cmdk]").forEach(function (b) { b.addEventListener("click", open); });
   })();
 
-  /* ---------- 15. Parallax, depth, magnetic buttons, spotlight ---------- */
+  /* ---------- 15. Brands wall + world map (both from assets/coverage.json) ---------- */
+  var VERDICTS = [
+    { k: "rise", t: "Rise" }, { k: "comeback", t: "Comeback" }, { k: "fall", t: "Fall" },
+    { k: "threat", t: "Under threat" }, { k: "power", t: "Money & power" }
+  ];
+  var VERDICT_LABEL = {};
+  VERDICTS.forEach(function (v) { VERDICT_LABEL[v.k] = v.t; });
+  function ytUrl(id) { return "https://www.youtube.com/watch?v=" + encodeURIComponent(id); }
+  function monthYear(day) {
+    var m = /^(\d{4})-(\d{2})/.exec(day || "");
+    return m ? MONTHS[+m[2] - 1] + " " + m[1] : "";
+  }
+
+  (function initBrands() {
+    var sec = $("#brands"), wall = $("#bwall"), bar = $(".bfilter");
+    if (!sec || !wall || !bar) return;
+
+    coverReq.then(function (cov) {
+      var brands = cov && cov.brands;
+      if (!brands || !brands.length) { sec.hidden = true; return; }
+      var videos = cov.videos || {};
+
+      // filter chips, with counts; only outcomes that exist get a chip
+      var counts = {};
+      brands.forEach(function (b) { counts[b.verdict] = (counts[b.verdict] || 0) + 1; });
+      [{ k: "all", t: "All", n: brands.length }].concat(
+        VERDICTS.filter(function (v) { return counts[v.k]; }).map(function (v) { return { k: v.k, t: v.t, n: counts[v.k] }; })
+      ).forEach(function (f, i) {
+        var b = d.createElement("button");
+        b.type = "button"; b.className = "bchip"; b.dataset.f = f.k;
+        b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+        b.innerHTML = "<span></span><small></small>";
+        $("span", b).textContent = f.t; $("small", b).textContent = f.n;
+        bar.appendChild(b);
+      });
+
+      brands.forEach(function (br, i) {
+        var v = videos[br.video] || {};
+        var verdict = /^[a-z]+$/.test(br.verdict || "") ? br.verdict : "power";
+        var a = d.createElement("a");
+        a.className = "brand";
+        a.href = ytUrl(br.video); a.target = "_blank"; a.rel = "noopener";
+        a.dataset.v = verdict; a.dataset.id = br.video;
+        a.setAttribute("aria-label", br.name + ", " + (VERDICT_LABEL[verdict] || "") + ". Watch: " + (v.t || "the breakdown"));
+        a.innerHTML =
+          '<span class="brand__media" aria-hidden="true"></span>' +
+          '<span class="brand__top"><span class="brand__sector"></span><span class="vtag vtag--' + verdict + '"></span></span>' +
+          '<span class="brand__name"></span>' +
+          '<span class="brand__foot"><span class="brand__meta"></span>' +
+          '<span class="brand__go">Watch <svg aria-hidden="true"><use href="#i-arrow-up"/></svg></span></span>';
+        $(".brand__sector", a).textContent = br.sector || "";
+        $(".vtag", a).textContent = VERDICT_LABEL[verdict] || "";
+        $(".brand__name", a).textContent = br.name;
+        $(".brand__meta", a).textContent = [br.country, monthYear(v.d)].filter(Boolean).join(" · ");
+        wall.appendChild(a);
+      });
+
+      // the video's thumbnail fades in behind the name on hover/focus (fetched only then)
+      function warm(e) {
+        var a = e.target.closest && e.target.closest(".brand");
+        if (!a || a.dataset.warm) return;
+        a.dataset.warm = "1";
+        var img = new Image();
+        img.onload = function () { $(".brand__media", a).style.backgroundImage = "url(" + img.src + ")"; a.classList.add("has-media"); };
+        img.src = "https://i.ytimg.com/vi/" + a.dataset.id + "/hqdefault.jpg";
+      }
+      if (fine) wall.addEventListener("pointerover", warm);
+      wall.addEventListener("focusin", warm);
+
+      // filtering: fade the leavers out, then swap, then fade the newcomers in
+      var swapTimer = 0;
+      bar.addEventListener("click", function (e) {
+        var chip = e.target.closest(".bchip");
+        if (!chip || chip.getAttribute("aria-pressed") === "true") return;
+        var f = chip.dataset.f;
+        $$(".bchip", bar).forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
+        var tiles = $$(".brand", wall);
+        function match(a) { return f === "all" || a.dataset.v === f; }
+        tiles.forEach(function (a) { if (!match(a) && !a.hidden) a.classList.add("is-out"); });
+        clearTimeout(swapTimer);
+        swapTimer = setTimeout(function () {
+          var k = 0;
+          tiles.forEach(function (a) {
+            if (match(a)) {
+              if (a.hidden) { a.hidden = false; a.classList.add("is-out"); }
+              a.style.setProperty("--k", k++);
+            } else { a.hidden = true; }
+          });
+          requestAnimationFrame(function () { requestAnimationFrame(function () {
+            tiles.forEach(function (a) { if (!a.hidden) a.classList.remove("is-out"); });
+          }); });
+        }, reduce ? 0 : 220);
+      });
+    });
+  })();
+
+  (function initWorldMap() {
+    var host = $("[data-wmap]"), chips = $(".glo__chips"), panel = $(".glo__panel");
+    if (!host || !chips || !panel) return;
+    var tile = host.closest(".tile") || d;
+    var SHORT = { US: "USA", GB: "UK", ZA: "S. Africa" };
+
+    var started = false;
+    function start() {
+      if (started) return;
+      started = true;
+      Promise.all([coverReq, fetchJSON("assets/world-dots.json")]).then(function (r) {
+        if (r[0] && r[0].countries && r[0].countries.length && r[1] && r[1].dots) build(r[0], r[1]);
+      });
+    }
+    // the map data is only fetched when the visitor gets near it
+    if (hasIO) {
+      var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); start(); } }, { rootMargin: "700px 0px" });
+      io.observe(host);
+    } else start();
+
+    function dotPath(str) {
+      return (str || "").split(" ").map(function (p) { return p ? "M" + p.replace(",", " ") + "h0" : ""; }).join("");
+    }
+
+    function build(cov, map) {
+      var W = map.w, H = map.h, k = W / 360;
+      function X(lon) { return (lon + 180) * k; }
+      function Y(lat) { return (75 - lat) * k; }
+      var countries = cov.countries, videos = cov.videos || {};
+      var byCode = {};
+      countries.forEach(function (c) { byCode[c.code] = c; });
+      var hub = byCode.IN || countries[0];
+
+      var wrap = d.createElement("div");
+      wrap.className = "wmap";
+      wrap.style.aspectRatio = W + " / " + H;
+
+      var svg = d.createElementNS(svgNS, "svg");
+      svg.setAttribute("class", "wmap__svg");
+      svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+      svg.setAttribute("aria-hidden", "true");
+      var land = "";
+      Object.keys(map.dots).forEach(function (code) { if (!byCode[code]) land += dotPath(map.dots[code]); });
+      var html = '<path class="wm-land" d="' + land + '"/>';
+      countries.forEach(function (c) {
+        if (map.dots[c.code]) html += '<path class="wm-c" data-c="' + c.code + '" d="' + dotPath(map.dots[c.code]) + '"/>';
+      });
+      // arcs out of India: the channel's point of view
+      var hx = X(hub.lon), hy = Y(hub.lat), n = 0;
+      countries.forEach(function (c) {
+        if (c === hub) return;
+        var x = X(c.lon), y = Y(c.lat), mx = (hx + x) / 2, my = (hy + y) / 2;
+        var lift = Math.min(90, Math.hypot(x - hx, y - hy) * 0.32);
+        html += '<path class="wm-arc" data-c="' + c.code + '" pathLength="1" style="--i:' + (n++) + '" d="M' +
+                hx.toFixed(1) + " " + hy.toFixed(1) + " Q" + mx.toFixed(1) + " " + (my - lift).toFixed(1) + " " + x.toFixed(1) + " " + y.toFixed(1) + '"/>';
+      });
+      svg.innerHTML = html;
+      wrap.appendChild(svg);
+
+      // pins are real buttons laid over the map, so they stay crisp and tappable at any size
+      countries.forEach(function (c) {
+        var b = d.createElement("button");
+        b.type = "button";
+        b.className = "wm-pin" + (c === hub ? " wm-pin--hub" : "");
+        b.dataset.c = c.code;
+        b.style.left = (X(c.lon) / W * 100).toFixed(2) + "%";
+        b.style.top = (Y(c.lat) / H * 100).toFixed(2) + "%";
+        b.setAttribute("aria-label", c.name + ", " + c.videos.length + (c.videos.length === 1 ? " breakdown" : " breakdowns"));
+        b.innerHTML = '<span class="wm-pin__dot"></span><span class="wm-pin__lbl"><span></span><b></b></span>';
+        $(".wm-pin__lbl span", b).textContent = c.name;
+        $(".wm-pin__lbl b", b).textContent = c.videos.length;
+        wrap.appendChild(b);
+      });
+
+      // chips: the same choices as a scrollable row (the main control on phones)
+      chips.textContent = "";
+      countries.forEach(function (c) {
+        var b = d.createElement("button");
+        b.type = "button"; b.className = "gchip"; b.dataset.c = c.code;
+        b.innerHTML = "<span></span><small></small>";
+        $("span", b).textContent = SHORT[c.code] || c.name;
+        $("small", b).textContent = c.videos.length;
+        chips.appendChild(b);
+      });
+
+      host.textContent = "";
+      host.appendChild(wrap);
+
+      // draw the arcs once the map is actually on screen
+      if (hasIO && !reduce) {
+        var dio = new IntersectionObserver(function (es) {
+          if (es[0].isIntersecting) { dio.disconnect(); requestAnimationFrame(function () { wrap.classList.add("is-drawn"); }); }
+        }, { threshold: 0.3 });
+        dio.observe(wrap);
+      } else wrap.classList.add("is-drawn");
+
+      function renderPanel(c) {
+        var list = c.videos.map(function (id) {
+          var v = videos[id] || {};
+          return '<li><a class="gvid" href="' + ytUrl(id) + '" target="_blank" rel="noopener">' +
+                 '<img src="https://i.ytimg.com/vi/' + encodeURIComponent(id) + '/mqdefault.jpg" width="320" height="180" alt="" loading="lazy" decoding="async">' +
+                 '<span class="gvid__t"></span><span class="gvid__d">' + (v.d ? fmtDate(v.d) : "") + '</span></a></li>';
+        }).join("");
+        panel.innerHTML = '<div class="glo__head"><b></b><span></span></div><ul class="glo__list">' + list + "</ul>";
+        $(".glo__head b", panel).textContent = c.name;
+        $(".glo__head span", panel).textContent = c.videos.length + (c.videos.length === 1 ? " breakdown" : " breakdowns");
+        $$(".gvid__t", panel).forEach(function (t, i) { t.textContent = (videos[c.videos[i]] || {}).t || "Watch on YouTube"; });
+      }
+
+      var cur = null, swap = 0;
+      function select(code, fromUser) {
+        var c = byCode[code];
+        if (!c || code === cur) return;
+        cur = code;
+        $$(".wm-pin, .gchip", tile).forEach(function (el) {
+          var on = el.dataset.c === code;
+          el.classList.toggle("is-active", on);
+          el.setAttribute("aria-pressed", String(on));
+        });
+        $$(".wm-c, .wm-arc", svg).forEach(function (p) { p.classList.toggle("is-active", p.getAttribute("data-c") === code); });
+        wrap.classList.toggle("has-pick", code !== hub.code);
+        if (!fromUser || reduce) { renderPanel(c); return; }
+        panel.classList.add("is-swap");
+        clearTimeout(swap);
+        swap = setTimeout(function () { renderPanel(c); panel.classList.remove("is-swap"); }, 160);
+        var chip = $('.gchip[data-c="' + code + '"]', chips);
+        if (chip) chips.scrollTo({ left: chip.offsetLeft - chips.offsetLeft - 12, behavior: "smooth" });
+      }
+      tile.addEventListener("click", function (e) {
+        var b = e.target.closest && e.target.closest(".wm-pin, .gchip");
+        if (b) select(b.dataset.c, true);
+      });
+      select(hub.code, false);
+    }
+  })();
+
+  /* ---------- 16. Parallax, depth, magnetic buttons, spotlight ---------- */
   if (!reduce) {
     (function initParallax() {
       var layers = $$("[data-parallax]");

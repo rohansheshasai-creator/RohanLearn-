@@ -24,6 +24,8 @@ build, and no dependencies to break. Edit a file, save it, done.
 | `assets/channel-stats.json` | Subscribers / videos / views — **updated automatically** |
 | `assets/stats-history.json` | One data point per day — the growth chart is drawn from this, **updated automatically** |
 | `assets/takeaways.json` | The "3 takeaways inside" teasers under each video — **you edit this** (see below) |
+| `assets/coverage.json` | The **Brands I've broken down** wall and the **world map**: which videos cover which company and country — **you edit this** |
+| `assets/world-dots.json` | The dot-matrix world map (generated once from Natural Earth; no need to touch) |
 | `.github/` | The two small automations that keep those two JSON files fresh |
 | `robots.txt`, `sitemap.xml`, `site.webmanifest` | Search-engine and install metadata |
 | `CNAME` | Tells GitHub this site lives at `rohanlearn.com` — **don't delete this** |
@@ -92,6 +94,18 @@ its three takeaways, typing `█` in place of the words you want hidden:
 The hidden words are never sent to visitors, so nobody can read them in the page
 source. A video with no entry simply shows no box.
 
+## Brands wall and world map
+
+Both are drawn from `assets/coverage.json`, so a new video takes three small edits:
+
+1. Add it under `"videos"`: `"VIDEO_ID": { "t": "Title", "d": "2026-10-17" }`
+2. If it is about a company, add a brand:
+   `{ "name": "Tesla", "sector": "Electric vehicles", "country": "US", "verdict": "rise", "video": "VIDEO_ID" }`.
+   The verdict is one of `rise`, `comeback`, `fall`, `threat` (under threat) or `power` (money & power).
+3. Add the video's id to the `"videos"` list of every country it covers. For a new
+   country, add `{ "code": "JP", "name": "Japan", "lon": 138, "lat": 37, "videos": ["VIDEO_ID"] }`.
+   The 2-letter code lights the country up on the map, and `lon`/`lat` place its pin.
+
 ## Light and dark mode
 
 Dark is the default (and the original look) for everyone. The **Light mode / Dark
@@ -125,7 +139,7 @@ Commit, then push (GitHub Desktop → **Push origin**). GitHub Pages redeploys
 automatically, usually within a minute. Browsers keep files for up to 10 minutes,
 so use a hard refresh (Cmd+Shift+R) or a private window to see changes immediately.
 
-Each page links its CSS and JS with a version (`style.css?v=20261013a`). When you
+Each page links its CSS and JS with a version (`style.css?v=20261013b`). When you
 change either file, change that `v=` value in the four HTML pages (any new text
 works) so every visitor gets the new file straight away instead of an old cached one.
 

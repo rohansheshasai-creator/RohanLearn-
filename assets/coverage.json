@@ -1,0 +1,374 @@
+{
+ "_how": "Powers the 'Brands I've broken down' wall and the world map on the home page. To add a video: put it in 'videos' (id: title + date), then reference its id from a brand and/or from each country it covers. Brand 'verdict' is one of: rise, comeback, fall, threat, power. Countries use 2-letter codes (IN, US, CN...) with a pin position in degrees (lon, lat).",
+ "videos": {
+  "t0h2oP_XjAA": {
+   "t": "Microsoft Lost 10 Years and $7.6 Billion. So Why Is It Winning Now?",
+   "d": "2026-10-10"
+  },
+  "3qxYlfArCe8": {
+   "t": "The Rise of Walmart: 12 Years as the Biggest Company on Earth",
+   "d": "2026-10-03"
+  },
+  "FGkzeJM9LxI": {
+   "t": "How a Rejected Idea Became a $2 Trillion Empire | The Comeback Series",
+   "d": "2026-09-26"
+  },
+  "OtBNSe3AurA": {
+   "t": "Your JOB is in Risk Now!",
+   "d": "2026-09-19"
+  },
+  "LPR-zYHLDKM": {
+   "t": "Why BRICS is Suddenly the World’s Biggest Threat to Dollar?",
+   "d": "2026-09-12"
+  },
+  "onxEbLI_kU8": {
+   "t": "The Death Of Jaguar: How A $2.3B Icon Failed",
+   "d": "2026-09-05"
+  },
+  "8E47OF_uZvY": {
+   "t": "The Most Important Company, That You Don't Know: ASML",
+   "d": "2026-08-29"
+  },
+  "l1kLylCZZkY": {
+   "t": "US Debt Bomb: How To Protect Your Future ?",
+   "d": "2026-08-22"
+  },
+  "XJkbPqqPXAo": {
+   "t": "From Poor to World's 4th Biggest — This is India (Independence Day Special)",
+   "d": "2026-08-15"
+  },
+  "wUT71G9Dq4s": {
+   "t": "Why Supreme Court Ordered The Greatest Airline to liquidate?? | DTKT Series 3/3",
+   "d": "2026-08-08"
+  },
+  "v0Tkn8-JBwM": {
+   "t": "The Reason Why World's Greatest Infrastructre Brand Collapsed | DTKT Series 2/3",
+   "d": "2026-08-01"
+  },
+  "-VSel3RcixI": {
+   "t": "BYJU'S $22 Billion Gamble: Played with Kids Future ? | DTKT Series 1/3",
+   "d": "2026-07-25"
+  },
+  "46bihZKU8hw": {
+   "t": "The FIFA World Cup Made $8.9 Billion — You Paid For It",
+   "d": "2026-07-18"
+  },
+  "Gve5RhpBb04": {
+   "t": "From Textile Shop to Jewellery Empire | The Kalyan Jewellers Strategies to be world No.1",
+   "d": "2026-07-11"
+  },
+  "tENejOtXb6M": {
+   "t": "India Is Killing Visa and Mastercard — Death of VISA and Mastercard by UPI and RuPay....",
+   "d": "2026-07-04"
+  },
+  "mBgK02cLCUU": {
+   "t": "US Will Defend India — On One Condition to MODI that Nobody Noticed...",
+   "d": "2026-06-27"
+  },
+  "hk0n3fCWfAQ": {
+   "t": "The Death of an Oil Giant: How Venezuela Lost Its Wealth to History",
+   "d": "2026-06-20"
+  },
+  "z2u5HMtfG0M": {
+   "t": "A Country With No Water Became Richer Than Britain — And India Keeps Ignoring",
+   "d": "2026-06-13"
+  },
+  "M1zs_ecyOyE": {
+   "t": "The Brain Behind Every AI — Every AI depends on this.. | Untold Strategy Revealed",
+   "d": "2026-06-06"
+  },
+  "JJkz76-Vbsk": {
+   "t": "Maruti Suzuki: The Secret Behind India's Biggest Car Company...",
+   "d": "2026-05-30"
+  },
+  "8Rr5Zb_yRI4": {
+   "t": "Trump Brought 9 CEOs to China and Walked Out With This",
+   "d": "2026-05-23"
+  },
+  "qseBo7Jebb8": {
+   "t": "Strategy Lessons for everyone | What Strategies did Vijay use to become the CM of Tamil Nadu.",
+   "d": "2026-05-16"
+  },
+  "uVmH21ppVn4": {
+   "t": "BJP Just Won West Bengal — Here’s Why It Changes Everything",
+   "d": "2026-05-09"
+  },
+  "1iIRZfVe-rs": {
+   "t": "India’s GDP Rank Fall… But Is This Planned??",
+   "d": "2026-05-02"
+  },
+  "wS_NihdI8is": {
+   "t": "IPL Isn't Cricket — It's a ₹118 Crore Per Match Money Engine",
+   "d": "2026-04-25"
+  },
+  "SAnSYugaOM4": {
+   "t": "Why the Indian Rupee Is Falling — And the Dollar Keeps Winning (Power, Money & Strategy)",
+   "d": "2026-04-18"
+  },
+  "-l2NXxmYetY": {
+   "t": "Why India Still Chooses Russia: Power, Money & Strategy Explained",
+   "d": "2026-04-11"
+  },
+  "n_QPARbnj6A": {
+   "t": "Will Apple Become Bankrupt… Tim Cook is no Longer the CEO... (Explained).",
+   "d": "2026-04-04"
+  },
+  "7FPmWWWts-c": {
+   "t": "Why the World Is Betting Big on India’s AI (AI Summit 2026 | Power, Money & Strategy)",
+   "d": "2026-03-28"
+  },
+  "lWC3FRLMnUk": {
+   "t": "Iran Just Shut Down The World Without Firing A Shot",
+   "d": "2026-03-21"
+  },
+  "V2G06btgQz4": {
+   "t": "From IIT Dorm to Market Leader — Ather's Exact Formula",
+   "d": "2026-03-14"
+  }
+ },
+ "brands": [
+  {
+   "name": "Walmart",
+   "sector": "Retail",
+   "country": "US",
+   "verdict": "rise",
+   "video": "3qxYlfArCe8"
+  },
+  {
+   "name": "Kalyan Jewellers",
+   "sector": "Jewellery",
+   "country": "IN",
+   "verdict": "rise",
+   "video": "Gve5RhpBb04"
+  },
+  {
+   "name": "Maruti Suzuki",
+   "sector": "Automotive",
+   "country": "IN",
+   "verdict": "rise",
+   "video": "JJkz76-Vbsk"
+  },
+  {
+   "name": "Ather Energy",
+   "sector": "Electric vehicles",
+   "country": "IN",
+   "verdict": "rise",
+   "video": "V2G06btgQz4"
+  },
+  {
+   "name": "Google",
+   "sector": "Search & ads",
+   "country": "US",
+   "verdict": "comeback",
+   "video": "FGkzeJM9LxI"
+  },
+  {
+   "name": "Microsoft",
+   "sector": "Software",
+   "country": "US",
+   "verdict": "comeback",
+   "video": "t0h2oP_XjAA"
+  },
+  {
+   "name": "Nvidia",
+   "sector": "AI chips",
+   "country": "US",
+   "verdict": "comeback",
+   "video": "M1zs_ecyOyE"
+  },
+  {
+   "name": "Jaguar",
+   "sector": "Automotive",
+   "country": "GB",
+   "verdict": "fall",
+   "video": "onxEbLI_kU8"
+  },
+  {
+   "name": "Evergrande",
+   "sector": "Real estate",
+   "country": "CN",
+   "verdict": "fall",
+   "video": "v0Tkn8-JBwM"
+  },
+  {
+   "name": "Jet Airways",
+   "sector": "Aviation",
+   "country": "IN",
+   "verdict": "fall",
+   "video": "wUT71G9Dq4s"
+  },
+  {
+   "name": "BYJU'S",
+   "sector": "Edtech",
+   "country": "IN",
+   "verdict": "fall",
+   "video": "-VSel3RcixI"
+  },
+  {
+   "name": "Apple",
+   "sector": "Consumer tech",
+   "country": "US",
+   "verdict": "threat",
+   "video": "n_QPARbnj6A"
+  },
+  {
+   "name": "Visa & Mastercard",
+   "sector": "Payments",
+   "country": "US",
+   "verdict": "threat",
+   "video": "tENejOtXb6M"
+  },
+  {
+   "name": "ASML",
+   "sector": "Semiconductors",
+   "country": "NL",
+   "verdict": "power",
+   "video": "8E47OF_uZvY"
+  },
+  {
+   "name": "FIFA",
+   "sector": "Sport",
+   "country": "CH",
+   "verdict": "power",
+   "video": "46bihZKU8hw"
+  },
+  {
+   "name": "IPL",
+   "sector": "Cricket",
+   "country": "IN",
+   "verdict": "power",
+   "video": "wS_NihdI8is"
+  }
+ ],
+ "countries": [
+  {
+   "code": "IN",
+   "name": "India",
+   "lon": 78.9,
+   "lat": 21.5,
+   "videos": [
+    "LPR-zYHLDKM",
+    "onxEbLI_kU8",
+    "XJkbPqqPXAo",
+    "wUT71G9Dq4s",
+    "-VSel3RcixI",
+    "Gve5RhpBb04",
+    "tENejOtXb6M",
+    "mBgK02cLCUU",
+    "JJkz76-Vbsk",
+    "qseBo7Jebb8",
+    "uVmH21ppVn4",
+    "1iIRZfVe-rs",
+    "wS_NihdI8is",
+    "SAnSYugaOM4",
+    "-l2NXxmYetY",
+    "7FPmWWWts-c",
+    "V2G06btgQz4"
+   ]
+  },
+  {
+   "code": "US",
+   "name": "United States",
+   "lon": -98.5,
+   "lat": 39.5,
+   "videos": [
+    "t0h2oP_XjAA",
+    "3qxYlfArCe8",
+    "FGkzeJM9LxI",
+    "LPR-zYHLDKM",
+    "l1kLylCZZkY",
+    "tENejOtXb6M",
+    "mBgK02cLCUU",
+    "M1zs_ecyOyE",
+    "8Rr5Zb_yRI4",
+    "SAnSYugaOM4",
+    "n_QPARbnj6A"
+   ]
+  },
+  {
+   "code": "CN",
+   "name": "China",
+   "lon": 104,
+   "lat": 34.5,
+   "videos": [
+    "LPR-zYHLDKM",
+    "v0Tkn8-JBwM",
+    "8Rr5Zb_yRI4"
+   ]
+  },
+  {
+   "code": "RU",
+   "name": "Russia",
+   "lon": 60,
+   "lat": 58,
+   "videos": [
+    "LPR-zYHLDKM",
+    "-l2NXxmYetY"
+   ]
+  },
+  {
+   "code": "IR",
+   "name": "Iran",
+   "lon": 53.5,
+   "lat": 32.5,
+   "videos": [
+    "LPR-zYHLDKM",
+    "lWC3FRLMnUk"
+   ]
+  },
+  {
+   "code": "GB",
+   "name": "United Kingdom",
+   "lon": -2,
+   "lat": 53.5,
+   "videos": [
+    "onxEbLI_kU8"
+   ]
+  },
+  {
+   "code": "NL",
+   "name": "Netherlands",
+   "lon": 5.4,
+   "lat": 52.1,
+   "videos": [
+    "8E47OF_uZvY"
+   ]
+  },
+  {
+   "code": "SG",
+   "name": "Singapore",
+   "lon": 103.8,
+   "lat": 1.3,
+   "videos": [
+    "z2u5HMtfG0M"
+   ]
+  },
+  {
+   "code": "VE",
+   "name": "Venezuela",
+   "lon": -66.5,
+   "lat": 7,
+   "videos": [
+    "hk0n3fCWfAQ"
+   ]
+  },
+  {
+   "code": "BR",
+   "name": "Brazil",
+   "lon": -52,
+   "lat": -10,
+   "videos": [
+    "LPR-zYHLDKM"
+   ]
+  },
+  {
+   "code": "ZA",
+   "name": "South Africa",
+   "lon": 24,
+   "lat": -29,
+   "videos": [
+    "LPR-zYHLDKM"
+   ]
+  }
+ ]
+}

@@ -36,7 +36,7 @@
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/instrument-serif-italic-latin.woff2">
 <link rel="preload" as="image" href="assets/img/rohan-hero.webp" type="image/webp">
 <link rel="preconnect" href="https://i.ytimg.com">
-<link rel="stylesheet" href="assets/css/style.css?v=20261013a">
+<link rel="stylesheet" href="assets/css/style.css?v=20261013b">
 
 <script type="application/ld+json">
 {
@@ -313,6 +313,21 @@
     </div>
   </section>
 
+  <!-- ===== BRANDS BROKEN DOWN (filled from assets/coverage.json) ===== -->
+  <section class="section section--tight brands-sec" id="brands">
+    <div class="wrap">
+      <header class="shead shead--split">
+        <div style="display:grid;gap:22px">
+          <span class="eyebrow" data-reveal>Case studies</span>
+          <h2 class="shead__title" data-split>Brands I've broken down</h2>
+        </div>
+        <p class="shead__lede" data-reveal style="--d:.2s;max-width:38ch">How they rose, how they fell, and the few that came back. Pick one to watch the full breakdown.</p>
+      </header>
+      <div class="bfilter" role="group" aria-label="Filter brands by outcome" data-reveal></div>
+      <div class="bwall" id="bwall" data-reveal style="--d:.1s"></div>
+    </div>
+  </section>
+
   <!-- ===== HOW IT WORKS (interactive walkthrough) ===== -->
   <section class="section" id="format">
     <div class="wrap showcase" data-showcase>
@@ -477,13 +492,15 @@
           </div>
         </article>
 
-        <article class="tile tile--glo" data-reveal>
+        <article class="tile tile--glo" data-reveal id="map">
           <div class="tile__text">
             <h3>A global lens, from an Indian point of view.</h3>
-            <p>India's UPI, the US dollar, China, Russia, BRICS — the big shifts in money and power, connected.</p>
+            <p>India's UPI, the US dollar, China, Russia, BRICS — the big shifts in money and power, connected. Pick a country to see its breakdowns.</p>
+            <div class="glo__chips" role="group" aria-label="Choose a country"></div>
+            <div class="glo__panel" aria-live="polite"></div>
           </div>
-          <div class="tile__viz" aria-hidden="true">
-            <svg class="globe" viewBox="0 0 640 230">
+          <div class="tile__viz" data-wmap>
+            <svg class="globe" viewBox="0 0 640 230" aria-hidden="true">
               <defs><pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" class="dotgrid"/></pattern></defs>
               <rect width="640" height="230" fill="url(#dots)" opacity=".55"/>
               <path class="arc" style="--i:0" pathLength="1" d="M92 108 Q 230 -10 372 150"/>
@@ -623,6 +640,6 @@
   </div>
 </footer>
 
-<script src="assets/js/main.js?v=20261013a"></script>
+<script src="assets/js/main.js?v=20261013b"></script>
 </body>
 </html>
