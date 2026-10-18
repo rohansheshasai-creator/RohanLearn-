@@ -1,6 +1,10 @@
 {
  "_how": "Powers the 'Brands I've broken down' wall and the world map on the home page. To add a video: put it in 'videos' (id: title + date), then reference its id from a brand and/or from each country it covers. Brand 'verdict' is one of: rise, comeback, fall, threat, power. Countries use 2-letter codes (IN, US, CN...) with a pin position in degrees (lon, lat). The first 8 brands in the list are the ones shown before 'Show all' is clicked, so order them best first.",
  "videos": {
+  "rBSQpQB0Frs": {
+   "t": "Jio vs Starlink: The Billionaire Battle for India's Internet",
+   "d": "2026-10-17"
+  },
   "t0h2oP_XjAA": {
    "t": "Microsoft Lost 10 Years and $7.6 Billion. So Why Is It Winning Now?",
    "d": "2026-10-10"
@@ -184,6 +188,20 @@
    "video": "-VSel3RcixI"
   },
   {
+   "name": "Jio",
+   "sector": "Telecom",
+   "country": "IN",
+   "verdict": "power",
+   "video": "rBSQpQB0Frs"
+  },
+  {
+   "name": "Starlink",
+   "sector": "Satellite internet",
+   "country": "US",
+   "verdict": "power",
+   "video": "rBSQpQB0Frs"
+  },
+  {
    "name": "Kalyan Jewellers",
    "sector": "Jewellery",
    "country": "IN",
@@ -247,6 +265,7 @@
    "lon": 78.9,
    "lat": 21.5,
    "videos": [
+    "rBSQpQB0Frs",
     "LPR-zYHLDKM",
     "onxEbLI_kU8",
     "XJkbPqqPXAo",
@@ -272,6 +291,7 @@
    "lon": -98.5,
    "lat": 39.5,
    "videos": [
+    "rBSQpQB0Frs",
     "t0h2oP_XjAA",
     "3qxYlfArCe8",
     "FGkzeJM9LxI",

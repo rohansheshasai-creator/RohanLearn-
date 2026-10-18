@@ -1,6 +1,15 @@
 {
   "_how": "Teasers for the 'N takeaways inside' boxes on the home page. Add one entry per video: the video id (the part after v= in the YouTube link) mapped to its three takeaways. Replace the words you want to hide with block characters (the █ character, one per letter, roughly). Hidden words are NEVER sent to visitors' browsers, so the surprise stays a surprise until they watch. Videos with no entry simply show no box.",
   "videos": {
+    "rBSQpQB0Frs": [
+      "The company that makes your life ██████ today can become the █████ you ██████ on tomorrow",
+      "Every ████████ who wins becomes the ███████"
+    ],
+    "t0h2oP_XjAA": [
+      "Kill the ███████ in public before it █████ you quietly",
+      "Bet on the ██████ thing that everything else will ████",
+      "Fix how your team ██████ before you fix what it ██████"
+    ],
     "3qxYlfArCe8": [
       "Find the ██████ everyone else ██████ ██ ███ █████",
       "Cut costs in the ████ ███, not on the ███████",
