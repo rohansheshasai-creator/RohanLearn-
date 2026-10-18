@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://rohanlearn.com/sitemap.xml
+Sitemap: https://www.rohanlearn.com/sitemap.xml

@@ -53,11 +53,11 @@
   var svgNS = "http://www.w3.org/2000/svg";
 
   /* ---------- 2. Shared data (each file is fetched once) ---------- */
-  var videosReq  = fetchJSON("assets/latest-video.json");
-  var statsReq   = fetchJSON("assets/channel-stats.json");
-  var takeReq    = fetchJSON("assets/takeaways.json");
-  var coverReq   = fetchJSON("assets/coverage.json");
-  var historyReq = fetchJSON("assets/stats-history.json").then(function (data) {
+  var videosReq  = fetchJSON("/assets/latest-video.json");
+  var statsReq   = fetchJSON("/assets/channel-stats.json");
+  var takeReq    = fetchJSON("/assets/takeaways.json");
+  var coverReq   = fetchJSON("/assets/coverage.json");
+  var historyReq = fetchJSON("/assets/stats-history.json").then(function (data) {
     return data && data.points && data.points.length > 1 ? data.points : null;
   });
 
@@ -384,10 +384,39 @@
       if ($(".seal", card)) return;
       var link = $(".vcard__link", card);
       var m = link && /[?&]v=([\w-]{11})/.exec(link.href);
-      var seal = m && buildSeal(m[1], tk.videos[m[1]], false);
+      var id = card.dataset.id || (m && m[1]);
+      var seal = id && buildSeal(id, tk.videos[id], false);
       if (seal) card.appendChild(seal);
     });
   }
+
+  // Video cards open the video's case-study page (on this site) when it has one;
+  // otherwise they keep linking straight to YouTube.
+  function caseUrl(cov, id) {
+    var v = cov && cov.videos && cov.videos[id];
+    return v && v.s ? "/case-studies/" + v.s + "/" : null;
+  }
+  function linkCases(scope, cov) {
+    $$(".vcard", scope).forEach(function (card) {
+      var link = $(".vcard__link", card);
+      var m = link && /[?&]v=([\w-]{11})/.exec(link.href);
+      if (!m) return;
+      var href = caseUrl(cov, m[1]);
+      if (!href) return;
+      card.dataset.id = m[1];
+      link.href = href;
+      link.removeAttribute("target"); link.removeAttribute("rel");
+    });
+  }
+
+  // case-study pages: the sealed takeaways sit beside the video, already open
+  takeReq.then(function (tk) {
+    if (!tk || !tk.videos) return;
+    $$("[data-seal-id]").forEach(function (slot) {
+      var seal = buildSeal(slot.dataset.sealId, tk.videos[slot.dataset.sealId], true);
+      if (seal) slot.appendChild(seal);
+    });
+  });
 
   d.addEventListener("click", function (e) {
     var b = e.target.closest ? e.target.closest(".seal__btn") : null;
@@ -478,6 +507,7 @@
         if (seal) { slot.textContent = ""; slot.appendChild(seal); }
       }
       if (grid) attachSeals(grid, tk);
+      coverReq.then(function (cov) { if (grid) linkCases(grid, cov); });
     });
   })();
 
@@ -957,6 +987,7 @@
 
     var STATIC = [
       { g: "Pages", t: "Home", href: "/", icon: "i-page", k: "start index" },
+      { g: "Pages", t: "Case studies", href: "/case-studies/", icon: "i-page", k: "all videos breakdowns library companies economy geopolitics" },
       { g: "Pages", t: "About", href: "/about.html", icon: "i-page", k: "story rohan journey rules" },
       { g: "Pages", t: "Contact", href: "/contact.html", icon: "i-mail", k: "business sponsor promotions collab email" }
     ];
@@ -1149,7 +1180,9 @@
         var verdict = /^[a-z]+$/.test(br.verdict || "") ? br.verdict : "power";
         var a = d.createElement("a");
         a.className = "brand";
-        a.href = ytUrl(br.video); a.target = "_blank"; a.rel = "noopener";
+        var page = caseUrl(cov, br.video);
+        a.href = page || ytUrl(br.video);
+        if (!page) { a.target = "_blank"; a.rel = "noopener"; }
         a.dataset.v = verdict; a.dataset.id = br.video;
         a.setAttribute("aria-label", br.name + ", " + (VERDICT_LABEL[verdict] || "") + ". Watch: " + (v.t || "the breakdown"));
         a.innerHTML =
@@ -1245,7 +1278,7 @@
     function start() {
       if (started) return;
       started = true;
-      Promise.all([coverReq, fetchJSON("assets/world-dots.json")]).then(function (r) {
+      Promise.all([coverReq, fetchJSON("/assets/world-dots.json")]).then(function (r) {
         if (r[0] && r[0].countries && r[0].countries.length && r[1] && r[1].dots) build(r[0], r[1]);
       });
     }
@@ -1334,7 +1367,8 @@
       function renderPanel(c) {
         var list = c.videos.map(function (id) {
           var v = videos[id] || {};
-          return '<li><a class="gvid" href="' + ytUrl(id) + '" target="_blank" rel="noopener">' +
+          var page = caseUrl(cov, id);
+          return '<li><a class="gvid" href="' + (page || ytUrl(id)) + '"' + (page ? "" : ' target="_blank" rel="noopener"') + ">" +
                  '<img src="https://i.ytimg.com/vi/' + encodeURIComponent(id) + '/mqdefault.jpg" width="320" height="180" alt="" loading="lazy" decoding="async">' +
                  '<span class="gvid__t"></span><span class="gvid__d">' + (v.d ? fmtDate(v.d) : "") + '</span></a></li>';
         }).join("");
@@ -1369,6 +1403,35 @@
       });
       select(hub.code, false);
     }
+  })();
+
+  // the case-studies hub: filter by topic and search as you type
+  (function initHub() {
+    var list = $("#cs-list"), bar = $(".cs-filter"), input = $(".cs-search input"), empty = $(".cs-empty");
+    if (!list || !bar) return;
+    var cards = $$(".cs-card", list), topic = "all", q = "", typing = 0;
+    function apply() {
+      var words = q.toLowerCase().split(/\s+/).filter(Boolean), shown = 0;
+      cards.forEach(function (c) {
+        var ok = (topic === "all" || c.dataset.cat === topic) &&
+                 words.every(function (w) { return c.dataset.q.indexOf(w) !== -1; });
+        c.hidden = !ok;
+        if (ok) shown++;
+      });
+      if (empty) empty.hidden = shown > 0;
+    }
+    bar.addEventListener("click", function (e) {
+      var chip = e.target.closest(".bchip");
+      if (!chip) return;
+      topic = chip.dataset.f;
+      $$(".bchip", bar).forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
+      apply();
+    });
+    if (input) input.addEventListener("input", function () {
+      q = input.value;
+      clearTimeout(typing);
+      typing = setTimeout(apply, 80);
+    });
   })();
 
   /* ---------- 16. Subscribe bar + Saturday reminder ---------- */
@@ -1596,6 +1659,7 @@
 
     if (at('a[href*="sub_confirmation"]')) {
       var from = t.closest(".subbar") ? "sticky_bar" : t.closest(".seal") ? "takeaways" : t.closest(".nav") ? "top_bar" :
+                 t.closest(".cs-aside") ? "case_page" :
                  t.closest(".menu") ? "menu" : t.closest(".cta") ? "closing" : t.closest(".hero") ? "hero" :
                  t.closest(".footer") ? "footer" : "page";
       track("subscribe_" + from);
@@ -1605,12 +1669,15 @@
     else if (at(".remind__btn")) { if (el.getAttribute("aria-expanded") === "true") track("reminder_open"); }
     else if (at(".remind__item")) track(el.classList.contains("js-gcal") ? "reminder_google" : "reminder_apple");
     else if (at("[data-theme-toggle]")) { track("theme_" + cur); window.clarity("set", "theme", cur); }   // cur = the theme being switched to
-    else if (at(".bchip")) track("brands_filter_" + el.dataset.f);
+    else if (at(".bchip")) track((t.closest(".cs-filter") ? "hub_filter_" : "brands_filter_") + el.dataset.f);
     else if (at(".bmore__btn")) { if (el.getAttribute("aria-expanded") === "true") track("brands_show_all"); }
-    else if (at(".brand")) track("watch_from_brands");
+    else if (at(".brand")) track("case_from_brands");
     else if (at(".wm-pin, .gchip")) track("map_" + (el.dataset.c || "").toLowerCase());
-    else if (at(".gvid")) track("watch_from_map");
-    else if (at(".vcard__link")) track("watch_from_recent");
+    else if (at(".gvid")) track("case_from_map");
+    else if (at(".vcard__link")) track("case_from_recent");
+    else if (at(".cs-card__link")) track(t.closest(".cs-more") ? "case_from_related" : "case_from_hub");
+    else if (at(".cs-ch a")) track("chapter_click");
+    else if (at(".cs-actions .btn--yt")) track("watch_from_case_page");
     else if (at(".js-latest-link, .player__poster")) track("watch_latest");
     else if (at(".announce__link")) track("watch_from_announcement");
     else if (at(".announce__close")) track("announcement_closed");

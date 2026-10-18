@@ -1,7 +1,7 @@
 # RohanLearn
 
 The website for the [RohanLearn](https://www.youtube.com/@rohanlearn) YouTube channel.
-Live at **[rohanlearn.com](https://rohanlearn.com)**.
+Live at **[rohanlearn.com](https://www.rohanlearn.com)**.
 
 Built as plain HTML, CSS and JavaScript — there is nothing to install, nothing to
 build, and no dependencies to break. Edit a file, save it, done.
@@ -16,11 +16,14 @@ build, and no dependencies to break. Edit a file, save it, done.
 | `about.html` | The full About page |
 | `contact.html` | Sponsorships & promotions |
 | `privacy.html` | What the site measures and how to switch it off |
+| `case-studies/` | The hub page plus one page per video — **generated**, don't edit by hand |
+| `content/case-studies.json` | The words on each case-study page (headline, summary, chapters) — **you edit this** |
+| `tools/build_case_studies.py` | Rebuilds the case-study pages and `sitemap.xml` from that file |
 | `404.html` | Shown when someone hits a link that doesn't exist |
 | `assets/css/style.css` | All the styling — colours, type, layout, motion |
 | `assets/js/main.js` | All the interactive bits — animations, live data, charts, ⌘K search |
 | `assets/fonts/` | The fonts, hosted on the site itself (fast, nothing loaded from Google) |
-| `assets/img/` | Photos, the share-preview image (`og-image.png`) and favicons |
+| `assets/img/` | Photos, the share-preview image (`og-image.jpg`) and favicons |
 | `assets/latest-video.json` | Latest videos — **updated automatically** (see below) |
 | `assets/channel-stats.json` | Subscribers / videos / views — **updated automatically** |
 | `assets/stats-history.json` | One data point per day — the growth chart is drawn from this, **updated automatically** |
@@ -135,9 +138,10 @@ Filters → Custom events), for example:
 
 | Event | Means |
 |---|---|
-| `subscribe_sticky_bar`, `subscribe_takeaways`, `subscribe_top_bar`, `subscribe_closing`, `subscribe_hero`, `subscribe_menu`, `subscribe_footer` | Clicked Subscribe, and where |
+| `subscribe_sticky_bar`, `subscribe_takeaways`, `subscribe_top_bar`, `subscribe_closing`, `subscribe_hero`, `subscribe_menu`, `subscribe_footer`, `subscribe_case_page` | Clicked Subscribe, and where |
 | `takeaways_peek` / `takeaways_unlock` | Opened a takeaways box / clicked "Watch to unlock" |
-| `watch_latest`, `watch_from_recent`, `watch_from_brands`, `watch_from_map`, `watch_from_announcement` | Clicked through to a video, and from where |
+| `watch_latest`, `watch_from_announcement`, `watch_from_case_page` | Clicked through to YouTube, and from where |
+| `case_from_recent`, `case_from_brands`, `case_from_map`, `case_from_hub`, `case_from_related`, `chapter_click`, `hub_filter_…` | Opened a case-study page, and from where |
 | `reminder_open`, `reminder_google`, `reminder_apple` | Saturday reminder |
 | `brands_filter_…`, `brands_show_all`, `map_in`, `map_us`… | Used the brands wall / world map |
 | `theme_light` / `theme_dark`, `search_open`, `search_pick`, `faq_open`, `email_click`, `email_copy` | Everything else |
@@ -145,6 +149,24 @@ Filters → Custom events), for example:
 Visitors can switch analytics off on the [privacy page](privacy.html), and browsers
 that send *Global Privacy Control* are never tracked. In Clarity's settings keep
 **Masking** on *Balanced* or *Strict*.
+
+## Case-study pages (SEO)
+
+Every video has its own page at `/case-studies/<name>/`, with the video, a written
+summary, clickable chapters, the sealed takeaways, and Google video markup (so search
+results can show the thumbnail, length and "key moments"). `/case-studies/` lists them all.
+
+**For a new video:** add an entry to `content/case-studies.json` (copy an existing one),
+then run:
+
+```bash
+python3 tools/build_case_studies.py
+```
+
+That rebuilds every page and `sitemap.xml`. (Or just ask Claude: "add the new video".)
+
+The site's address is **https://www.rohanlearn.com** (with www); every page, the
+sitemap and robots.txt use it.
 
 ## Light and dark mode
 

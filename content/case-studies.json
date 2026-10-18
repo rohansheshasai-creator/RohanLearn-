@@ -1,0 +1,1298 @@
+{
+ "_how": "One entry per video; tools/build_case_studies.py turns these into the pages under /case-studies/. Fields: id (YouTube id), slug (page address), cat (business, economy, geopolitics or politics), h1 (page headline), seo (search-result title, under ~60 characters), desc (search-result description, under ~155 characters), lede, body (paragraphs), chapters (t = time in the video, label), countries (2-letter codes), optional series. title, published and duration come from YouTube.",
+ "case_studies": [
+  {
+   "id": "rBSQpQB0Frs",
+   "slug": "jio-vs-starlink",
+   "cat": "business",
+   "h1": "Jio vs Starlink: The Billionaire Battle for India's Internet",
+   "seo": "Jio vs Starlink Explained: Who Wins India's Internet?",
+   "desc": "Musk vs Ambani, explained: how 13 telecom companies became 4, how Jio and Starlink reach you, what each costs, and both sides of the fight.",
+   "lede": "Elon Musk called Mukesh Ambani “the real boss of India.” Behind the post is a fight over who connects the next billion Indians, and what it costs you.",
+   "body": [
+    "India had 13 telecom companies in 2014. After Jio launched in 2016 with free calls and data, that number fell to four, and two of them now control most broadband connections. This breakdown starts there, because the company that makes your life cheaper today can become the one you depend on tomorrow.",
+    "It then follows how your data actually travels: undersea cables, fibre and towers for Jio, a rooftop dish and satellites 550 km up for Starlink. It compares speed and price, explains why Starlink still can't sell a single connection in India, and lays out both sides of the security argument, without taking a side."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The billionaire battle for India's internet"
+    },
+    {
+     "t": "1:28",
+     "label": "How 13 telecom giants became just four"
+    },
+    {
+     "t": "3:24",
+     "label": "Jio vs Starlink: how your data travels"
+    },
+    {
+     "t": "5:57",
+     "label": "Comparing the costs"
+    },
+    {
+     "t": "8:56",
+     "label": "The future of India's digital landscape"
+    }
+   ],
+   "countries": [
+    "IN",
+    "US"
+   ],
+   "title": "Jio vs Starlink: The Billionaire Battle for India's Internet",
+   "published": "2026-10-17T13:32:31Z",
+   "duration": "PT10M27S"
+  },
+  {
+   "id": "t0h2oP_XjAA",
+   "slug": "microsoft-comeback",
+   "cat": "business",
+   "series": "The Comeback · Episode 3",
+   "h1": "Microsoft Lost 10 Years and $7.6 Billion. So Why Is It Winning Now?",
+   "seo": "Microsoft's Comeback: From the Nokia Loss to $3 Trillion",
+   "desc": "How Microsoft wrote off $7.6 billion on Nokia, bet on boring cloud infrastructure and rebuilt its culture under Satya Nadella. Comeback, Episode 3.",
+   "lede": "Microsoft missed the smartphone, wrote off $7.6 billion on Nokia and went a decade with a flat stock price. Then it became one of the most valuable companies on Earth.",
+   "body": [
+    "The final episode of The Comeback shows that the turnaround didn't start with a product. It started with Satya Nadella admitting, in public, that the Nokia deal was a mistake, and taking the loss instead of defending it.",
+    "From there it covers the unglamorous bet nobody was excited about, cloud computing through Azure, which now quietly runs the AI models people use every day, and the change in culture that turned teams competing with each other into one company competing with Google and Apple."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The decade of stagnation"
+    },
+    {
+     "t": "2:19",
+     "label": "The courage to admit failure"
+    },
+    {
+     "t": "4:06",
+     "label": "Betting on the boring infrastructure"
+    },
+    {
+     "t": "6:03",
+     "label": "Rewiring the corporate culture"
+    }
+   ],
+   "countries": [
+    "US"
+   ],
+   "title": "Microsoft Lost 10 Years and $7.6 Billion. So Why Is It Winning Now?",
+   "published": "2026-10-10T13:32:34Z",
+   "duration": "PT8M46S"
+  },
+  {
+   "id": "3qxYlfArCe8",
+   "slug": "walmart-rise",
+   "cat": "business",
+   "series": "The Comeback · Episode 2",
+   "h1": "The Rise of Walmart: 12 Years as the Biggest Company on Earth",
+   "seo": "How Walmart Became the World's Biggest Company",
+   "desc": "Sam Walton's strategy explained: small towns the giants ignored, cost discipline in the back end, and never stopping after winning. Comeback, Episode 2.",
+   "lede": "His own company said no. Kmart, Sears and Woolworths didn't even notice him. Sam Walton's small-town store went on to spend twelve straight years as the world's largest company by revenue.",
+   "body": [
+    "In the 1960s every discount chain built near crowded cities. Walton built in small towns, some with fewer than 5,000 people, where nobody else bothered to compete. By the time the giants noticed Walmart, it had already won.",
+    "The episode explains how a central warehouse, its own trucks and no middlemen let Walmart cut costs in the back end and pass the savings on as “everyday low prices,” and why it kept expanding long after it had already won."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The visionary ignored by giants"
+    },
+    {
+     "t": "1:42",
+     "label": "Going where competitors refuse to tread"
+    },
+    {
+     "t": "3:09",
+     "label": "Cost discipline as a competitive weapon"
+    },
+    {
+     "t": "4:32",
+     "label": "The danger of being satisfied"
+    }
+   ],
+   "countries": [
+    "US"
+   ],
+   "title": "The Rise of Walmart: 12 Years as the Biggest Company on Earth",
+   "published": "2026-10-03T13:32:30Z",
+   "duration": "PT7M1S"
+  },
+  {
+   "id": "FGkzeJM9LxI",
+   "slug": "google-rejected-idea",
+   "cat": "business",
+   "series": "The Comeback · Episode 1",
+   "h1": "How a Rejected Idea Became a $2 Trillion Empire",
+   "seo": "How Google Went From Rejected Idea to $2 Trillion",
+   "desc": "Yahoo and AltaVista passed on it. How Google built a better product, turned free search into AdWords, and bought Android and YouTube. Comeback, Episode 1.",
+   "lede": "Two students tried to sell their search engine for $1 million, then $750,000. Yahoo and AltaVista both said no. That idea became Google.",
+   "body": [
+    "The first episode of The Comeback looks at why Google won: in 1998 search results were junk, and Larry Page and Sergey Brin simply ranked pages better, so Google improved as the internet grew while rivals got worse.",
+    "It then explains how a free product became one of the most profitable machines on the internet through AdWords, where even a small shop pays only when someone clicks, and why buying Android and a loss-making YouTube showed a company refusing to stay what it started as."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The billion-dollar idea everyone rejected"
+    },
+    {
+     "t": "2:05",
+     "label": "Why being genuinely better changed everything"
+    },
+    {
+     "t": "3:29",
+     "label": "Turning free services into a profit machine"
+    },
+    {
+     "t": "5:26",
+     "label": "Refusing to stay within the original vision"
+    }
+   ],
+   "countries": [
+    "US"
+   ],
+   "title": "How a Rejected Idea Became a $2 Trillion Empire | The Comeback Series",
+   "published": "2026-09-26T13:32:09Z",
+   "duration": "PT8M20S"
+  },
+  {
+   "id": "OtBNSe3AurA",
+   "slug": "ai-jobs-risk",
+   "cat": "economy",
+   "h1": "Your Job Is at Risk Now: AI, Layoffs and Young Workers",
+   "seo": "Is AI Taking Your Job? The Real Story Behind 2026 Layoffs",
+   "desc": "Why 22–25-year-olds in AI-exposed jobs are being hit first, why AI often makes people slower, and the one skill that turns the crisis into an opportunity.",
+   "lede": "For fifteen years, learning to code was the safest career advice on the planet. Now companies that aren't even losing money are cutting staff, and young workers are hit first.",
+   "body": [
+    "This breakdown looks at who is actually being cut, with real numbers: Stanford research on employment for 22-to-25-year-olds in AI-exposed jobs, tech layoffs running at around 981 a day, and a first decline in IT employment in two decades.",
+    "It also asks whether AI is really the reason, including evidence that people using AI tools can be slower while feeling faster, and why the World Economic Forum still expects millions of new jobs. The question isn't whether work disappears, but how its shape changes."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Employment for youth is gone"
+    },
+    {
+     "t": "1:26",
+     "label": "The end of the coding career myth"
+    },
+    {
+     "t": "3:50",
+     "label": "The hidden trap of AI efficiency"
+    }
+   ],
+   "countries": [],
+   "title": "Your JOB is in Risk Now!",
+   "published": "2026-09-19T13:32:02Z",
+   "duration": "PT8M32S"
+  },
+  {
+   "id": "LPR-zYHLDKM",
+   "slug": "brics-vs-dollar",
+   "cat": "geopolitics",
+   "h1": "Why BRICS Is Suddenly the World's Biggest Threat to the Dollar",
+   "seo": "BRICS vs the US Dollar, Explained Simply",
+   "desc": "How the dollar controls trade, what BRICS has built to get around it (the New Development Bank and local-currency payments), and whose side India is on.",
+   "lede": "Leaders from across BRICS landed in New Delhi for one summit. This isn't a foreign-policy story: it's about why your petrol, fees and the rupee depend on who controls the world's money.",
+   "body": [
+    "The video explains why the dollar is powerful because of its “plumbing”: even when India buys oil from Russia, the payment usually flows through the American banking system, which can be switched off, as the world saw in 2022.",
+    "It then shows what BRICS has quietly built instead of a fantasy currency: the New Development Bank, which lends to members in their own currencies, and trade settled in rupees. And it asks the real question: with friends on every side, which side is India actually on?"
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Why global leaders are gathering in India"
+    },
+    {
+     "t": "5:38",
+     "label": "Three lessons from the BRICS summit"
+    }
+   ],
+   "countries": [
+    "IN",
+    "US",
+    "CN",
+    "RU",
+    "IR",
+    "BR",
+    "ZA"
+   ],
+   "title": "Why BRICS is Suddenly the World’s Biggest Threat to Dollar?",
+   "published": "2026-09-12T05:15:28Z",
+   "duration": "PT8M26S"
+  },
+  {
+   "id": "onxEbLI_kU8",
+   "slug": "jaguar-decline",
+   "cat": "business",
+   "h1": "The Death of Jaguar: How a $2.3B Icon Failed",
+   "seo": "Why Jaguar Is Failing: Six Cars Sold, Explained",
+   "desc": "Tata bought Jaguar for $2.3B in 2008 and turned it around. Then came a rebrand with no cars to sell and a cyberattack. What went wrong, and how it could recover.",
+   "lede": "In January 2026 Jaguar registered just six new cars in the UK. A year earlier it was 783. This is how India's proudest turnaround nearly came undone.",
+   "body": [
+    "Tata Motors bought Jaguar Land Rover from Ford for $2.3 billion in 2008, when everyone called it reckless, and turned it into the group's biggest profit engine. The breakdown covers how big Jaguar still was, then the “Copy Nothing” rebrand launched with no cars on sale, and the 2025 cyberattack that stopped production for five weeks.",
+    "It then lays out three strategies Jaguar could use to recover, from leaving the BMW and Mercedes fight to treating operational resilience as part of the product."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The rise and fall"
+    },
+    {
+     "t": "3:50",
+     "label": "Strategies for Jaguar"
+    },
+    {
+     "t": "5:36",
+     "label": "Takeaways for everyone"
+    }
+   ],
+   "countries": [
+    "GB",
+    "IN"
+   ],
+   "title": "The Death Of Jaguar: How A $2.3B Icon Failed",
+   "published": "2026-09-05T16:30:32Z",
+   "duration": "PT7M52S"
+  },
+  {
+   "id": "8E47OF_uZvY",
+   "slug": "asml",
+   "cat": "business",
+   "h1": "ASML: The Most Important Company You Don't Know",
+   "seo": "ASML Explained: The Company Behind Every Advanced Chip",
+   "desc": "One Dutch company makes the only machines that print the world's most advanced chips. How ASML beat Nikon and Canon, and why it's at the centre of the US–China tech war.",
+   "lede": "There is one machine on Earth that can make the most advanced computer chips, and only one company builds it. Not American, not Chinese: a Dutch firm that nearly went bankrupt in 1992.",
+   "body": [
+    "The breakdown explains what ASML does and how EUV lithography works in plain language, then tells the underdog story of how it overtook Japan's Nikon and Canon to hold a monopoly on the technology.",
+    "It ends at the US–China chokepoint: why Washington wants ASML locked down, why Beijing wants it opened up, how the Netherlands ended up holding a switch over China's chip industry, and what all of it means for India's own chip ambitions."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The impossible machine"
+    },
+    {
+     "t": "0:35",
+     "label": "What is ASML?"
+    },
+    {
+     "t": "1:45",
+     "label": "How EUV lithography works"
+    },
+    {
+     "t": "3:15",
+     "label": "The underdog story: ASML vs Nikon & Canon"
+    },
+    {
+     "t": "5:10",
+     "label": "The US–China chokepoint"
+    },
+    {
+     "t": "7:19",
+     "label": "The real lessons"
+    }
+   ],
+   "countries": [
+    "NL",
+    "US",
+    "CN"
+   ],
+   "title": "The Most Important Company, That You Don't Know: ASML",
+   "published": "2026-08-29T13:32:32Z",
+   "duration": "PT10M26S"
+  },
+  {
+   "id": "l1kLylCZZkY",
+   "slug": "us-debt-bomb",
+   "cat": "economy",
+   "h1": "US Debt Bomb: How It Reaches Your Money in India",
+   "seo": "The US Debt Crisis Explained, and What It Means for India",
+   "desc": "America's debt crossed $40 trillion. Why it now pays more in interest than on its military, who holds the debt, and how it reaches your rupee, petrol and EMI.",
+   "lede": "The richest country in history crossed $40 trillion in debt. The video explains how it got there, and why the blast reaches homes in India.",
+   "body": [
+    "It starts with history: the same pattern of debt weakened Rome, Spain and Britain. Then it explains why this time is different, with the US now spending more on interest than on its entire military and borrowing just to keep up with payments.",
+    "The breakdown also covers who really holds the fuse, including China quietly cutting its holdings of US debt, and the two invisible wires connecting America's debt to your rupee, your petrol price and your EMI."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The silent killer of superpowers"
+    },
+    {
+     "t": "0:48",
+     "label": "Lessons from fallen empires"
+    },
+    {
+     "t": "2:34",
+     "label": "Why this time is different"
+    },
+    {
+     "t": "4:44",
+     "label": "Who really holds the fuse?"
+    },
+    {
+     "t": "6:35",
+     "label": "The global ripple effect"
+    },
+    {
+     "t": "7:52",
+     "label": "The three takeaways"
+    }
+   ],
+   "countries": [
+    "US",
+    "CN",
+    "IN"
+   ],
+   "title": "US Debt Bomb: How To Protect Your Future ?",
+   "published": "2026-08-22T16:56:03Z",
+   "duration": "PT10M39S"
+  },
+  {
+   "id": "XJkbPqqPXAo",
+   "slug": "india-fourth-largest-economy",
+   "cat": "economy",
+   "h1": "From Poor to the World's 4th Biggest Economy: This Is India",
+   "seo": "How India Became the World's 4th Largest Economy",
+   "desc": "In 1947 the world gave India five years to survive. The 1991 crisis, the gold pledge, a young workforce and the road to a $30 trillion economy by 2047.",
+   "lede": "In 1947 much of the world doubted India would survive. This Independence Day special traces how it became the fourth-biggest economy on Earth.",
+   "body": [
+    "The story runs from the midnight birth of a nation to 1991, when India came within weeks of running out of money and pledged its gold. It then follows the reforms and growth that took the country from crisis to a global top-five economy.",
+    "It closes on the road ahead: the goal of a $30 trillion developed nation by 2047, the power of one of the youngest workforces in the world, and the debate over whether that target is realistic."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The nation the world bet against"
+    },
+    {
+     "t": "3:17",
+     "label": "The midnight birth of a nation"
+    },
+    {
+     "t": "4:59",
+     "label": "Three weeks from total bankruptcy"
+    },
+    {
+     "t": "7:01",
+     "label": "The road to a $30 trillion economy"
+    },
+    {
+     "t": "7:52",
+     "label": "The power of a young workforce"
+    },
+    {
+     "t": "11:14",
+     "label": "The 3 takeaways"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "title": "From Poor to World's 4th Biggest — This is India 🇮🇳 (Independence Day Special)",
+   "published": "2026-08-15T05:37:34Z",
+   "duration": "PT14M2S"
+  },
+  {
+   "id": "wUT71G9Dq4s",
+   "slug": "jet-airways-liquidation",
+   "cat": "business",
+   "series": "DTKT Series · Episode 3",
+   "h1": "Why the Supreme Court Ordered Jet Airways to Be Liquidated",
+   "seo": "Why Jet Airways Collapsed: The 3 Decisions Explained",
+   "desc": "Jet Airways was India's proudest airline. How expansion on borrowed money, flying after the cash ran out and a rescue that never funded it led to liquidation.",
+   "lede": "Jet Airways wasn't a budget airline that cut corners. It was India's second-biggest carrier, famous for warm service and on-time flights, and in 2024 the Supreme Court ordered it liquidated.",
+   "body": [
+    "Founded in 1993 by former travel agent Naresh Goyal, Jet grew to more than 100 aircraft, flying from Delhi and Mumbai to London and beyond. It didn't die from bad luck; the breakdown traces three decisions.",
+    "Expanding on borrowed money at the wrong time, including the costly Air Sahara deal. Flying long after the money had run out. And a rescue plan whose winning bidders never put in the funds. The finale of the DTKT series ties all three companies together."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "How great Jet Airways actually was"
+    },
+    {
+     "t": "2:05",
+     "label": "The 3 decisions"
+    },
+    {
+     "t": "4:26",
+     "label": "Avoid these in your life"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "title": "Why Supreme Court Ordered The Greatest Airline to liquidate??  | DTKT Series 3/3",
+   "published": "2026-08-08T13:32:20Z",
+   "duration": "PT8M18S"
+  },
+  {
+   "id": "v0Tkn8-JBwM",
+   "slug": "evergrande-collapse",
+   "cat": "business",
+   "series": "DTKT Series · Episode 2",
+   "h1": "Evergrande: How the World's Biggest Property Developer Collapsed",
+   "seo": "Why Evergrande Collapsed: China's Property Giant Explained",
+   "desc": "Evergrande built homes in hundreds of Chinese cities, then collapsed. Selling homes before building them, borrowing at an impossible scale, and inflating revenue.",
+   "lede": "Evergrande wasn't a fraud pretending to be a company. It was a real empire, which is what makes its collapse so frightening: around 1.5 million families paid for homes that were never finished.",
+   "body": [
+    "Hui Ka Yan started with almost nothing and built China's largest property developer, building in more than 200 cities and owning a football club, a water brand and an electric-car company. Today the company has been wound up by a Hong Kong court and removed from the stock exchange.",
+    "The breakdown traces three decisions: selling homes before building them to fund the next project, borrowing on a scale no company should, and inflating revenue instead of facing the truth, as regulators later found."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "How great Evergrande actually was"
+    },
+    {
+     "t": "2:10",
+     "label": "The 3 decisions"
+    },
+    {
+     "t": "4:00",
+     "label": "Avoid these in your life"
+    }
+   ],
+   "countries": [
+    "CN"
+   ],
+   "title": "The Reason Why World's Greatest Infrastructre Brand Collapsed | DTKT Series 2/3",
+   "published": "2026-08-01T13:32:13Z",
+   "duration": "PT6M51S"
+  },
+  {
+   "id": "-VSel3RcixI",
+   "slug": "byjus-collapse",
+   "cat": "business",
+   "series": "DTKT Series · Episode 1",
+   "h1": "BYJU'S $22 Billion Gamble: How India's Edtech Giant Fell",
+   "seo": "Why BYJU'S Collapsed: The $22 Billion Story Explained",
+   "desc": "A teacher from Kerala built a $22 billion edtech giant with 100 million students. Four years later it was worth almost nothing. The three decisions behind it.",
+   "lede": "BYJU'S was not a scam, which is what makes it painful. A teacher who filled stadiums built the world's most valuable edtech company, sponsored India's cricket jersey and the FIFA World Cup, and then lost it all.",
+   "body": [
+    "The first episode of the DTKT series shows how big BYJU'S really was at its peak: a $22 billion valuation and 100 million students.",
+    "It then breaks down the three decisions that brought it down, and the lesson hidden inside each one. Where matters are still disputed in court, the video treats them as allegations or as the findings of a specific court."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "How great BYJU'S actually was"
+    },
+    {
+     "t": "2:45",
+     "label": "The 3 decisions"
+    },
+    {
+     "t": "5:37",
+     "label": "Avoid these in your life"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "title": "BYJU'S $22 Billion Gamble: Played with Kids Future ? | DTKT Series 1/3",
+   "published": "2026-07-25T13:32:12Z",
+   "duration": "PT8M29S"
+  },
+  {
+   "id": "46bihZKU8hw",
+   "slug": "fifa-world-cup-money",
+   "cat": "business",
+   "h1": "The FIFA World Cup Made $8.9 Billion, and You Paid for It",
+   "seo": "FIFA World Cup 2026 Money Explained: Who Really Pays?",
+   "desc": "FIFA expects $8.9B from one World Cup while host cities pay $100–200M each. The business, economics and geopolitics of the World Cup money machine.",
+   "lede": "The 2026 World Cup is the richest sporting event ever staged, and for the first time FIFA runs it itself. It keeps essentially all the revenue, while host cities absorb the costs.",
+   "body": [
+    "The breakdown follows the money: a projected $8.9 billion for FIFA, host cities paying $100–200 million each, and twelve of the last fourteen World Cups losing money for their hosts. A group-stage ticket started at $60; a top seat at the final costs $7,875.",
+    "It also covers the stadiums taxpayers had already paid for, the uncontested Saudi bid for 2034, and why India helps fund a tournament it doesn't even play in."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The World Cup is not a football tournament"
+    }
+   ],
+   "countries": [
+    "US"
+   ],
+   "title": "The FIFA World Cup Made $8.9 Billion — You Paid For It",
+   "published": "2026-07-18T13:32:37Z",
+   "duration": "PT10M56S"
+  },
+  {
+   "id": "Gve5RhpBb04",
+   "slug": "kalyan-jewellers",
+   "cat": "business",
+   "h1": "From Textile Shop to Jewellery Empire: The Kalyan Jewellers Story",
+   "seo": "Kalyan Jewellers Business Strategy, Explained",
+   "desc": "How a textile trader from Thrissur built 500+ showrooms in 5 countries, why he waited 7 years to open a second store, and what it would take to beat Titan.",
+   "lede": "Everyone said he'd fail. Tanishq launched the next year, Malabar was scaling, Joyalukkas was going global. A textile trader from Thrissur beat them anyway.",
+   "body": [
+    "Kalyan Jewellers now has more than 500 showrooms across five countries and around ₹35,000 crore in sales. The breakdown explains the seven-year decision that built its reputation for trust, including why the founder refused to open a second store for years.",
+    "It also looks at the uncomfortable fact: Kalyan is India's number two, and Titan is worth almost seven times more. Then it sets out three bold moves that could make Kalyan the world's number one jeweller."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The rise of Kalyan Jewellers"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "title": "From Textile Shop to Jewellery Empire | The Kalyan Jewellers Strategies to be world No.1",
+   "published": "2026-07-11T13:32:14Z",
+   "duration": "PT11M56S"
+  },
+  {
+   "id": "tENejOtXb6M",
+   "slug": "upi-vs-visa-mastercard",
+   "cat": "business",
+   "h1": "India Is Killing Visa and Mastercard: How UPI and RuPay Won",
+   "seo": "UPI vs Visa and Mastercard: How India Changed Payments",
+   "desc": "Two of the biggest payment companies on Earth are worried about a free app from India. How UPI and RuPay grew, and the number inside the 'free' system.",
+   "lede": "Two of the biggest financial companies on the planet are now worried about a free payment app from India. This is how UPI went from the vegetable stall to Washington.",
+   "body": [
+    "The breakdown explains why Visa and Mastercard, among the largest companies in the world, couldn't crack India, and the origin story of UPI that the banking world didn't see coming.",
+    "It also points to a number hiding inside this “free” system that should worry every bank, and what India's payment rails mean for the rest of the world."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Inside the payments war"
+    },
+    {
+     "t": "6:37",
+     "label": "The three takeaways"
+    }
+   ],
+   "countries": [
+    "IN",
+    "US"
+   ],
+   "title": "India Is Killing Visa and Mastercard — Death of VISA and Mastercard by UPI and RuPay....",
+   "published": "2026-07-04T13:32:22Z",
+   "duration": "PT9M16S"
+  },
+  {
+   "id": "mBgK02cLCUU",
+   "slug": "us-will-defend-india",
+   "cat": "geopolitics",
+   "h1": "US Will Defend India, on One Condition Nobody Noticed",
+   "seo": "G7 2026 and India: The US Defence Pledge, Explained",
+   "desc": "At the 2026 G7 in Evian, the US said it would defend India. India was invited for the 13th year and still isn't a member. What was said, and what it means.",
+   "lede": "While a gas carrier sailed through the most dangerous strait on Earth, seven of the richest countries met in a small French town. India was in the building, but not in the room.",
+   "body": [
+    "India was invited to the G7 for the 13th year in a row, and is still not a member. The video looks at what was decided over three days in Evian, including the US statement that it would defend India.",
+    "It explains which country walked out stronger, which walked out exposed, and the one sentence from an Indian leader that almost no camera caught, which the video argues was the most important of the summit."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Inside the G7 summit"
+    },
+    {
+     "t": "6:54",
+     "label": "3 takeaways"
+    }
+   ],
+   "countries": [
+    "US",
+    "IN",
+    "IR"
+   ],
+   "title": "US Will Defend India — On One Condition to MODI that Nobody Noticed...",
+   "published": "2026-06-27T13:32:01Z",
+   "duration": "PT10M11S"
+  },
+  {
+   "id": "hk0n3fCWfAQ",
+   "slug": "venezuela-oil-collapse",
+   "cat": "economy",
+   "h1": "The Death of an Oil Giant: How Venezuela Lost Its Wealth",
+   "seo": "How Venezuela Went From Oil Riches to Collapse",
+   "desc": "Venezuela sits on the world's largest oil reserves, yet nearly 8 million people have left. How an oil giant collapsed, and why superpowers came back for it.",
+   "lede": "Venezuela sits on the largest oil reserves on the planet, more than Saudi Arabia. So why is it one of the poorest countries in its region, with nearly 8 million people gone?",
+   "body": [
+    "The breakdown traces how the country's oil wealth turned into hyperinflation, poverty and one of the largest migrations in the world, using reserve, migration and poverty data from public sources.",
+    "It then asks why the world's superpowers suddenly came running back to a country everyone had written off, and what its critical minerals have to do with it."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The fall of an oil giant"
+    },
+    {
+     "t": "9:50",
+     "label": "Takeaways for everyone"
+    }
+   ],
+   "countries": [
+    "VE",
+    "US"
+   ],
+   "title": "The Death of an Oil Giant: How Venezuela Lost Its Wealth to History",
+   "published": "2026-06-20T13:32:23Z",
+   "duration": "PT12M41S"
+  },
+  {
+   "id": "z2u5HMtfG0M",
+   "slug": "singapore-economy",
+   "cat": "economy",
+   "h1": "A Country With No Water Became Richer Than Britain",
+   "seo": "How Singapore Got Rich With No Resources",
+   "desc": "No oil, no farmland, not even its own water. How Lee Kuan Yew built Singapore into one of the richest nations, and the biggest foreign investor in India.",
+   "lede": "Singapore had no oil, no farmland and couldn't even make its own drinking water. Today it is richer per person than Britain, and the single biggest foreign investor in India.",
+   "body": [
+    "Thrown out of Malaysia in 1965, Singapore started with 2 million people, no resources and riots in the streets. The video explains Lee Kuan Yew's bets: war on corruption, English as the working language, and home ownership for most of the population.",
+    "It then shows how a port on the Strait of Malacca became a tollbooth on world trade, how Temasek and GIC invest the country's money like an investor rather than a government, and the lessons India keeps refusing to learn."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "From slum to superpower"
+    },
+    {
+     "t": "8:09",
+     "label": "3 takeaways"
+    }
+   ],
+   "countries": [
+    "SG",
+    "IN"
+   ],
+   "title": "A Country With No Water Became Richer Than Britain — And India Keeps Ignoring",
+   "published": "2026-06-13T13:32Z",
+   "duration": "PT10M"
+  },
+  {
+   "id": "M1zs_ecyOyE",
+   "slug": "nvidia-ai-chips",
+   "cat": "business",
+   "h1": "Nvidia: The Brain Behind Every AI",
+   "seo": "How Nvidia Went From 30 Days to Bankruptcy to AI Giant",
+   "desc": "Nvidia's first chip failed, 249,000 of 250,000 units came back, and it was 30 days from shutting down. How CUDA and AI made it worth trillions.",
+   "lede": "The company powering the AI revolution was once 30 days from shutting down. Its first product failed so badly that customers returned 249,000 out of 250,000 units.",
+   "body": [
+    "The video follows Jensen Huang from a bet on 3D graphics for video games, through the NV1 failure and the risky RIVA 128 chip that saved the company, to CUDA, a platform that had almost no users for six years.",
+    "Then AlexNet ran on Nvidia chips in 2012, and AI took off. The breakdown also covers why most AI now runs on Nvidia hardware, how the company became a geopolitical weapon, and includes a three-question game along the way."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Every AI depends on this"
+    },
+    {
+     "t": "2:50",
+     "label": "The game: can you score 3 out of 3?"
+    },
+    {
+     "t": "3:54",
+     "label": "Nvidia changed gaming"
+    },
+    {
+     "t": "5:22",
+     "label": "The failure that nearly killed Nvidia"
+    },
+    {
+     "t": "7:43",
+     "label": "Jensen didn't back off"
+    },
+    {
+     "t": "9:32",
+     "label": "Nvidia and the birth of AI"
+    },
+    {
+     "t": "12:07",
+     "label": "Takeaways"
+    }
+   ],
+   "countries": [
+    "US"
+   ],
+   "title": "The Brain Behind Every AI — Every AI depends on this.. | Untold Strategy Revealed",
+   "published": "2026-06-06T13:32:35Z",
+   "duration": "PT15M52S"
+  },
+  {
+   "id": "JJkz76-Vbsk",
+   "slug": "maruti-suzuki",
+   "cat": "business",
+   "h1": "Maruti Suzuki: The Secret Behind India's Biggest Car Company",
+   "seo": "How Maruti Suzuki Won India's Car Market",
+   "desc": "The 1982 deal Renault, Ford and Volkswagen rejected, the engines Suzuki built in India, and the warning sign that its 40-year dominance is cracking.",
+   "lede": "India now makes up nearly half of Suzuki's global revenue. India gave Suzuki land, a protected market and 40 years of loyalty. So who actually won?",
+   "body": [
+    "The breakdown starts with the 1982 political deal that Renault, Ford and Volkswagen turned down and Suzuki accepted, then explains the business engines Suzuki built inside India that rivals couldn't copy for decades.",
+    "It shows the financial proof of that dominance, then the warning sign that Maruti's 40-year lead is finally being challenged, and what happens next."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Introduction"
+    },
+    {
+     "t": "1:43",
+     "label": "Maruti's success"
+    },
+    {
+     "t": "2:31",
+     "label": "The hero of the story"
+    },
+    {
+     "t": "3:55",
+     "label": "The ecosystem"
+    },
+    {
+     "t": "4:55",
+     "label": "The financial proof"
+    },
+    {
+     "t": "5:32",
+     "label": "The warning sign"
+    },
+    {
+     "t": "6:46",
+     "label": "3 takeaways"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "title": "Maruti Suzuki: The Secret Behind India's Biggest Car Company...",
+   "published": "2026-05-30T13:32:39Z",
+   "duration": "PT8M41S"
+  },
+  {
+   "id": "8Rr5Zb_yRI4",
+   "slug": "trump-ceos-china",
+   "cat": "geopolitics",
+   "h1": "Trump Brought 9 CEOs to China and Walked Out With This",
+   "seo": "Trump's Beijing Summit With 9 CEOs, Explained",
+   "desc": "Musk, Huang, Cook and six more CEOs flew to Beijing with Trump. What America demanded, what happened behind closed doors, and what it came back with.",
+   "lede": "Nine of America's most powerful executives walked off Air Force One onto a red carpet in Beijing. The video asks what the US actually came home with.",
+   "body": [
+    "It sets out the five specific demands America took into the summit, what went on behind closed doors, and the result that surprised most observers.",
+    "Along the way it explains the Thucydides Trap, the idea that a rising power and an established one tend to drift towards conflict, and what that means for the US–China relationship."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Introduction"
+    },
+    {
+     "t": "1:56",
+     "label": "The questions"
+    },
+    {
+     "t": "2:35",
+     "label": "The 5 specific demands"
+    },
+    {
+     "t": "6:23",
+     "label": "The shocking part"
+    },
+    {
+     "t": "8:03",
+     "label": "The Thucydides Trap"
+    },
+    {
+     "t": "9:29",
+     "label": "What did the US get?"
+    },
+    {
+     "t": "11:24",
+     "label": "The takeaways"
+    }
+   ],
+   "countries": [
+    "US",
+    "CN"
+   ],
+   "title": "Trump Brought 9 CEOs to China and Walked Out With This",
+   "published": "2026-05-23T13:32:30Z",
+   "duration": "PT13M52S"
+  },
+  {
+   "id": "qseBo7Jebb8",
+   "slug": "vijay-tamil-nadu-strategy",
+   "cat": "politics",
+   "h1": "How Vijay Became Chief Minister of Tamil Nadu: The Strategy",
+   "seo": "Vijay's Strategy to Become Tamil Nadu CM, Explained",
+   "desc": "An actor with no election record defeated Tamil Nadu's two-party duopoly. The strategy lessons in how TVK reached 18 million young voters.",
+   "lede": "On 4 May 2026, chief minister MK Stalin lost his own seat. The man behind that upset had never held public office, and had launched his party only two years earlier.",
+   "body": [
+    "The video treats Joseph Vijay's win as a strategy case study, not a political endorsement. It explains Tamil Nadu's long DMK–AIADMK duopoly and how TVK focused on young voters the established parties had overlooked.",
+    "It walks through the steps from launching the party to registration and the campaign, with three takeaways along the way, and closes on the promises voters will now hold him to. The channel doesn't support or oppose any party."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Introduction"
+    },
+    {
+     "t": "1:12",
+     "label": "Tamil Nadu, India's 2nd richest state"
+    },
+    {
+     "t": "1:25",
+     "label": "The DMK–AIADMK duopoly"
+    },
+    {
+     "t": "2:37",
+     "label": "The rise of Vijay and TVK"
+    },
+    {
+     "t": "6:16",
+     "label": "Takeaway 1"
+    },
+    {
+     "t": "9:10",
+     "label": "Takeaway 2"
+    },
+    {
+     "t": "12:31",
+     "label": "Takeaway 3"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "title": "Strategy Lessons for everyone | What Strategies did Vijay use to become the CM of Tamil Nadu.",
+   "published": "2026-05-16T13:30:10Z",
+   "duration": "PT14M42S"
+  },
+  {
+   "id": "uVmH21ppVn4",
+   "slug": "bjp-west-bengal",
+   "cat": "politics",
+   "h1": "Why West Bengal Fell From India's Richest State",
+   "seo": "West Bengal's Economic Decline, Explained in 3 Decisions",
+   "desc": "In 1951 West Bengal had more factories than Maharashtra and Gujarat combined. Three decisions across three governments, and the business lessons in each.",
+   "lede": "In 1951 West Bengal ran 27% of India's industrial output, and Kolkata was richer than Mumbai. Today the state ranks 24th in per-capita income. The video asks how.",
+   "body": [
+    "Timed with the 2026 election result, the breakdown looks past the celebrations to a longer question: why Bengal's economy declined. It traces three decisions across three governments over seventy years.",
+    "These include industrial policy from Delhi, years of labour militancy, and the Tata Nano exit from Singur. Each decision is paired with a business lesson for entrepreneurs and professionals. The video is analysis, not support for any party."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Introduction"
+    },
+    {
+     "t": "3:05",
+     "label": "The richest state of India"
+    },
+    {
+     "t": "4:28",
+     "label": "Decision 1"
+    },
+    {
+     "t": "5:53",
+     "label": "Decision 2"
+    },
+    {
+     "t": "7:27",
+     "label": "The Ratan Tata story"
+    },
+    {
+     "t": "8:02",
+     "label": "Decision 3"
+    },
+    {
+     "t": "9:35",
+     "label": "Why every party wants West Bengal"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "title": "BJP Just Won West Bengal — Here’s Why It Changes Everything",
+   "published": "2026-05-09T13:31:08Z",
+   "duration": "PT11M31S"
+  },
+  {
+   "id": "1iIRZfVe-rs",
+   "slug": "india-gdp-rank-fall",
+   "cat": "economy",
+   "h1": "India's GDP Rank Fell. But Is This Planned?",
+   "seo": "Why India's GDP Rank Fell to 6th Despite 8% Growth",
+   "desc": "India grew at 8.2% and still fell from 4th to 6th. The calculation behind it, how US interest rates hit the rupee, India's real rank, and how to protect your money.",
+   "lede": "India became the world's fourth-largest economy in 2023, then dropped to sixth in 2026. No war, no scam, no recession: it grew 8.2% and still fell two places.",
+   "body": [
+    "The video explains the one calculation behind the drop: GDP rankings are measured in US dollars, so a weaker rupee shrinks India's number even while its economy grows. It shows how American interest rates pushed the rupee down, and why a shrinking Germany can still rank above a growing India.",
+    "It then looks at India's rank by purchasing power, which tells a very different story, and ends with three practical things viewers can do to protect their own money."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Introduction"
+    },
+    {
+     "t": "1:44",
+     "label": "Why the rank fell"
+    },
+    {
+     "t": "3:38",
+     "label": "India's real rank nobody talks about"
+    },
+    {
+     "t": "4:20",
+     "label": "The real enemy"
+    },
+    {
+     "t": "6:40",
+     "label": "The untold story of GDP"
+    },
+    {
+     "t": "7:50",
+     "label": "3 ways to protect your money"
+    }
+   ],
+   "countries": [
+    "IN",
+    "US"
+   ],
+   "title": "India’s GDP Rank Fall… But Is This Planned??",
+   "published": "2026-05-02T14:30:02Z",
+   "duration": "PT10M31S"
+  },
+  {
+   "id": "wS_NihdI8is",
+   "slug": "ipl-business-model",
+   "cat": "business",
+   "h1": "IPL Isn't Cricket: It's a ₹118 Crore Per Match Money Engine",
+   "seo": "The IPL Business Model, Explained: How It Makes Money",
+   "desc": "How the BCCI built a monopoly, the engine earning ₹118 crore per match, why IPL teams are worth more than airports, and what it proves about India.",
+   "lede": "Mumbai Indians, CSK and RCB have delivered returns that make most investors look slow. The video argues the IPL is the greatest wealth-creation machine India has built.",
+   "body": [
+    "It breaks the league into four chapters: how the BCCI built a monopoly, the money engine behind roughly ₹118 crore per match, why franchise valuations now rival infrastructure assets like airports, and what the IPL proves about India's future.",
+    "It also compares the growth of the three biggest teams, including CSK's return despite a two-year ban, and closes with three takeaways for anyone watching."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "MI, CSK, RCB: whom do you support?"
+    },
+    {
+     "t": "1:31",
+     "label": "BCCI built a monopoly"
+    },
+    {
+     "t": "3:00",
+     "label": "The money engine"
+    },
+    {
+     "t": "5:13",
+     "label": "IPL teams are worth more than airports"
+    },
+    {
+     "t": "5:50",
+     "label": "What IPL really proves"
+    },
+    {
+     "t": "8:22",
+     "label": "3 takeaways"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "title": "IPL Isn't Cricket — It's a ₹118 Crore Per Match Money Engine",
+   "published": "2026-04-25T14:30:42Z",
+   "duration": "PT11M57S"
+  },
+  {
+   "id": "SAnSYugaOM4",
+   "slug": "rupee-vs-dollar",
+   "cat": "economy",
+   "h1": "Why the Indian Rupee Is Falling, and the Dollar Keeps Winning",
+   "seo": "Why Is the Rupee Falling? The Dollar System Explained",
+   "desc": "How the US dollar dominates global trade, why the rupee is under pressure, how it affects you, and India's long-term plan to depend less on the dollar.",
+   "lede": "The rupee's slide isn't just a currency story. It is about money, power and who controls the system the whole world trades in.",
+   "body": [
+    "The video explains how the US dollar came to dominate global trade and reserves, and why that leaves the rupee under constant pressure, with direct effects on prices, fuel and imports.",
+    "It then turns to what India is doing about it, including settling trade in rupees, and asks whether India is losing, or quietly playing a longer game."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The real problem"
+    },
+    {
+     "t": "2:17",
+     "label": "How the dollar rules"
+    },
+    {
+     "t": "3:45",
+     "label": "Why the rupee falls"
+    },
+    {
+     "t": "6:13",
+     "label": "How it affects you"
+    },
+    {
+     "t": "7:32",
+     "label": "The big twist"
+    },
+    {
+     "t": "8:36",
+     "label": "3 takeaways"
+    }
+   ],
+   "countries": [
+    "IN",
+    "US"
+   ],
+   "title": "Why the Indian Rupee Is Falling — And the Dollar Keeps Winning (Power, Money & Strategy)",
+   "published": "2026-04-18T15:30:28Z",
+   "duration": "PT11M21S"
+  },
+  {
+   "id": "-l2NXxmYetY",
+   "slug": "india-russia-relations",
+   "cat": "geopolitics",
+   "h1": "Why India Still Chooses Russia: Power, Money and Strategy",
+   "seo": "Why India Still Chooses Russia: 1971 to Today",
+   "desc": "In 1971, when superpowers opposed India, the Soviet Union stood with it. How that moment shaped India's defence, energy and diplomacy for decades.",
+   "lede": "During the 1971 war, when major powers lined up against India, one country stood with it: the Soviet Union. That moment still shapes India's choices today.",
+   "body": [
+    "The video tells the story of the 1971 Indo-Pak war, the call that changed India's position, the victory and the birth of a new country, and the India–Soviet agreement behind it.",
+    "It then explains why that friendship still matters, from defence deals to energy imports and diplomatic support, and closes with three lessons on long-term relationships and power."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The 1971 war"
+    },
+    {
+     "t": "2:23",
+     "label": "India left helpless"
+    },
+    {
+     "t": "2:40",
+     "label": "One call changed everything"
+    },
+    {
+     "t": "3:27",
+     "label": "India won the war"
+    },
+    {
+     "t": "4:32",
+     "label": "A new country is born"
+    },
+    {
+     "t": "5:17",
+     "label": "The India–Russia deal"
+    },
+    {
+     "t": "6:20",
+     "label": "India–Russia friendship"
+    },
+    {
+     "t": "12:04",
+     "label": "3 lessons"
+    }
+   ],
+   "countries": [
+    "IN",
+    "RU"
+   ],
+   "title": "Why India Still Chooses Russia: Power, Money & Strategy Explained",
+   "published": "2026-04-11T13:00Z",
+   "duration": "PT14M50S"
+  },
+  {
+   "id": "n_QPARbnj6A",
+   "slug": "apple-tim-cook",
+   "cat": "business",
+   "h1": "Apple at 50: From 90 Days to Bankruptcy to $3.77 Trillion",
+   "seo": "How Apple Went From Near Bankruptcy to $3.77 Trillion",
+   "desc": "In 1997 Apple was burning $1M a day with 90 days left. Steve Jobs' three moves, the iPod and iPhone, and how Tim Cook took Apple from $350B to $3.77T.",
+   "lede": "In 1997 Apple was burning $1 million a day and was about 90 days from bankruptcy. By its 50th birthday it was worth $3.77 trillion, and the man who added most of that value wasn't Steve Jobs.",
+   "body": [
+    "The breakdown covers the three moves Steve Jobs made to stop the cash burn, why the iPod was a Trojan horse rather than just a music player, and how the iPhone overtook Nokia, BlackBerry and Motorola within five years.",
+    "Then it turns to Tim Cook, the CEO few believed in, who took Apple from $350 billion to $3.77 trillion, and the quiet services business behind that growth."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Apple burning cash"
+    },
+    {
+     "t": "2:07",
+     "label": "Apple's history"
+    },
+    {
+     "t": "4:32",
+     "label": "A shocking acquisition"
+    },
+    {
+     "t": "5:15",
+     "label": "Jobs' 3 moves"
+    },
+    {
+     "t": "9:16",
+     "label": "New innovations"
+    },
+    {
+     "t": "13:34",
+     "label": "The new CEO"
+    },
+    {
+     "t": "14:21",
+     "label": "Apple at 50"
+    },
+    {
+     "t": "15:26",
+     "label": "The lessons"
+    }
+   ],
+   "countries": [
+    "US"
+   ],
+   "title": "Will Apple Become Bankrupt… Tim Cook is no Longer the CEO... (Explained).",
+   "published": "2026-04-04T12:31:07Z",
+   "duration": "PT19M44S"
+  },
+  {
+   "id": "7FPmWWWts-c",
+   "slug": "india-ai-summit",
+   "cat": "economy",
+   "h1": "Why the World Is Betting Big on India's AI",
+   "seo": "India AI Impact Summit 2026: Why the World Is Investing",
+   "desc": "In 1991 India airlifted its gold to stay solvent. In 2026 the world pledged ₹1.6 lakh crore at the India AI Impact Summit. What changed, in 3 lessons.",
+   "lede": "In 1991 India secretly flew 67 tonnes of gold abroad because it had no money left. In 2026 the world brought around ₹1,60,000 crore into India in six days.",
+   "body": [
+    "The video breaks down the India AI Impact Summit 2026: who invested, what was announced, and why the world is now betting on India.",
+    "To explain how the country got here, it goes back to the 1991 crisis and the gold pledge, the reforms that followed, the IT boom and UPI, and turns the story into three simple lessons for students and citizens."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "₹1,60,000 crore in 6 days"
+    },
+    {
+     "t": "1:18",
+     "label": "Who invested?"
+    },
+    {
+     "t": "2:40",
+     "label": "When India pledged its gold"
+    },
+    {
+     "t": "5:40",
+     "label": "The solution"
+    },
+    {
+     "t": "7:40",
+     "label": "The IT boom"
+    },
+    {
+     "t": "7:55",
+     "label": "UPI"
+    },
+    {
+     "t": "9:30",
+     "label": "The lessons"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "title": "Why the World Is Betting Big on India’s AI (AI Summit 2026 | Power, Money & Strategy)",
+   "published": "2026-03-28T12:30Z",
+   "duration": "PT16M17S"
+  },
+  {
+   "id": "lWC3FRLMnUk",
+   "slug": "iran-strait-of-hormuz",
+   "cat": "geopolitics",
+   "h1": "Iran Just Shut Down the World Without Firing a Shot",
+   "seo": "Strait of Hormuz Crisis 2026 Explained: Why Oil Matters",
+   "desc": "A 33 km strip of water between Iran and Oman stopped 150 oil tankers. What the Strait of Hormuz is, why most of its oil goes to Asia, and what it means for India.",
+   "lede": "In late February 2026, tankers stopped moving through a 33-kilometre strip of water between Iran and Oman, and the global economy felt it within days.",
+   "body": [
+    "The video explains what the Strait of Hormuz is, why there is no real alternative route, and why most of the oil that passes through it goes to Asia, not the West, which makes it India's problem as much as anyone's.",
+    "It follows the 2026 crisis timeline, the jump in oil prices and the losses for major brands, the reopening, what India did, and the lessons for India and for viewers."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The night that shocked the world"
+    },
+    {
+     "t": "1:30",
+     "label": "The message that closed the strait"
+    },
+    {
+     "t": "2:53",
+     "label": "What is a chokepoint?"
+    },
+    {
+     "t": "6:06",
+     "label": "Oil prices shot up"
+    },
+    {
+     "t": "8:30",
+     "label": "Where is the Strait of Hormuz?"
+    },
+    {
+     "t": "10:50",
+     "label": "How much oil passes through"
+    },
+    {
+     "t": "14:20",
+     "label": "It's an Asian problem"
+    },
+    {
+     "t": "20:18",
+     "label": "Iran's dominance"
+    },
+    {
+     "t": "26:28",
+     "label": "The strait reopens"
+    },
+    {
+     "t": "27:22",
+     "label": "What India has done"
+    },
+    {
+     "t": "27:52",
+     "label": "Lessons for India"
+    }
+   ],
+   "countries": [
+    "IR",
+    "IN"
+   ],
+   "title": "Iran Just Shut Down The World Without Firing A Shot",
+   "published": "2026-03-21T12:45:11Z",
+   "duration": "PT32M41S"
+  },
+  {
+   "id": "V2G06btgQz4",
+   "slug": "ather-energy",
+   "cat": "business",
+   "h1": "From IIT Dorm to Market Leader: Ather's Exact Formula",
+   "seo": "Ather Energy's Growth Story, Explained",
+   "desc": "From an IIT hostel in 2013 to a ₹26,756 crore market cap in 2025: how Ather Energy grew while other electric-scooter brands struggled.",
+   "lede": "Ather started in an IIT hostel in 2013. By 2025 it was a listed company worth ₹26,756 crore, growing while other electric-scooter brands struggled.",
+   "body": [
+    "This long-form breakdown follows Ather Energy's journey, the real data behind its growth, and how it positioned itself in India's electric two-wheeler market.",
+    "It closes with three hard truths from the story for students, founders and professionals."
+   ],
+   "chapters": [],
+   "countries": [
+    "IN"
+   ],
+   "title": "From IIT Dorm to Market Leader — Ather's Exact Formula",
+   "published": "2026-03-14T19:40:34Z",
+   "duration": "PT32M31S"
+  }
+ ]
+}
