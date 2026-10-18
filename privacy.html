@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>document.documentElement.classList.add("js")</script>
+
+<title>Privacy — RohanLearn</title>
+<meta name="description" content="How rohanlearn.com handles your data: anonymous visit analytics with Microsoft Clarity, what is stored on your device, and how to switch it off.">
+<meta name="theme-color" content="#09090a">
+<script>(function(){var r=document.documentElement,t="dark";try{if(localStorage.getItem("rl-theme")==="light")t="light"}catch(e){}r.setAttribute("data-theme",t);if(t==="light"){var m=document.querySelectorAll('meta[name="color-scheme"],meta[name="theme-color"]');for(var i=0;i<m.length;i++)m[i].content=m[i].name==="theme-color"?"#f6f3ec":"light"}})()</script>
+
+<link rel="canonical" href="https://rohanlearn.com/privacy.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="RohanLearn">
+<meta property="og:locale" content="en_IN">
+<meta property="og:url" content="https://rohanlearn.com/privacy.html">
+<meta property="og:title" content="Privacy — RohanLearn">
+<meta property="og:description" content="Anonymous visit analytics, what is stored on your device, and how to switch it off.">
+<meta property="og:image" content="https://rohanlearn.com/assets/img/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://rohanlearn.com/assets/img/og-image.png">
+
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+
+<meta name="color-scheme" content="dark">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/geist-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/instrument-serif-latin.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="assets/fonts/instrument-serif-italic-latin.woff2">
+<link rel="stylesheet" href="assets/css/style.css?v=20261018a">
+</head>
+
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><path d="M3 6h18v12H3zM3 7l9 7 9-7" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-yt" viewBox="0 0 24 24"><path fill="currentColor" d="M23 12s0-3.9-.5-5.8a3 3 0 0 0-2.1-2.1C18.5 3.6 12 3.6 12 3.6s-6.5 0-8.4.5a3 3 0 0 0-2.1 2.1C1 8.1 1 12 1 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 8.4.5 8.4.5s6.5 0 8.4-.5a3 3 0 0 0 2.1-2.1C23 15.9 23 12 23 12ZM9.8 15.5v-7l6.1 3.5-6.1 3.5Z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path fill="currentColor" d="M18.9 2H22l-7.4 8.5L23.3 22h-6.8l-5.3-6.9L5 22H1.9l7.9-9L1 2h7l4.8 6.3L18.9 2Zm-1.2 18h1.9L7.4 4H5.3l12.4 16Z"/></symbol>
+  <symbol id="i-fb" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21v-7.6h2.55l.38-3H13.5V8.4c0-.87.24-1.46 1.5-1.46h1.6V4.28C16.3 4.2 15.4 4.13 14.35 4.13c-2.4 0-4.05 1.47-4.05 4.16v2.32H7.73v3h2.57V21h3.2Z"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9S14.6 18.4 12 21c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3Z"/></g></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></g></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></g></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.8v2M12 19.2v2M2.8 12h2M19.2 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></g></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.3A8.3 8.3 0 0 1 9.7 4a8.3 8.3 0 1 0 10.3 10.3z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></symbol>
+  <symbol id="i-page" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4M10 12h5M10 16h5"/></g></symbol>
+</svg>
+
+<div class="bg" aria-hidden="true"><div class="bg__grid"></div><div class="bg__glow"></div><div class="bg__grain"></div></div>
+<div class="progress" aria-hidden="true"></div>
+
+<div class="topbar">
+<div class="announce" role="region" aria-label="Announcement">
+  <a class="announce__link" href="https://www.youtube.com/watch?v=3qxYlfArCe8" target="_blank" rel="noopener">
+    <span class="announce__badge">New</span>
+    <span class="announce__text js-announce-title">The Rise of Walmart: 12 Years as the Biggest Company on Earth</span>
+    <span class="announce__cta">Watch <svg><use href="#i-arrow"/></svg></span>
+  </a>
+  <button class="announce__close" type="button" aria-label="Dismiss announcement"><svg><use href="#i-close"/></svg></button>
+</div>
+
+<header class="nav">
+  <div class="wrap nav__in">
+    <a class="logo" href="index.html" aria-label="RohanLearn — home">
+      <span class="logo__mark">R</span>
+      <span class="logo__text">Rohan<em>Learn</em></span>
+    </a>
+
+    <nav class="nav__links" aria-label="Main">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <span class="nav__ind" aria-hidden="true"></span>
+    </nav>
+
+    <div class="nav__right">
+      <button class="kbtn" type="button" data-cmdk aria-label="Open search" aria-haspopup="dialog"><svg><use href="#i-search"/></svg><span>Search</span><kbd>⌘K</kbd></button>
+      <button class="themebtn" type="button" data-theme-toggle aria-label="Switch to light mode" title="Switch to light mode"><span class="themebtn__w"></span><span class="themebtn__m">mode</span></button>
+      <a class="btn btn--primary btn--sm" href="https://www.youtube.com/@rohanlearn?sub_confirmation=1" target="_blank" rel="noopener">
+        <span class="btn__dot"></span> Subscribe
+      </a>
+      <button class="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+</div>
+<script>try{var l=document.querySelector(".announce__link"),m=/[?&]v=([\w-]+)/.exec(l&&l.href);if(m&&localStorage.getItem("rl-announce-dismissed")===m[1])document.documentElement.classList.add("ann-off")}catch(e){}</script>
+
+<div class="menu" id="menu" aria-hidden="true">
+  <a href="index.html"><small>01</small>Home</a>
+  <a href="about.html"><small>02</small>About</a>
+  <a href="contact.html"><small>03</small>Contact</a>
+  <a href="https://www.youtube.com/@rohanlearn" target="_blank" rel="noopener"><small>↗</small>YouTube</a>
+  <p class="menu__foot">New video every Saturday, 7:02 PM.</p>
+</div>
+
+<main id="main">
+
+  <!-- ===== HERO ===== -->
+  <section class="phero">
+    <div class="wrap">
+      <span class="eyebrow" data-reveal>Privacy</span>
+      <h1 class="phero__title" data-split>Your data, <em>plainly.</em></h1>
+      <p class="phero__sub" data-reveal style="--d:.3s">
+        This site has no accounts, no forms and no ads. Here is exactly what it measures,
+        what it keeps on your device, and how to switch it off.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap legal">
+
+      <article class="legal__body" data-reveal>
+        <h2>Visit analytics</h2>
+        <p>
+          To learn which parts of the site are useful, rohanlearn.com uses
+          <a href="https://clarity.microsoft.com" target="_blank" rel="noopener">Microsoft Clarity</a>.
+          It records how visitors use the pages: which pages are opened, clicks, scrolling and mouse
+          movement, plus general details such as device type, browser, approximate country and the
+          site you came from. These recordings are anonymous: they are not linked to your name or email,
+          and anything typed into a text box is hidden before it leaves your browser.
+        </p>
+        <p>
+          The site also notes a few anonymous moments, such as a Subscribe button being clicked, a
+          “3 takeaways” box being opened or a calendar reminder being added, to see which features help.
+        </p>
+        <p>
+          Clarity stores two small first-party cookies (<code>_clck</code> and <code>_clsk</code>) to
+          tell one visit from another. Microsoft processes this data under the
+          <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener">Microsoft Privacy Statement</a>.
+        </p>
+
+        <div class="optout" data-optout>
+          <div>
+            <b class="optout__state">Analytics are on for this device.</b>
+            <span>Switching off stops Clarity from loading on this browser.</span>
+          </div>
+          <button class="btn btn--ghost btn--sm optout__btn" type="button">Turn off</button>
+        </div>
+
+        <h2>Saved on your device</h2>
+        <p>The site remembers a few choices in your own browser. They never leave it.</p>
+        <ul>
+          <li>Light or dark mode.</li>
+          <li>Whether you closed the announcement bar or the subscribe bar.</li>
+          <li>Whether you switched analytics off.</li>
+        </ul>
+
+        <h2>YouTube</h2>
+        <p>
+          Videos play through YouTube's own player and open on YouTube. When a video plays, YouTube may
+          set its own cookies under the
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google Privacy Policy</a>.
+        </p>
+
+        <h2>Questions</h2>
+        <p>
+          The site is run by B-RITE LEARNING LLP. For anything about your data, email
+          <a href="mailto:knowledgegrowthhubb@gmail.com">knowledgegrowthhubb@gmail.com</a>.
+        </p>
+        <p class="legal__updated">Last updated 18 October 2026</p>
+      </article>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a class="logo" href="index.html"><span class="logo__mark">R</span><span class="logo__text">Rohan<em>Learn</em></span></a>
+        <p>Money, power and strategy — explained simply. New video every Saturday at 7:02 PM.</p>
+      </div>
+      <nav class="footer__col" aria-label="Pages">
+        <h4>Pages</h4>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <nav class="footer__col" aria-label="Channels">
+        <h4>Follow</h4>
+        <a href="https://www.youtube.com/@rohanlearn" target="_blank" rel="noopener">YouTube</a>
+        <a href="https://www.instagram.com/rohansheshasai/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://x.com/RohanSaikyw" target="_blank" rel="noopener">X</a>
+        <a href="https://www.facebook.com/profile.php?id=100086551701987" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://rohanlearn.blogspot.com" target="_blank" rel="noopener">Blog</a>
+      </nav>
+      <div class="footer__col">
+        <h4>Business</h4>
+        <a href="contact.html">Sponsorships &amp; promotions</a>
+        <a href="mailto:knowledgegrowthhubb@gmail.com">knowledgegrowthhubb@gmail.com</a>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© <span id="year">2026</span> B-RITE LEARNING LLP, RohanLearn. All rights reserved.</span>
+      <span class="footer__live"><span class="live-dot"></span> Live data · updated daily</span>
+      <a href="privacy.html">Privacy</a>
+      <a href="#main">Back to top ↑</a>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js?v=20261018a"></script>
+</body>
+</html>

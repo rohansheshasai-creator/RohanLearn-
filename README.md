@@ -15,6 +15,7 @@ build, and no dependencies to break. Edit a file, save it, done.
 | `index.html` | Home page — hero, latest upload, recent breakdowns, format, about teaser |
 | `about.html` | The full About page |
 | `contact.html` | Sponsorships & promotions |
+| `privacy.html` | What the site measures and how to switch it off |
 | `404.html` | Shown when someone hits a link that doesn't exist |
 | `assets/css/style.css` | All the styling — colours, type, layout, motion |
 | `assets/js/main.js` | All the interactive bits — animations, live data, charts, ⌘K search |
@@ -119,6 +120,32 @@ three small edits:
   If the upload time ever changes, update the time in that file and in `nextSlot()`
   in `assets/js/main.js`.
 
+## Visitor analytics (Microsoft Clarity, free)
+
+Clarity shows how people use the site: visitor numbers, pages, countries, devices,
+where they came from, **heatmaps** and anonymous **session recordings**.
+
+**To switch it on:** open `assets/js/main.js`, find `var CLARITY_ID = "";` (near the
+bottom, section 18) and paste your Project ID between the quotes, then push. Until
+then nothing is loaded. It never runs on `localhost`, so testing at home doesn't
+pollute your numbers.
+
+The site also sends named events you can filter recordings by (Clarity → Recordings →
+Filters → Custom events), for example:
+
+| Event | Means |
+|---|---|
+| `subscribe_sticky_bar`, `subscribe_takeaways`, `subscribe_top_bar`, `subscribe_closing`, `subscribe_hero`, `subscribe_menu`, `subscribe_footer` | Clicked Subscribe, and where |
+| `takeaways_peek` / `takeaways_unlock` | Opened a takeaways box / clicked "Watch to unlock" |
+| `watch_latest`, `watch_from_recent`, `watch_from_brands`, `watch_from_map`, `watch_from_announcement` | Clicked through to a video, and from where |
+| `reminder_open`, `reminder_google`, `reminder_apple` | Saturday reminder |
+| `brands_filter_…`, `brands_show_all`, `map_in`, `map_us`… | Used the brands wall / world map |
+| `theme_light` / `theme_dark`, `search_open`, `search_pick`, `faq_open`, `email_click`, `email_copy` | Everything else |
+
+Visitors can switch analytics off on the [privacy page](privacy.html), and browsers
+that send *Global Privacy Control* are never tracked. In Clarity's settings keep
+**Masking** on *Balanced* or *Strict*.
+
 ## Light and dark mode
 
 Dark is the default (and the original look) for everyone. The **Light mode / Dark
@@ -152,7 +179,7 @@ Commit, then push (GitHub Desktop → **Push origin**). GitHub Pages redeploys
 automatically, usually within a minute. Browsers keep files for up to 10 minutes,
 so use a hard refresh (Cmd+Shift+R) or a private window to see changes immediately.
 
-Each page links its CSS and JS with a version (`style.css?v=20261013e`). When you
+Each page links its CSS and JS with a version (`style.css?v=20261018a`). When you
 change either file, change that `v=` value in the four HTML pages (any new text
 works) so every visitor gets the new file straight away instead of an old cached one.
 

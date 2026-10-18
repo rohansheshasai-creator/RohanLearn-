@@ -1485,6 +1485,28 @@ html:active-view-transition-type(page)::view-transition-group(backdrop) { animat
 @media (pointer: coarse) { .remind--card .remind__btn { height: 42px; } .remind__item { padding-block: 14px; } }
 @media (max-height: 520px) and (orientation: landscape) { .remind--card { display: none; } }
 
+/* ============================================================
+   26. Privacy page
+   ============================================================ */
+.legal__body { max-width: 68ch; }
+.legal__body h2 { font-size: clamp(1.7rem, 2.6vw, 2.2rem); margin: 48px 0 14px; }
+.legal__body h2:first-child { margin-top: 0; }
+.legal__body p, .legal__body li { color: var(--dim); font-size: 1.02rem; }
+.legal__body p + p { margin-top: 14px; }
+.legal__body ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.legal__body a { color: var(--text); border-bottom: 1px solid var(--line-2); transition: color .3s, border-color .3s; }
+.legal__body a:hover { color: var(--accent); border-color: var(--accent); }
+.legal__body code { font: 500 .85em var(--mono); padding: 2px 6px; border-radius: 6px; background: rgb(var(--ink) / .07); color: var(--text); }
+.legal__updated { margin-top: 48px !important; font: 500 .6875rem/1 var(--mono) !important; letter-spacing: .14em; text-transform: uppercase; color: var(--faint) !important; }
+.optout {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+  margin: 26px 0 0; padding: 18px 20px; border: 1px solid var(--line-2); border-radius: var(--r);
+  background: rgb(var(--ink) / .03);
+}
+.optout div { display: grid; gap: 4px; }
+.optout b { font-weight: 500; color: var(--text); }
+.optout span { color: var(--faint); font-size: .9rem; }
+
 /* --- print --- */
 @media print {
   .topbar, .menu, .bg, .progress, .tape, .player, .cmdk, .toast, .hero__scroll, .stage, .seal, .bfilter, .wmap, .subbar, .remind { display: none !important; }

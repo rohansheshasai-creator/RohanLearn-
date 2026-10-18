@@ -8,7 +8,7 @@
    stats & counters · 6 videos · 7 announcement · 8 hero cards ·
    9 growth dashboard · 10 walkthrough · 11 FAQ · 12 toast & copy ·
    13 theme switch · 14 command palette · 15 brands wall & world map ·
-   16 subscribe bar & Saturday reminder · 17 pointer effects
+   16 subscribe bar & Saturday reminder · 17 pointer effects · 18 analytics
    ============================================================ */
 
 (function () {
@@ -1559,4 +1559,96 @@
       }));
     });
   }
+
+
+  /* ---------- 18. Analytics (Microsoft Clarity) ---------- */
+  // EDIT: paste the Project ID from clarity.microsoft.com (Settings → Overview) between the quotes.
+  // While it is empty, nothing is loaded and nothing is sent.
+  var CLARITY_ID = "";
+  var NO_ANALYTICS = "rl-noanalytics";
+
+  var isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === "file:";
+  var optedOut = store(NO_ANALYTICS) === "1" || navigator.globalPrivacyControl === true;
+  var analyticsOn = !!CLARITY_ID && !optedOut && !isLocal;
+
+  if (analyticsOn) {
+    // calls made before the script arrives are queued and sent once it loads
+    window.clarity = window.clarity || function () { (window.clarity.q = window.clarity.q || []).push(arguments); };
+    var loadClarity = function () {
+      var t = d.createElement("script");
+      t.async = true;
+      t.src = "https://www.clarity.ms/tag/" + encodeURIComponent(CLARITY_ID);
+      d.head.appendChild(t);
+    };
+    // wait until the page has loaded and the browser is idle, so it never slows the site down
+    var whenIdle = function () { if ("requestIdleCallback" in window) requestIdleCallback(loadClarity, { timeout: 3000 }); else setTimeout(loadClarity, 1500); };
+    if (d.readyState === "complete") whenIdle(); else window.addEventListener("load", whenIdle);
+    window.clarity("set", "theme", theme());
+  }
+  function track(name) { if (analyticsOn) window.clarity("event", name); }
+
+  // One listener for every moment worth counting. It is added last, so it sees each control
+  // after its own click handler has run (e.g. whether a box ended up open or closed).
+  d.addEventListener("click", function (e) {
+    if (!analyticsOn || !e.target.closest) return;
+    var t = e.target, el;
+    function at(sel) { el = t.closest(sel); return el; }
+
+    if (at('a[href*="sub_confirmation"]')) {
+      var from = t.closest(".subbar") ? "sticky_bar" : t.closest(".seal") ? "takeaways" : t.closest(".nav") ? "top_bar" :
+                 t.closest(".menu") ? "menu" : t.closest(".cta") ? "closing" : t.closest(".hero") ? "hero" :
+                 t.closest(".footer") ? "footer" : "page";
+      track("subscribe_" + from);
+    }
+    else if (at(".seal__btn")) { if (el.getAttribute("aria-expanded") === "true") track("takeaways_peek"); }
+    else if (at(".seal__cta")) track("takeaways_unlock");
+    else if (at(".remind__btn")) { if (el.getAttribute("aria-expanded") === "true") track("reminder_open"); }
+    else if (at(".remind__item")) track(el.classList.contains("js-gcal") ? "reminder_google" : "reminder_apple");
+    else if (at("[data-theme-toggle]")) { track("theme_" + cur); window.clarity("set", "theme", cur); }   // cur = the theme being switched to
+    else if (at(".bchip")) track("brands_filter_" + el.dataset.f);
+    else if (at(".bmore__btn")) { if (el.getAttribute("aria-expanded") === "true") track("brands_show_all"); }
+    else if (at(".brand")) track("watch_from_brands");
+    else if (at(".wm-pin, .gchip")) track("map_" + (el.dataset.c || "").toLowerCase());
+    else if (at(".gvid")) track("watch_from_map");
+    else if (at(".vcard__link")) track("watch_from_recent");
+    else if (at(".js-latest-link, .player__poster")) track("watch_latest");
+    else if (at(".announce__link")) track("watch_from_announcement");
+    else if (at(".announce__close")) track("announcement_closed");
+    else if (at(".subbar__x")) track("subscribe_bar_closed");
+    else if (at("[data-cmdk]")) track("search_open");
+    else if (at(".cmdk__item")) track("search_pick");
+    else if (at("[data-copy]")) track("email_copy");
+    else if (at('a[href^="mailto:"]')) track("email_click");
+    else if (at(".qa__q")) { if (el.getAttribute("aria-expanded") === "true") track("faq_open"); }
+    else if (at('a[href*="youtube.com"]')) track("youtube_link");
+  });
+
+  // privacy page: switch analytics off (or back on) for this browser
+  (function initOptOut() {
+    var box = $("[data-optout]");
+    if (!box) return;
+    var state = $(".optout__state", box), btn = $(".optout__btn", box);
+    function paint() {
+      var off = store(NO_ANALYTICS) === "1";
+      if (!CLARITY_ID) { state.textContent = "Analytics are not running on this site yet."; btn.hidden = true; return; }
+      if (navigator.globalPrivacyControl === true) { state.textContent = "Analytics are off: your browser asks sites not to track."; btn.hidden = true; return; }
+      state.textContent = off ? "Analytics are off for this device." : "Analytics are on for this device.";
+      btn.textContent = off ? "Turn on" : "Turn off";
+    }
+    btn.addEventListener("click", function () {
+      var off = store(NO_ANALYTICS) === "1";
+      if (off) { try { localStorage.removeItem(NO_ANALYTICS); } catch (e) {} }
+      else {
+        store(NO_ANALYTICS, "1");
+        // forget Clarity's visitor cookies too
+        ["_clck", "_clsk"].forEach(function (n) {
+          d.cookie = n + "=; Max-Age=0; path=/";
+          d.cookie = n + "=; Max-Age=0; path=/; domain=." + location.hostname.replace(/^www\./, "");
+        });
+      }
+      toast(off ? "Analytics turned on" : "Analytics turned off for this device");
+      setTimeout(function () { location.reload(); }, 900);
+    });
+    paint();
+  })();
 })();
