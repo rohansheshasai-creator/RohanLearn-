@@ -1564,7 +1564,7 @@
   /* ---------- 18. Analytics (Microsoft Clarity) ---------- */
   // EDIT: paste the Project ID from clarity.microsoft.com (Settings → Overview) between the quotes.
   // While it is empty, nothing is loaded and nothing is sent.
-  var CLARITY_ID = "";
+  var CLARITY_ID = "yzorjquef2";
   var NO_ANALYTICS = "rl-noanalytics";
 
   var isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === "file:";
