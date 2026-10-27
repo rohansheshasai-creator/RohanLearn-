@@ -122,17 +122,27 @@ def crumbs_ld(items):
         {"@type": "ListItem", "position": i + 1, "name": n, "item": SITE + (h or "")} for i, (n, h) in enumerate(items)]}
 
 
-def card(c, heading="h3"):
+def clock(dur):  # PT10M27S -> 10:27 (the badge on a thumbnail)
+    t = secs(dur)
+    h, rem = divmod(t, 3600)
+    m, sec = divmod(rem, 60)
+    return "%d:%02d:%02d" % (h, m, sec) if h else "%d:%02d" % (m, sec)
+
+
+def card(c, heading="h3", lede=True):
+    q = (c["h1"] + " " + c["title"] + " " + " ".join(COUNTRY.get(x, x) for x in c["countries"])).lower()
     return ('<article class="cs-card" data-cat="%s" data-q="%s">'
             '<a class="cs-card__link" href="/case-studies/%s/">'
-            '<span class="cs-card__thumb"><img src="https://i.ytimg.com/vi/%s/mqdefault.jpg" width="320" height="180" alt="" loading="lazy" decoding="async"></span>'
-            '<span class="cs-card__meta">%s · %s · %s</span>'
+            '<span class="cs-card__thumb"><img src="https://i.ytimg.com/vi/%s/mqdefault.jpg" width="320" height="180" alt="" loading="lazy" decoding="async">'
+            '<span class="cs-card__dur">%s</span></span>'
+            '<span class="cs-card__meta"><span class="cs-card__cat">%s</span><span>%s</span></span>'
             '<%s class="cs-card__title">%s</%s>'
-            '<span class="cs-card__lede">%s</span>'
+            '%s'
             "</a></article>") % (
-        c["cat"], e((c["h1"] + " " + c["title"] + " " + " ".join(COUNTRY.get(x, x) for x in c["countries"])).lower()),
-        c["slug"], c["id"], CAT[c["cat"]], nice_date(c["published"]), mins(c["duration"]),
-        heading, e(c["h1"]), heading, e(c["lede"]))
+        c["cat"], e(q), c["slug"], c["id"], clock(c["duration"]),
+        CAT[c["cat"]], nice_date(c["published"]),
+        heading, e(c["h1"]), heading,
+        ('<span class="cs-card__lede">%s</span>' % e(c["lede"])) if lede else "")
 
 
 def build():
@@ -272,8 +282,8 @@ def build():
         <label class="cs-search"><svg aria-hidden="true"><use href="#i-search"/></svg><span class="sr-only">Search case studies</span>
           <input type="search" placeholder="Search: Jaguar, rupee, China…" autocomplete="off" spellcheck="false"></label>
       </div>
-      <div class="cs-cards" id="cs-list" data-reveal style="--d:.1s">
-        {"".join(card(c, "h2") for c in items)}
+      <div class="cs-cards cs-cards--hub" id="cs-list" data-reveal style="--d:.1s">
+        {"".join(card(c, "h2", lede=False) for c in items)}
       </div>
       <p class="cs-empty" hidden>No case study matches that yet. Try another word.</p>
     </div>
