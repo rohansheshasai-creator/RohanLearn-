@@ -22,7 +22,7 @@ CHANNEL = "https://www.youtube.com/@rohanlearn"
 SUB = CHANNEL + "?sub_confirmation=1"
 IST = timezone(timedelta(hours=5, minutes=30))
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-CATS = [("business", "Business"), ("economy", "Economy"), ("geopolitics", "Geopolitics"), ("politics", "Politics")]
+CATS = [("business", "Business"), ("economy", "Economy"), ("geopolitics", "Geopolitics")]
 CAT = dict(CATS)
 COUNTRY = {"IN": "India", "US": "United States", "CN": "China", "RU": "Russia", "IR": "Iran", "GB": "United Kingdom",
            "NL": "Netherlands", "SG": "Singapore", "VE": "Venezuela", "BR": "Brazil", "ZA": "South Africa"}

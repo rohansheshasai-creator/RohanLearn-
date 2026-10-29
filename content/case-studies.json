@@ -1,5 +1,5 @@
 {
- "_how": "One entry per video; tools/build_case_studies.py turns these into the pages under /case-studies/. Fields: id (YouTube id), slug (page address), cat (business, economy, geopolitics or politics), h1 (page headline), seo (search-result title, under ~60 characters), desc (search-result description, under ~155 characters), lede, body (paragraphs), chapters (t = time in the video, label), countries (2-letter codes), optional series. title, published and duration come from YouTube.",
+ "_how": "One entry per video; tools/build_case_studies.py turns these into the pages under /case-studies/. Fields: id (YouTube id), slug (page address), cat (business, economy or geopolitics), h1 (page headline), seo (search-result title, under ~60 characters), desc (search-result description, under ~155 characters), lede, body (paragraphs), chapters (t = time in the video, label), countries (2-letter codes), optional series. title, published and duration come from YouTube.",
  "case_studies": [
   {
    "id": "rBSQpQB0Frs",
@@ -820,14 +820,14 @@
   {
    "id": "qseBo7Jebb8",
    "slug": "vijay-tamil-nadu-strategy",
-   "cat": "politics",
+   "cat": "economy",
    "h1": "How Vijay Became Chief Minister of Tamil Nadu: The Strategy",
    "seo": "Vijay's Strategy to Become Tamil Nadu CM, Explained",
    "desc": "An actor with no election record defeated Tamil Nadu's two-party duopoly. The strategy lessons in how TVK reached 18 million young voters.",
    "lede": "On 4 May 2026, chief minister MK Stalin lost his own seat. The man behind that upset had never held public office, and had launched his party only two years earlier.",
    "body": [
-    "The video treats Joseph Vijay's win as a strategy case study, not a political endorsement. It explains Tamil Nadu's long DMK–AIADMK duopoly and how TVK focused on young voters the established parties had overlooked.",
-    "It walks through the steps from launching the party to registration and the campaign, with three takeaways along the way, and closes on the promises voters will now hold him to. The channel doesn't support or oppose any party."
+    "The video treats Joseph Vijay's rise as a strategy case study. It explains Tamil Nadu, India's second-richest state, its long DMK–AIADMK duopoly, and how TVK focused on 18 million young voters the established parties had overlooked.",
+    "It walks through the steps from launching the party to registration and the campaign, with three strategy takeaways along the way that apply to any challenger taking on established players, and closes on the promises voters will now hold him to."
    ],
    "chapters": [
     {
@@ -869,14 +869,14 @@
   {
    "id": "uVmH21ppVn4",
    "slug": "bjp-west-bengal",
-   "cat": "politics",
+   "cat": "economy",
    "h1": "Why West Bengal Fell From India's Richest State",
    "seo": "West Bengal's Economic Decline, Explained in 3 Decisions",
    "desc": "In 1951 West Bengal had more factories than Maharashtra and Gujarat combined. Three decisions across three governments, and the business lessons in each.",
    "lede": "In 1951 West Bengal ran 27% of India's industrial output, and Kolkata was richer than Mumbai. Today the state ranks 24th in per-capita income. The video asks how.",
    "body": [
-    "Timed with the 2026 election result, the breakdown looks past the celebrations to a longer question: why Bengal's economy declined. It traces three decisions across three governments over seventy years.",
-    "These include industrial policy from Delhi, years of labour militancy, and the Tata Nano exit from Singur. Each decision is paired with a business lesson for entrepreneurs and professionals. The video is analysis, not support for any party."
+    "Timed with the 2026 election result, the breakdown looks at a longer economic question: how West Bengal went from the industrial heart of India to 24th in per-capita income. It traces three decisions across seventy years.",
+    "These include industrial policy from Delhi, years of labour militancy, and the Tata Nano exit from Singur. Each decision is paired with a business lesson for entrepreneurs and professionals."
    ],
    "chapters": [
     {
