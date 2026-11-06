@@ -2,6 +2,145 @@
  "_how": "One entry per video; tools/build_case_studies.py turns these into the pages under /case-studies/. Fields: id (YouTube id), slug (page address), cat (business, economy or geopolitics), h1 (page headline), seo (search-result title, under ~60 characters), desc (search-result description, under ~155 characters), lede, body (paragraphs), chapters (t = time in the video, label), countries (2-letter codes), optional series. title, published and duration come from YouTube.",
  "case_studies": [
   {
+   "id": "0z0BJb-kZgs",
+   "slug": "us-midterms-india",
+   "cat": "geopolitics",
+   "h1": "Why the US Midterms Matter More Than You Think",
+   "seo": "Why the US Midterms Matter for India: Tariffs, H-1B and Oil",
+   "desc": "Trump told his party it must win or he gets impeached. How one sentence from 1787 hit his tariffs and H-1B fee, and what the vote means for India.",
+   "lede": "Trump promised a $5,000 cheque to every adult in America if his party wins, and warned it that he would be impeached if it loses. This one election now reaches your petrol price, your portfolio and your American dream.",
+   "body": [
+    "One sentence written in 1787 has already struck down Trump's emergency tariffs and his $100,000 H-1B visa fee. This breakdown explains how American power actually works, and why the most powerful man on earth is so scared of a single midterm election.",
+    "It then follows the result back to India: what the constitutional fight means for Indian exporters, how Iran plays into the vote, and what comes next for H-1B visas and Indian IT careers."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "The $5,000 promise and the global stakes"
+    },
+    {
+     "t": "1:55",
+     "label": "How American power actually works"
+    },
+    {
+     "t": "6:20",
+     "label": "How constitutional law hits Indian exports"
+    },
+    {
+     "t": "8:30",
+     "label": "Iran's strategic play in the midterms"
+    },
+    {
+     "t": "11:05",
+     "label": "H-1B visas and Indian IT careers"
+    }
+   ],
+   "countries": [
+    "US",
+    "IN",
+    "IR"
+   ],
+   "title": "Why the US Midterms Matter More Than You Think",
+   "published": "2026-11-04T17:30:24Z",
+   "duration": "PT14M29S"
+  },
+  {
+   "id": "4Q2-2vzvOaY",
+   "slug": "ai-million-dollars-three-weeks",
+   "cat": "business",
+   "h1": "$1 Million in 3 Weeks With Just AI: Which AI Is Worth Paying For?",
+   "seo": "$1 Million in 3 Weeks With AI: Which AI Is Worth Paying For?",
+   "desc": "How one developer hit $1 million in annual revenue in 3 weeks, how an engineer from Nellore built SiteGPT, and ChatGPT, Gemini, Claude and Grok compared.",
+   "lede": "One person. One laptop. Zero employees. If everyone has the same AI tools, why are only a few people building real businesses with them?",
+   "body": [
+    "In early 2025 a 31-year-old developer from Israel built Base44 with AI, and three weeks after launch it reached $1 million in annual recurring revenue. Back in Nellore, Andhra Pradesh, a software engineer started SiteGPT with $500 and crossed $500,000 in total revenue, with zero employees, zero funding and zero paid marketing.",
+    "This third episode of the AI Series looks at what those two did differently, then answers the question everyone asks next: what AI really costs you, and which subscription is actually worth your money between ChatGPT, Gemini, Claude and Grok."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "Two people who used AI to the maximum"
+    },
+    {
+     "t": "0:53",
+     "label": "Person 1: the developer behind Base44"
+    },
+    {
+     "t": "2:13",
+     "label": "Person 2: from India, SiteGPT"
+    },
+    {
+     "t": "4:32",
+     "label": "The 2 greatest takeaways"
+    },
+    {
+     "t": "6:01",
+     "label": "What AI really costs you"
+    },
+    {
+     "t": "10:14",
+     "label": "Takeaway 3"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "series": "AI Series · Episode 3",
+   "title": "$1 Million in 3 Weeks With Just AI | Which AI Is Actually Worth Paying For? (AI Series Ep-03)",
+   "published": "2026-10-31T13:32:14Z",
+   "duration": "PT11M38S"
+  },
+  {
+   "id": "6FZByVM64Nw",
+   "slug": "build-a-team-of-ai",
+   "cat": "business",
+   "h1": "How to Build a Team of AI and Be a Special Person",
+   "seo": "How to Build a Team of AI: Bajaj, HUL and the 4 Apps to Use",
+   "desc": "Bajaj Finance's AI made 2 crore calls and lent ₹1,600 crore. How India's biggest companies use AI, and which of four apps to open for which job.",
+   "lede": "Two crore phone calls, one lakh loan offers, ₹1,600 crore disbursed, and not a single human picked up the phone. This isn't a prediction. Bajaj Finance told its own investors it already happened.",
+   "body": [
+    "Bajaj Finance is not alone. Wipro has freed up work equal to 20,000 employees, and Hindustan Unilever processes 2.5 crore shelf photographs every month. This breakdown shows how India's biggest companies have already rebuilt themselves around artificial intelligence.",
+    "The technology behind it isn't locked in a laboratory in America. It is four apps already on your phone, three of them completely free. This second episode of the AI Series goes through ChatGPT, Gemini, Claude and Grok, and which one to open for which job."
+   ],
+   "chapters": [
+    {
+     "t": "0:00",
+     "label": "2 crore calls and not one human"
+    },
+    {
+     "t": "3:43",
+     "label": "The four AI apps on your phone"
+    },
+    {
+     "t": "6:46",
+     "label": "Hindustan Unilever's shelf photographs"
+    },
+    {
+     "t": "11:15",
+     "label": "Gemini and its free study tool"
+    },
+    {
+     "t": "13:16",
+     "label": "ChatGPT and deep research"
+    },
+    {
+     "t": "15:02",
+     "label": "Claude for writing and coding"
+    },
+    {
+     "t": "17:27",
+     "label": "The 3 takeaways"
+    }
+   ],
+   "countries": [
+    "IN"
+   ],
+   "series": "AI Series · Episode 2",
+   "title": "How to Build a Team of AI and be a Special Person !! (AI Series Ep-02)",
+   "published": "2026-10-24T13:32:07Z",
+   "duration": "PT22M10S"
+  },
+  {
    "id": "rBSQpQB0Frs",
    "slug": "jio-vs-starlink",
    "cat": "business",
@@ -186,7 +325,8 @@
    "countries": [],
    "title": "Your JOB is in Risk Now!",
    "published": "2026-09-19T13:32:02Z",
-   "duration": "PT8M32S"
+   "duration": "PT8M32S",
+   "series": "AI Series · Episode 1"
   },
   {
    "id": "LPR-zYHLDKM",

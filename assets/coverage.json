@@ -1,6 +1,21 @@
 {
  "_how": "Powers the 'Brands I've broken down' wall and the world map on the home page. To add a video: put it in 'videos' (id: title + date), then reference its id from a brand and/or from each country it covers. Brand 'verdict' is one of: rise, comeback, fall, threat, power. Countries use 2-letter codes (IN, US, CN...) with a pin position in degrees (lon, lat). The first 8 brands in the list are the ones shown before 'Show all' is clicked, so order them best first.",
  "videos": {
+  "0z0BJb-kZgs": {
+   "t": "Why the US Midterms Matter More Than You Think",
+   "d": "2026-11-04",
+   "s": "us-midterms-india"
+  },
+  "4Q2-2vzvOaY": {
+   "t": "$1 Million in 3 Weeks With Just AI | Which AI Is Actually Worth Paying For? (AI Series Ep-03)",
+   "d": "2026-10-31",
+   "s": "ai-million-dollars-three-weeks"
+  },
+  "6FZByVM64Nw": {
+   "t": "How to Build a Team of AI and be a Special Person !! (AI Series Ep-02)",
+   "d": "2026-10-24",
+   "s": "build-a-team-of-ai"
+  },
   "rBSQpQB0Frs": {
    "t": "Jio vs Starlink: The Billionaire Battle for India's Internet",
    "d": "2026-10-17",
@@ -297,6 +312,9 @@
    "lon": 78.9,
    "lat": 21.5,
    "videos": [
+    "0z0BJb-kZgs",
+    "4Q2-2vzvOaY",
+    "6FZByVM64Nw",
     "rBSQpQB0Frs",
     "LPR-zYHLDKM",
     "onxEbLI_kU8",
@@ -323,6 +341,7 @@
    "lon": -98.5,
    "lat": 39.5,
    "videos": [
+    "0z0BJb-kZgs",
     "rBSQpQB0Frs",
     "t0h2oP_XjAA",
     "3qxYlfArCe8",
@@ -364,6 +383,7 @@
    "lon": 53.5,
    "lat": 32.5,
    "videos": [
+    "0z0BJb-kZgs",
     "LPR-zYHLDKM",
     "lWC3FRLMnUk"
    ]
