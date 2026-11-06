@@ -18,7 +18,10 @@ build, and no dependencies to break. Edit a file, save it, done.
 | `privacy.html` | What the site measures and how to switch it off |
 | `case-studies/` | The hub page plus one page per video — **generated**, don't edit by hand |
 | `content/case-studies.json` | The words on each case-study page (headline, summary, chapters) — **you edit this** |
-| `tools/build_case_studies.py` | Rebuilds the case-study pages and `sitemap.xml` from that file |
+| `tools/build_case_studies.py` | Rebuilds the case-study pages, the scoreboard page and `sitemap.xml` |
+| `scoreboard/` | The share-price scoreboard page — **generated**, don't edit by hand |
+| `content/scoreboard.json` | Which companies are on the scoreboard — **you edit this** |
+| `assets/scoreboard.json` | The scoreboard's prices — **updated automatically** |
 | `404.html` | Shown when someone hits a link that doesn't exist |
 | `assets/css/style.css` | All the styling — colours, type, layout, motion |
 | `assets/js/main.js` | All the interactive bits — animations, live data, charts, ⌘K search |
@@ -30,7 +33,7 @@ build, and no dependencies to break. Edit a file, save it, done.
 | `assets/takeaways.json` | The "3 takeaways inside" teasers under each video — **you edit this** (see below) |
 | `assets/coverage.json` | The **Brands I've broken down** wall and the **world map**: which videos cover which company and country — **you edit this** |
 | `assets/world-dots.json` | The dot-matrix world map (generated once from Natural Earth; no need to touch) |
-| `.github/` | The two small automations that keep those two JSON files fresh |
+| `.github/` | The small automations that keep those JSON files fresh |
 | `robots.txt`, `sitemap.xml`, `site.webmanifest` | Search-engine and install metadata |
 | `CNAME` | Tells GitHub this site lives at `rohanlearn.com` — **don't delete this** |
 
@@ -38,7 +41,7 @@ build, and no dependencies to break. Edit a file, save it, done.
 
 ## Things that update themselves
 
-Two GitHub Actions run in the background. You don't need to do anything.
+Three GitHub Actions run in the background. You don't need to do anything.
 
 - **Latest video** (every 6 hours): reads the channel's feed, skips YouTube Shorts,
   and updates `assets/latest-video.json`. The homepage's *Latest upload* player and
@@ -46,6 +49,10 @@ Two GitHub Actions run in the background. You don't need to do anything.
 - **Channel stats** (daily): updates `assets/channel-stats.json` and adds a point to
   `assets/stats-history.json`. The numbers in the hero, the growth dashboard and the
   About / Contact pages read from them.
+- **Scoreboard** (weekdays, after the Indian and US markets close): updates
+  `assets/scoreboard.json` with closing prices from Yahoo Finance. Yahoo's feed is free
+  but unofficial: a company that fails keeps its last good numbers, and GitHub emails
+  you only if every company fails.
 
 To refresh right after you upload: GitHub → **Actions** → *Update latest video* →
 **Run workflow**.
@@ -111,6 +118,18 @@ three small edits:
 3. Add the video's id to the `"videos"` list of every country it covers. For a new
    country, add `{ "code": "JP", "name": "Japan", "lon": 138, "lat": 37, "videos": ["VIDEO_ID"] }`.
    The 2-letter code lights the country up on the map, and `lon`/`lat` place its pin.
+
+## Scoreboard
+
+`/scoreboard/` shows how each listed company's share price has moved since its video
+went live. It also feeds the strip under the brands wall and the box on each company's
+case-study page.
+
+**For a new company:** add a line under `"listed"` in `content/scoreboard.json` with its
+Yahoo Finance ticker and video id (or under `"unlisted"` with a short status if it has no
+shares), then run `python3 tools/build_case_studies.py`. Its prices arrive on the bot's
+next run, or run *Update scoreboard* from GitHub's Actions tab. (Or just ask Claude:
+"add the new video".)
 
 ## Subscribe bar and Saturday reminder
 

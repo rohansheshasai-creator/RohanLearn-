@@ -1,0 +1,41 @@
+name: Update scoreboard
+
+# Keeps assets/scoreboard.json (the /scoreboard/ page) up to date with closing prices.
+# Runs on weekdays after each market closes: India around 10:00 UTC, the US by 21:00 UTC.
+# Can also be run by hand from the Actions tab, and runs once whenever the script or
+# the company list changes.
+
+on:
+  schedule:
+    - cron: "45 10 * * 1-5"
+    - cron: "45 21 * * 1-5"
+  workflow_dispatch: {}
+  push:
+    paths:
+      - ".github/scripts/fetch-scoreboard.py"
+      - ".github/workflows/update-scoreboard.yml"
+      - "content/scoreboard.json"
+
+permissions:
+  contents: write
+
+jobs:
+  update-scoreboard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fetch closing prices
+        id: fetch
+        run: python3 .github/scripts/fetch-scoreboard.py
+
+      - name: Commit and push if the prices changed
+        if: steps.fetch.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/scoreboard.json
+          git commit -m "Auto-update scoreboard"
+          git pull --rebase origin main
+          git push

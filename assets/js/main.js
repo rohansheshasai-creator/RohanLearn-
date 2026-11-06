@@ -988,6 +988,7 @@
     var STATIC = [
       { g: "Pages", t: "Home", href: "/", icon: "i-page", k: "start index" },
       { g: "Pages", t: "Case studies", href: "/case-studies/", icon: "i-page", k: "all videos breakdowns library companies economy geopolitics" },
+      { g: "Pages", t: "Scoreboard", href: "/scoreboard/", icon: "i-page", k: "stocks share price market companies since video" },
       { g: "Pages", t: "About", href: "/about.html", icon: "i-page", k: "story rohan journey rules" },
       { g: "Pages", t: "Contact", href: "/contact.html", icon: "i-mail", k: "business sponsor promotions collab email" }
     ];
@@ -1434,6 +1435,159 @@
     });
   })();
 
+  /* ---------- 15b. Scoreboard: share prices since each video (assets/scoreboard.json) ---------- */
+  (function initScoreboard() {
+    var table = $(".sb-table"), strip = $("[data-sb-strip]"), slot = $("[data-move-id]");
+    if (!table && !strip && !slot) return;
+
+    var UP = '<svg class="sb-tri" viewBox="0 0 8 8" aria-hidden="true"><path d="M4 1l3.5 6h-7z"/></svg>';
+    var DOWN = '<svg class="sb-tri" viewBox="0 0 8 8" aria-hidden="true"><path d="M4 7L.5 1h7z"/></svg>';
+
+    function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function money(cur, v) {
+      var txt = v.toLocaleString(cur === "INR" ? "en-IN" : "en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      return (cur === "INR" ? "₹" : cur === "USD" ? "$" : cur + " ") + txt;
+    }
+    function delta(v) {
+      if (v === null || v === undefined) return "—";
+      var dir = v > 0 ? "up" : v < 0 ? "down" : "flat";
+      var num = (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1) + "%";
+      return '<span class="sb-d sb-d--' + dir + '">' + (dir === "up" ? UP : dir === "down" ? DOWN : "") + num + "</span>";
+    }
+    function shortDate(iso) { return fmtDate(iso).replace(/ \d{4}$/, ""); }
+
+    // the summary only counts companies that were already trading when the video went live
+    function fair(rows) { return rows.filter(function (r) { return !r.afterVideo; }); }
+    function extremes(rows) {
+      var sorted = fair(rows).sort(function (a, b) { return b.since - a.since; });
+      return { best: sorted[0], worst: sorted[sorted.length - 1], up: sorted.filter(function (r) { return r.since > 0; }).length, total: sorted.length };
+    }
+
+    function sparkline(r) {
+      var W = 112, H = 34, P = 4, vals = r.spark;
+      if (!vals || vals.length < 2) return "";
+      var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals), span = hi - lo || 1;
+      function x(i) { return P + i * (W - 2 * P) / (vals.length - 1); }
+      function y(v) { return H - P - (v - lo) * (H - 2 * P) / span; }
+      var line = vals.map(function (v, i) { return (i ? "L" : "M") + x(i).toFixed(1) + " " + y(v).toFixed(1); }).join("");
+      var dir = r.since >= 0 ? "up" : "down", last = vals.length - 1;
+      return '<svg class="sb-line sb-line--' + dir + '" viewBox="0 0 ' + W + " " + H + '" width="' + W + '" height="' + H + '" aria-hidden="true">' +
+        '<line class="sb-line__base" x1="' + P + '" x2="' + (W - P) + '" y1="' + y(vals[0]).toFixed(1) + '" y2="' + y(vals[0]).toFixed(1) + '"/>' +
+        '<path class="sb-line__path" d="' + line + '"/>' +
+        '<circle class="sb-line__dot" cx="' + x(last).toFixed(1) + '" cy="' + y(vals[last]).toFixed(1) + '" r="2.5"/></svg>';
+    }
+
+    // hovering a trend line reads off the date and price at that point
+    function initTip(rowsBy) {
+      if (!fine) return;
+      var tip = d.createElement("div");
+      tip.className = "sb-tip"; tip.hidden = true;
+      d.body.appendChild(tip);
+      table.addEventListener("mousemove", function (e) {
+        var svg = e.target.closest ? e.target.closest(".sb-line") : null;
+        if (!svg) { tip.hidden = true; return; }
+        var r = rowsBy[svg.closest(".sb-row").dataset.ticker], box = svg.getBoundingClientRect();
+        var share = Math.max(0, Math.min(1, (e.clientX - box.left) / box.width));
+        var i = Math.round(share * (r.spark.length - 1));
+        tip.innerHTML = "<small>" + esc(fmtDate(r.sparkDates[i])) + "</small><strong>" + esc(money(r.currency, r.spark[i])) + "</strong>";
+        tip.hidden = false;
+        tip.style.left = Math.min(e.clientX + 14, innerWidth - 150) + "px";
+        tip.style.top = (e.clientY - 48) + "px";
+      });
+      table.addEventListener("mouseleave", function () { tip.hidden = true; });
+    }
+
+    function fillTable(data) {
+      var asof = $(".sb-asof");
+      if (!data || !data.rows || !data.rows.length) { asof.textContent = "Prices are refreshing. Check back shortly."; return; }
+      var by = {};
+      data.rows.forEach(function (r) { by[r.ticker] = r; });
+      var body = $("tbody", table), trs = $$(".sb-row", table);
+      trs.forEach(function (tr) {
+        var r = by[tr.dataset.ticker];
+        if (!r) return;
+        $(".sb-base", tr).innerHTML = esc(money(r.currency, r.basePrice)) + (r.afterVideo ? '<small class="sb-tag">at listing</small>' : "");
+        $(".sb-now", tr).textContent = money(r.currency, r.price);
+        $(".sb-day", tr).innerHTML = delta(r.today);
+        $(".sb-spark", tr).innerHTML = sparkline(r);
+        $(".sb-since", tr).innerHTML = delta(r.since) + (r.afterVideo ? '<small class="sb-tag">since listing</small>' : "") +
+          '<small class="sb-since__now">' + esc(money(r.currency, r.price)) + "</small>";
+      });
+
+      var x = extremes(data.rows);
+      function who(r) { return r ? esc(r.name) + " " + delta(r.since) : "—"; }
+      $('[data-sb="up"]').textContent = x.up + " of " + x.total;
+      $('[data-sb="best"]').innerHTML = who(x.best);
+      $('[data-sb="worst"]').innerHTML = who(x.worst);
+
+      // the latest close differs by market, so say so instead of showing one date
+      var latest = {};
+      data.rows.forEach(function (r) { if (!latest[r.market] || r.asOf > latest[r.market]) latest[r.market] = r.asOf; });
+      asof.textContent = "Last close: " + Object.keys(latest).sort().map(function (m) { return m + " " + shortDate(latest[m]); }).join(" · ");
+
+      var key = "since", dir = -1, market = "all";
+      function val(tr) {
+        var r = by[tr.dataset.ticker];
+        if (key === "name") return tr.dataset.name;
+        if (key === "date") return tr.dataset.date;
+        return r && r[key] !== null && r[key] !== undefined ? r[key] : null;
+      }
+      function sort() {
+        trs.slice().sort(function (a, b) {
+          var p = val(a), q = val(b);
+          if (p === null) return q === null ? 0 : 1;
+          if (q === null) return -1;
+          return (p < q ? -1 : p > q ? 1 : 0) * dir;
+        }).forEach(function (tr) { body.appendChild(tr); });
+        $$(".sb-sort", table).forEach(function (btn) {
+          btn.parentNode.setAttribute("aria-sort", btn.dataset.k === key ? (dir < 0 ? "descending" : "ascending") : "none");
+        });
+      }
+      table.addEventListener("click", function (e) {
+        var btn = e.target.closest(".sb-sort");
+        if (!btn) return;
+        if (btn.dataset.k === key) dir = -dir;
+        else { key = btn.dataset.k; dir = key === "name" ? 1 : -1; }
+        sort();
+      });
+      var bar = $(".sb-filter");
+      bar.addEventListener("click", function (e) {
+        var chip = e.target.closest(".bchip");
+        if (!chip) return;
+        market = chip.dataset.f;
+        $$(".bchip", bar).forEach(function (c) { c.setAttribute("aria-pressed", String(c === chip)); });
+        trs.forEach(function (tr) { tr.hidden = market !== "all" && tr.dataset.market !== market; });
+      });
+      sort();
+      initTip(by);
+    }
+
+    function fillStrip(data) {
+      if (!data || !data.rows || !data.rows.length) return;
+      var x = extremes(data.rows);
+      if (!x.best) return;
+      $(".sb-strip__v", strip).innerHTML = "Since the video: <b>" + esc(x.best.name) + "</b> " + delta(x.best.since) +
+        '<i class="sb-strip__sep"></i><b>' + esc(x.worst.name) + "</b> " + delta(x.worst.since);
+    }
+
+    function fillSlot(data) {
+      if (!data || !data.rows) return;
+      var mine = data.rows.filter(function (r) { return r.video === slot.dataset.moveId; });
+      if (!mine.length) return;
+      slot.innerHTML = '<a class="cs-move__link" href="/scoreboard/"><span class="cs-move__k">Share price since this video</span>' +
+        mine.map(function (r) {
+          return '<span class="cs-move__row"><span>' + esc(r.name) + (r.afterVideo ? " <small>since listing</small>" : "") + "</span>" + delta(r.since) + "</span>";
+        }).join("") + '<span class="cs-move__more">See the scoreboard <svg aria-hidden="true"><use href="#i-arrow"/></svg></span></a>';
+      slot.hidden = false;
+    }
+
+    fetchJSON("/assets/scoreboard.json").then(function (data) {
+      if (table) fillTable(data);
+      if (strip) fillStrip(data);
+      if (slot) fillSlot(data);
+    }).catch(function () {});
+  })();
+
   /* ---------- 16. Subscribe bar + Saturday reminder ---------- */
   var SUB_URL = "https://www.youtube.com/@rohanlearn?sub_confirmation=1";
   function store(key, val) { try { if (val === undefined) return localStorage.getItem(key); localStorage.setItem(key, val); } catch (e) { return null; } }
@@ -1669,7 +1823,11 @@
     else if (at(".remind__btn")) { if (el.getAttribute("aria-expanded") === "true") track("reminder_open"); }
     else if (at(".remind__item")) track(el.classList.contains("js-gcal") ? "reminder_google" : "reminder_apple");
     else if (at("[data-theme-toggle]")) { track("theme_" + cur); window.clarity("set", "theme", cur); }   // cur = the theme being switched to
-    else if (at(".bchip")) track((t.closest(".cs-filter") ? "hub_filter_" : "brands_filter_") + el.dataset.f);
+    else if (at(".bchip")) track((t.closest(".cs-filter") ? "hub_filter_" : t.closest(".sb-filter") ? "scoreboard_filter_" : "brands_filter_") + el.dataset.f);
+    else if (at(".sb-sort")) track("scoreboard_sort_" + el.dataset.k);
+    else if (at(".sb-co__link, .sb-off a")) track("case_from_scoreboard");
+    else if (at(".sb-strip")) track("scoreboard_from_home");
+    else if (at(".cs-move__link")) track("scoreboard_from_case");
     else if (at(".bmore__btn")) { if (el.getAttribute("aria-expanded") === "true") track("brands_show_all"); }
     else if (at(".brand")) track("case_from_brands");
     else if (at(".wm-pin, .gchip")) track("map_" + (el.dataset.c || "").toLowerCase());

@@ -1,0 +1,26 @@
+{
+ "_how": "The companies on /scoreboard/. listed: name (the brand in the video), via (the parent, only when its shares are what we track), ticker (Yahoo Finance symbol), exchange, market (India or US, for the filter), video (YouTube id). unlisted: stories with no share price, with a short status. After editing, run: python3 .github/scripts/fetch-scoreboard.py && python3 tools/build_case_studies.py",
+ "listed": [
+  { "name": "Google", "via": "Alphabet", "ticker": "GOOGL", "exchange": "Nasdaq", "market": "US", "video": "FGkzeJM9LxI" },
+  { "name": "Microsoft", "ticker": "MSFT", "exchange": "Nasdaq", "market": "US", "video": "t0h2oP_XjAA" },
+  { "name": "Nvidia", "ticker": "NVDA", "exchange": "Nasdaq", "market": "US", "video": "M1zs_ecyOyE" },
+  { "name": "Apple", "ticker": "AAPL", "exchange": "Nasdaq", "market": "US", "video": "n_QPARbnj6A" },
+  { "name": "Walmart", "ticker": "WMT", "exchange": "Nasdaq", "market": "US", "video": "3qxYlfArCe8" },
+  { "name": "ASML", "ticker": "ASML", "exchange": "Nasdaq", "market": "US", "video": "8E47OF_uZvY" },
+  { "name": "Starlink", "via": "SpaceX", "ticker": "SPCX", "exchange": "Nasdaq", "market": "US", "video": "rBSQpQB0Frs" },
+  { "name": "Visa", "ticker": "V", "exchange": "NYSE", "market": "US", "video": "tENejOtXb6M" },
+  { "name": "Mastercard", "ticker": "MA", "exchange": "NYSE", "market": "US", "video": "tENejOtXb6M" },
+  { "name": "Jio", "via": "Jio Platforms", "ticker": "JPL.NS", "exchange": "NSE", "market": "India", "video": "rBSQpQB0Frs" },
+  { "name": "Jaguar", "via": "Tata Motors Passenger Vehicles", "ticker": "TMPV.NS", "exchange": "NSE", "market": "India", "video": "onxEbLI_kU8" },
+  { "name": "Kalyan Jewellers", "ticker": "KALYANKJIL.NS", "exchange": "NSE", "market": "India", "video": "Gve5RhpBb04" },
+  { "name": "Maruti Suzuki", "ticker": "MARUTI.NS", "exchange": "NSE", "market": "India", "video": "JJkz76-Vbsk" },
+  { "name": "Ather Energy", "ticker": "ATHERENERG.NS", "exchange": "NSE", "market": "India", "video": "V2G06btgQz4" }
+ ],
+ "unlisted": [
+  { "name": "BYJU'S", "status": "Private company", "video": "-VSel3RcixI" },
+  { "name": "Evergrande", "status": "Delisted in 2025", "video": "v0Tkn8-JBwM" },
+  { "name": "Jet Airways", "status": "Ordered into liquidation", "video": "wUT71G9Dq4s" },
+  { "name": "FIFA", "status": "Football's governing body, no shares", "video": "46bihZKU8hw" },
+  { "name": "IPL", "status": "Run by India's cricket board, no shares", "video": "wS_NihdI8is" }
+ ]
+}

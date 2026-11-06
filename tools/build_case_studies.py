@@ -7,6 +7,7 @@ Builds the case-study pages from content/case-studies.json.
 Writes:
   case-studies/index.html            the hub page (every breakdown, filterable)
   case-studies/<slug>/index.html     one page per video
+  scoreboard/index.html              the share-price scoreboard (companies from content/scoreboard.json)
   sitemap.xml                        every page on the site
   assets/coverage.json               adds each video's page address ("s")
 
@@ -86,7 +87,7 @@ def absolutize(s):
     return s.replace('href="/index.html"', 'href="/"')
 
 
-def shell(title, desc, url, og_title, og_desc, image, og_type, schema, main):
+def shell(title, desc, url, og_title, og_desc, image, og_type, schema, main, current=("/case-studies/", "Case studies")):
     head = re.sub(r'<script type="application/ld\+json">.*?</script>\n?', "", SRC[:HEAD_END], flags=re.S)  # the template page's own markup
     head = re.sub(r"<title>.*?</title>", "<title>%s</title>" % e(title), head, count=1)
     head = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="%s">' % e(desc), head, count=1)
@@ -103,7 +104,8 @@ def shell(title, desc, url, og_title, og_desc, image, og_type, schema, main):
     body = SRC[HEAD_END:MAIN_START] + main + SRC[MAIN_END:]
     body = body.replace(' aria-current="page"', "")
     page = absolutize(head + body)
-    page = page.replace('<a href="/case-studies/">Case studies</a>', '<a href="/case-studies/" aria-current="page">Case studies</a>', 1)
+    href, label = current
+    page = page.replace('<a href="%s">%s</a>' % (href, label), '<a href="%s" aria-current="page">%s</a>' % (href, label), 1)
     return page
 
 
@@ -224,6 +226,7 @@ def build():
       </div>
       <aside class="cs-aside" data-reveal style="--d:.1s">
         <div class="cs-seal" data-seal-id="{c["id"]}"></div>
+        <div class="cs-move" data-move-id="{c["id"]}" hidden></div>
         <dl class="cs-facts">{facts_html}</dl>
         <div class="cs-actions">
           <a class="btn btn--yt" href="{watch}" target="_blank" rel="noopener"><svg><use href="#i-yt"/></svg> Watch on YouTube</a>
@@ -294,6 +297,97 @@ def build():
                  "RohanLearn case studies", hub_desc, SITE + "/assets/img/og-image.jpg", "website", schema, main)
     write("case-studies/index.html", page)
 
+    # ---------- scoreboard (the prices are filled in from assets/scoreboard.json) ----------
+    board = json.loads(read("content/scoreboard.json"))
+    by_id = {c["id"]: c for c in items}
+    url = SITE + "/scoreboard/"
+    rows = ""
+    for co in board["listed"]:
+        c = by_id[co["video"]]
+        symbol = co["ticker"].split(".")[0]
+        sub = ("via %s &middot; " % e(co["via"]) if co.get("via") else "") + "%s &middot; %s" % (e(symbol), e(co["exchange"]))
+        rows += ('<tr class="sb-row" data-ticker="%s" data-market="%s" data-name="%s" data-date="%s">'
+                 '<th scope="row" class="sb-co"><a class="sb-co__link" href="/case-studies/%s/">%s</a><span class="sb-co__sub">%s</span></th>'
+                 '<td class="sb-vid">%s</td><td class="sb-num sb-base">&mdash;</td><td class="sb-num sb-now">&mdash;</td>'
+                 '<td class="sb-num sb-day">&mdash;</td><td class="sb-spark"></td><td class="sb-num sb-since">&mdash;</td></tr>') % (
+            e(co["ticker"]), e(co["market"]), e(co["name"].lower()), c["published"][:10], c["slug"], e(co["name"]), sub, nice_date(c["published"]))
+    off = "".join('<li><a href="/case-studies/%s/"><strong>%s</strong><span>%s</span></a></li>' % (by_id[x["video"]]["slug"], e(x["name"]), e(x["status"]))
+                  for x in board["unlisted"])
+    markets = [("India", "India"), ("US", "United States")]
+    sb_chips = '<button class="bchip" type="button" data-f="all" aria-pressed="true"><span>All</span><small>%d</small></button>' % len(board["listed"])
+    sb_chips += "".join('<button class="bchip" type="button" data-f="%s" aria-pressed="false"><span>%s</span><small>%d</small></button>'
+                        % (k, n, sum(1 for x in board["listed"] if x["market"] == k)) for k, n in markets)
+    sb_desc = "How the share prices of the companies in RohanLearn's case studies have moved since each video went live, from Microsoft and Nvidia to Jio and Maruti Suzuki."
+    crumbs = [("Home", "/"), ("Scoreboard", None)]
+    schema = ld({"@context": "https://schema.org", "@graph": [
+        {"@type": "WebPage", "@id": url, "url": url, "name": "Scoreboard", "description": sb_desc,
+         "isPartOf": {"@type": "WebSite", "@id": SITE + "/#website"}},
+        crumbs_ld(crumbs), org]})
+    main = f'''<main id="main">
+
+  <section class="phero cs-hero">
+    <div class="wrap">
+      {crumbs_html(crumbs)}
+      <span class="eyebrow" data-reveal>Scoreboard</span>
+      <h1 class="phero__title" data-split>What happened <em>after the video.</em></h1>
+      <p class="phero__sub" data-reveal style="--d:.3s">Every listed company I've broken down, and how its share price has moved since the video went live. Updated after each market closes.</p>
+    </div>
+  </section>
+
+  <section class="section section--tight sb-sec">
+    <div class="wrap">
+      <dl class="sb-stats" data-reveal>
+        <div><dt>Companies tracked</dt><dd data-sb="tracked">{len(board["listed"])}</dd></div>
+        <div><dt>Up since the video</dt><dd data-sb="up">&mdash;</dd></div>
+        <div><dt>Biggest gain</dt><dd data-sb="best">&mdash;</dd></div>
+        <div><dt>Biggest drop</dt><dd data-sb="worst">&mdash;</dd></div>
+      </dl>
+
+      <div class="sb-tools" data-reveal style="--d:.1s">
+        <div class="bfilter sb-filter" role="group" aria-label="Filter by market">{sb_chips}</div>
+        <p class="sb-asof" role="status">Loading prices&hellip;</p>
+      </div>
+
+      <div class="sb-tablewrap" data-reveal style="--d:.15s">
+        <table class="sb-table">
+          <caption class="sr-only">Share prices of companies covered in RohanLearn case studies, since each video went live</caption>
+          <thead><tr>
+            <th scope="col" class="sb-th-co" aria-sort="none"><button class="sb-sort" type="button" data-k="name">Company</button></th>
+            <th scope="col" class="sb-vid" aria-sort="none"><button class="sb-sort" type="button" data-k="date">Video</button></th>
+            <th scope="col" class="sb-num sb-base">At the video</th>
+            <th scope="col" class="sb-num sb-now">Now</th>
+            <th scope="col" class="sb-num sb-day" aria-sort="none"><button class="sb-sort" type="button" data-k="today">Last day</button></th>
+            <th scope="col" class="sb-spark"><span class="sr-only">Price trend</span></th>
+            <th scope="col" class="sb-num sb-since" aria-sort="descending"><button class="sb-sort" type="button" data-k="since">Since video</button></th>
+          </tr></thead>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
+
+      <div class="sb-below">
+        <div class="sb-off" data-reveal>
+          <h2>No share price to track</h2>
+          <ul>{off}</ul>
+        </div>
+        <div class="sb-how" data-reveal style="--d:.1s">
+          <h2>How to read this</h2>
+          <ul>
+            <li><strong>Since video</strong> compares the last closing price on or before the day the video went live with the latest close. Dividends aren't included.</li>
+            <li><strong>Via</strong> means the shares belong to the company behind the brand, so the price reflects that whole business, not the brand alone.</li>
+            <li><strong>Since listing</strong> marks a company that began trading after its video. It is measured from its first day's close and left out of the totals above.</li>
+            <li>Each price is in the stock's own currency, from <a href="https://finance.yahoo.com/" target="_blank" rel="noopener">Yahoo Finance</a>, and may be delayed or occasionally wrong.</li>
+          </ul>
+          <p class="sb-legal">This is a record of what happened, not a prediction, a recommendation or investment advice. A price move doesn't prove a video right or wrong.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>'''
+    page = shell("Scoreboard: Share Prices Since Each Video | RohanLearn", sb_desc, url, "The RohanLearn Scoreboard", sb_desc,
+                 SITE + "/assets/img/og-image.jpg", "website", schema, main, current=("/scoreboard/", "Scoreboard"))
+    write("scoreboard/index.html", page)
+
     # ---------- page addresses for the rest of the site ----------
     cov = json.loads(read("assets/coverage.json"))
     for c in items:
@@ -303,7 +397,7 @@ def build():
 
     # ---------- sitemap ----------
     today = datetime.now(IST).strftime("%Y-%m-%d")
-    urls = [(SITE + "/", today, "1.0"), (SITE + "/case-studies/", today, "0.9"),
+    urls = [(SITE + "/", today, "1.0"), (SITE + "/case-studies/", today, "0.9"), (SITE + "/scoreboard/", today, "0.8"),
             (SITE + "/about.html", today, "0.7"), (SITE + "/contact.html", today, "0.6"), (SITE + "/privacy.html", "2026-10-18", "0.2")]
     urls += [("%s/case-studies/%s/" % (SITE, c["slug"]), when(c["published"]).strftime("%Y-%m-%d"), "0.8") for c in items]
     xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
