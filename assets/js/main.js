@@ -20,7 +20,7 @@
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var fine   = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var hasIO  = "IntersectionObserver" in window;
-  var EMAIL  = "knowledgegrowthhubb@gmail.com";
+  var EMAIL  = "mail.rohanlearn@gmail.com";
   var conn   = navigator.connection || {};
   var saveData = !!conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "");
   // fewer continuous animations on very low-power / data-saver devices
